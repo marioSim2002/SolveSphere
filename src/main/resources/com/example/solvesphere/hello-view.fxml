@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.scene.control.Hyperlink?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.solvesphere.LogInUiController"
+           style="-fx-background-color: #C4CEF8;">
+
+  <!-- Centered VBox with fixed size -->
+  <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #C4CEF8; -fx-padding: 20px;" maxWidth="400" maxHeight="300" minWidth="400" minHeight="300">
+    <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Welcome" style="-fx-font-size: 34px;" />
+    <Label text="SolveSphere" style="-fx-font-size: 26px;" />
+
+    <!-- Username TextField -->
+    <TextField fx:id="userNameFld" promptText="Username" style="-fx-font-size: 15px;" />
+
+    <!-- Hidden PasswordField and Visible TextField for Password Input -->
+    <PasswordField fx:id="userPassFld" promptText="Password" style="-fx-font-size: 15px;" />
+    <TextField fx:id="userPassTextFld" promptText="Password" style="-fx-font-size: 15px;" visible="false" managed="false" />
+
+    <!-- Checkbox to toggle password visibility -->
+    <CheckBox fx:id="showPasswordCheck" text="Show Password" onAction="#togglePassVisibility" style="-fx-font-size: 15px;" />
+
+    <Hyperlink fx:id="registerLink" alignment="CENTER" onAction="#onRegisterClick" text="Register" style="-fx-font-size: 18px;" />
+    <Hyperlink fx:id="forgotDataLink" alignment="CENTER" onAction="#onLogInButtonClick" text="Forgot password" style="-fx-font-size: 18px;" />
+
+    <Button onAction="#onLogInButtonClick" text="Log In" style="-fx-font-size: 18px; -fx-background-radius: 15px;" />
+  </VBox>
+</StackPane>

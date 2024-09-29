@@ -1,0 +1,118 @@
+/* Set a gradient background for the AnchorPane */
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #BD88E0, #88B1E0); /* Purple to blue gradient */
+    -fx-font-family: "Segoe UI", sans-serif; /* Modern font style */
+}
+
+/* Style the Title Text */
+.text {
+    -fx-fill: black; /* Black text color */
+    -fx-font-size: 24px; /* Smaller font size */
+    -fx-font-weight: bold; /* Bold font */
+    -fx-text-alignment: center; /* Center the text */
+}
+
+/* Style for TextField and PasswordField */
+.text-field, .password-field {
+    -fx-background-radius: 20; /* Smaller rounded corners */
+    -fx-background-color: white; /* White background */
+    -fx-text-fill: #333; /* Darker input text color */
+    -fx-prompt-text-fill: #999; /* Slightly darker prompt text */
+    -fx-font-size: 16px; /* Smaller font size for input */
+    -fx-border-color: #4e54c8; /* Purple border */
+    -fx-border-radius: 20; /* Matching rounded border radius */
+    -fx-border-width: 2px; /* Border thickness */
+    -fx-padding: 8; /* Padding inside the input fields */
+    -fx-pref-width: 180px; /* Set fixed width to make fields smaller */
+}
+
+/* Hover effect for text fields */
+.text-field:hover, .password-field:hover {
+    -fx-border-color: #6d73ff; /* Slightly lighter border on hover */
+    -fx-background-color: #f2f2f2; /* Light gray background on hover */
+}
+
+/* Focus effect for text fields */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #ff8f00; /* Orange border when focused */
+    -fx-background-color: white; /* Ensure background stays white */
+}
+
+/* Style for DatePicker and ComboBox */
+.date-picker, .combo-box {
+    -fx-background-radius: 20; /* Smaller rounded corners */
+    -fx-border-radius: 20; /* Matching rounded border */
+    -fx-border-color: #4e54c8; /* Purple border */
+    -fx-border-width: 2px;
+    -fx-padding: 8;
+    -fx-background-color: white; /* White background */
+    -fx-pref-width: 180px; /* Set fixed width to match TextFields */
+}
+
+/* Button Style */
+.button {
+    -fx-background-color: #00aaff; /* Vibrant blue background */
+    -fx-background-radius: 20; /* Smaller rounded corners */
+    -fx-text-fill: white; /* White button text */
+    -fx-font-size: 18px; /* Smaller font size for buttons */
+    -fx-font-weight: bold; /* Bold button text */
+    -fx-padding: 8 16 8 16; /* Adjusted padding inside the button */
+    -fx-border-radius: 20;
+    -fx-border-width: 2px;
+    -fx-border-color: #0088cc; /* Slightly darker border */
+    -fx-pref-width: 150px; /* Make buttons smaller */
+}
+
+/* Hover effect for buttons */
+.button:hover {
+    -fx-background-color: #0088cc; /* Darker blue on hover */
+    -fx-border-color: #006699; /* Even darker border on hover */
+}
+
+
+
+.custom-checkbox .box {
+    -fx-background-color: #e0e0e0;          /* Default background color */
+    -fx-border-color: #888;                 /* Default border color */
+    -fx-border-radius: 4px;                 /* Rounded corners */
+    -fx-background-radius: 4px;             /* Background rounded corners */
+    -fx-padding: 2px;                       /* Inner padding */
+    -fx-pref-width: 10px;                   /* Box width */
+    -fx-pref-height: 10px;                  /* Box height */
+    -fx-font-size: 12px;
+}
+
+/* Styling when the checkbox is selected */
+.custom-checkbox:selected .box {
+    -fx-background-color: #4caf50;          /* Checked background */
+    -fx-border-color: #4caf50;              /* Checked border */
+    -fx-background-insets: 0, 0, 0;         /* Prevents border overlap */
+}
+
+/* Inner mark (tick) for selected checkbox */
+.custom-checkbox:selected .mark {
+    -fx-background-color: #ffffff;          /* Tick color */
+    -fx-background-radius: 2px;             /* Tick rounded shape */
+    -fx-scale-x: 1;                         /* Scale to appear */
+    -fx-scale-y: 1;
+}
+
+/* Default styling for the mark when unchecked */
+.custom-checkbox .mark {
+    -fx-background-color: transparent;      /* Hide tick */
+    -fx-background-radius: 0px;
+    -fx-scale-x: 0;                         /* Scale to hide */
+    -fx-scale-y: 0;
+}
+
+/* Hover effect */
+.custom-checkbox:hover .box {
+    -fx-background-color: #d0d0d0;          /* Slightly darker on hover */
+    -fx-border-color: #666;                 /* Darker border on hover */
+}
+
+/* Focus effect */
+.custom-checkbox:focused .box {
+    -fx-border-color: #5e9ddc;              /* Blue border when focused */
+    -fx-background-color: #b0c4de;          /* Light blue background */
+}
