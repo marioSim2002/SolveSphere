@@ -1,6 +1,7 @@
-package com.example.solvesphere;
+package com.example.solvesphere.Controllers;
 
-import com.example.solvesphere.SecurityUnit.PasswordHasher;
+import com.example.solvesphere.AlertsUnit;
+import com.example.solvesphere.ServerCommunicator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,23 +23,32 @@ public class LogInUiController {
     @FXML
     private CheckBox showPasswordCheck;
     @FXML
-   private Hyperlink registerLink;
+    private Hyperlink registerLink;
     @FXML
     private Hyperlink forgotDataLink;
+    private final ServerCommunicator serverCommunicator;
 
-    @FXML
-    protected void onLogInButtonClick() {
-        if(userNameFld.getText().isEmpty()||userPassFld.getText().isEmpty()){
-            AlertsUnit.showInvalidDataAlert();
-            return;
-        }
-        // connect user
-        PasswordHasher hasher = new PasswordHasher();
-        hasher.hashPassword(userNameFld.getText());
+    public LogInUiController() {
+        serverCommunicator = new ServerCommunicator("localhost", 12345);
     }
 
     @FXML
-    protected void onRegisterClick(){
+    protected void onLogInButtonClick() {
+        if (userNameFld.getText().isEmpty() || userPassFld.getText().isEmpty()) {
+            AlertsUnit.showInvalidDataAlert();
+            return;
+        }
+
+        // Gather login data
+        String username = userNameFld.getText();
+        String password = userPassFld.getText();
+
+        // Send login request to the server
+        String response = serverCommunicator.sendLoginRequest(username, password);
+        System.out.println(response);
+    }
+    @FXML
+     protected void onRegisterClick(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Register.fxml"));
             Parent root = fxmlLoader.load();

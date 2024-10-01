@@ -1,5 +1,8 @@
-package com.example.solvesphere;
+package com.example.solvesphere.Controllers;
 
+import com.example.solvesphere.AlertsUnit;
+import com.example.solvesphere.ServerCommunicator;
+import com.example.solvesphere.User;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,18 +37,21 @@ public class RegisterController {
     private CheckBox showPassCheck;
     @FXML
     private TextField TxtPassVisible;
+    private ServerCommunicator serverCommunicator;
 
-
+    public RegisterController() {
+        serverCommunicator = new ServerCommunicator("localhost", 12345);  // Initialize server communicator
+    }
     @FXML
     public void closeCurrentStage(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
 
+
     @FXML
     public void registerUser() {
-
-        // todo - implement method to check if user already found (already registered/in database)
+        // Collect user data
         String username = TxtUsername.getText();
         String email = TxtMail.getText();
         String password = TxtPass.getText();
@@ -53,32 +59,22 @@ public class RegisterController {
         String country = CountryInput.getValue();
         String fieldOfInterest = fieldOfInterestInput.getText();
         String dateOfBirthString = (dateOfBirth != null) ? dateOfBirth.toString() : "";
-        String[] userDataArr = {username, email, password, dateOfBirthString, country, fieldOfInterest};
 
+        // Validate data before sending to the server
+        String[] userDataArr = {username, email, password, dateOfBirthString, country, fieldOfInterest};
         if (!ValidateInputData.validData(userDataArr) || !ValidateInputData.validEmail(email)) {
             AlertsUnit.showInvalidDataAlert();
-            return ;
+            return;
         }
 
-        // send registration data to the server and read the response
-        try (Socket socket = new Socket("localhost", 12345);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-            //todo , create user class
-            // send registration details to the server
-            out.println(username);
-            out.println(email);
-            out.println(password);
-            // read the server's response
-            String response = in.readLine();
-            System.out.println("Server response: " + response);
+        // Create a User object
+        User newUser = new User(username, email, password, dateOfBirthString, country, fieldOfInterest);
 
-            // optionally, display the server's response in the UI (e.g., a label)
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Send the registration request using ServerCommunicator
+        String response = serverCommunicator.sendRegistrationRequest(newUser);
+        System.out.println("Server response: " + response);
     }
+
 
     public void togglePassVisibility(ActionEvent actionEvent) {
         if (showPassCheck.isSelected()) {
