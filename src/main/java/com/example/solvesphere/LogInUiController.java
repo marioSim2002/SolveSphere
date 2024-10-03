@@ -1,4 +1,4 @@
-package com.example.solvesphere.Controllers;
+package com.example.solvesphere;
 
 import com.example.solvesphere.AlertsUnit;
 import com.example.solvesphere.ServerCommunicator;

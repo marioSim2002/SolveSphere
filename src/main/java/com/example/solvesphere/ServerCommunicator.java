@@ -1,10 +1,11 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.UserData.User;
+
 import java.io.*;
 import java.net.Socket;
 
 public class ServerCommunicator {
-
     private String serverHost;
     private int serverPort;
 
@@ -13,7 +14,6 @@ public class ServerCommunicator {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
     }
-
     // general method to send a request and receive a response
     public String sendRequest(String command, Object data) {
         try (Socket socket = new Socket(serverHost, serverPort);
@@ -21,16 +21,14 @@ public class ServerCommunicator {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream())) {
 
-            // Send the command to indicate the type of request (e.g., REGISTER, LOGIN)
+            //command to indicate the type of request (e.g., REGISTER, LOGIN)
             out.println(command);
 
-            // If there is additional data (like a User object), send it via ObjectOutputStream
+            // if there is additional data (like a User object), send it via ObjectOutputStream
             if (data != null) {
                 objectOut.writeObject(data);
                 objectOut.flush();
             }
-
-            // Read the server's response
             return in.readLine();
 
         } catch (IOException e) {

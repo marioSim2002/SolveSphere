@@ -1,23 +1,21 @@
-package com.example.solvesphere.Controllers;
+package com.example.solvesphere;
 
-import com.example.solvesphere.AlertsUnit;
-import com.example.solvesphere.ServerCommunicator;
-import com.example.solvesphere.User;
+import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.UserData.UserFactory;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterController {
     @FXML
@@ -37,7 +35,14 @@ public class RegisterController {
     private CheckBox showPassCheck;
     @FXML
     private TextField TxtPassVisible;
-    private ServerCommunicator serverCommunicator;
+    @FXML
+    private ImageView profileImageView;
+
+    @FXML
+    private Hyperlink btChooseImage;
+
+    private String imagePath;
+    private final ServerCommunicator serverCommunicator;
 
     public RegisterController() {
         serverCommunicator = new ServerCommunicator("localhost", 12345);  // Initialize server communicator
@@ -57,20 +62,20 @@ public class RegisterController {
         String password = TxtPass.getText();
         LocalDate dateOfBirth = DateOfBirthVal.getValue();
         String country = CountryInput.getValue();
-        String fieldOfInterest = fieldOfInterestInput.getText();
+
         String dateOfBirthString = (dateOfBirth != null) ? dateOfBirth.toString() : "";
 
         // Validate data before sending to the server
-        String[] userDataArr = {username, email, password, dateOfBirthString, country, fieldOfInterest};
+        String[] userDataArr = {username, email, password, dateOfBirthString, country, getWordsFromFieldOfInterest().toString()};
         if (!ValidateInputData.validData(userDataArr) || !ValidateInputData.validEmail(email)) {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
 
-        // Create a User object
-        User newUser = new User(username, email, password, dateOfBirthString, country, fieldOfInterest);
+        // create user ob , using user factory
+        User newUser = UserFactory.createUser(username, email, password, dateOfBirthString, country, getWordsFromFieldOfInterest(),LocalDate.now(),getProfileImagePath());
 
-        // Send the registration request using ServerCommunicator
+        // send the registration request using ServerCommunicator
         String response = serverCommunicator.sendRegistrationRequest(newUser);
         System.out.println("Server response: " + response);
     }
@@ -92,5 +97,39 @@ public class RegisterController {
             TxtPassVisible.setVisible(false);
             TxtPassVisible.setManaged(false);
         }
+    }
+
+    public Map<String, Integer> getWordsFromFieldOfInterest() {
+        final int DEFAULT_PRIORITY = 1;
+
+        String inputText = fieldOfInterestInput.getText();
+        Map<String, Integer> wordMap = new HashMap<>();
+
+        String[] words = inputText.split("[ ,]+"); //regex splits on spaces and commas
+
+        for (String word : words) {
+            word = word.trim();
+            if (!word.isEmpty()) {
+                wordMap.put(word, DEFAULT_PRIORITY);
+            }
+        }
+        return wordMap;
+    }
+
+    @FXML
+    private void chooseProfileImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+
+        File selectedFile = fileChooser.showOpenDialog(btChooseImage.getScene().getWindow());
+        if (selectedFile != null) {
+            imagePath = selectedFile.getAbsolutePath();
+            Image image = new Image(selectedFile.toURI().toString());
+            profileImageView.setImage(image);
+        }
+    }
+
+    public String getProfileImagePath() {
+        return imagePath;
     }
 }

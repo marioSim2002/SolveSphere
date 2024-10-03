@@ -5,67 +5,74 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="1209.0" stylesheets="@src/main/resources/com/example/solvesphere/registerStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.Controllers.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="736.0" prefWidth="1209.0" stylesheets="@registerStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.RegisterController">
    <children>
       <!-- Title Text (Centered at the top) -->
-      <Text layoutX="569.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New User" textAlignment="CENTER" wrappingWidth="106.40545654296875">
+      <Text layoutX="570.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New User" textAlignment="CENTER" wrappingWidth="106.40545654296875">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
 
       <!-- Username TextField (Centered Horizontally) -->
-      <TextField fx:id="TxtUsername" layoutX="533.0" layoutY="115.0" maxWidth="200.0" prefHeight="45.0" prefWidth="200.0" promptText="Username">
+      <ImageView fx:id="profileImageView" accessibleText="" fitHeight="77.0" fitWidth="150.0" layoutX="543.0" layoutY="86.0">
+      </ImageView>
+
+
+      <!-- Username TextField (Centered Horizontally) -->
+      <TextField fx:id="TxtUsername" layoutX="532.0" layoutY="191.0" maxWidth="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Username">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
 
       <!-- E-mail TextField (Centered Horizontally) -->
-      <TextField fx:id="TxtMail" layoutX="532.0" layoutY="171.0" prefHeight="45.0" prefWidth="188.0" promptText="E-mail">
+      <TextField fx:id="TxtMail" layoutX="532.0" layoutY="253.0" prefHeight="45.0" prefWidth="188.0" promptText="E-mail">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
 
       <!-- PasswordField (Centered Horizontally) -->
-      <PasswordField fx:id="TxtPass" layoutX="532.0" layoutY="229.0" prefWidth="200.0" promptText="New Password">
+      <PasswordField fx:id="TxtPass" layoutX="533.0" layoutY="311.0" prefWidth="200.0" promptText="New Password">
          <font>
             <Font size="18.0" />
          </font>
       </PasswordField>
 
       <!-- TextField for plain text password, initially hidden -->
-      <TextField fx:id="TxtPassVisible" layoutX="532.0" layoutY="229.0" prefWidth="200.0" promptText="New Password" visible="false" managed="false">
+      <TextField fx:id="TxtPassVisible" layoutX="533.0" layoutY="311.0" managed="false" prefWidth="200.0" promptText="New Password" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </TextField>
 
       <!-- Date of Birth Picker -->
-      <DatePicker fx:id="DateOfBirthVal" layoutX="533.0" layoutY="293.0" prefHeight="43.0" prefWidth="223.0" promptText="Date of birth" />
+      <DatePicker fx:id="DateOfBirthVal" layoutX="532.0" layoutY="376.0" prefHeight="43.0" prefWidth="223.0" promptText="Date of birth" />
 
       <!-- Country ComboBox -->
-      <ComboBox fx:id="CountryInput" editable="true" layoutX="533.0" layoutY="370.0" maxHeight="59.0" prefHeight="45.0" prefWidth="172.0" promptText="Country" />
+      <ComboBox fx:id="CountryInput" editable="true" layoutX="532.0" layoutY="452.0" maxHeight="59.0" prefHeight="45.0" prefWidth="172.0" promptText="Country" />
 
       <!-- Field of Interest Input -->
-      <TextField fx:id="fieldOfInterestInput" layoutX="533.0" layoutY="450.0" promptText="Preffered topics/subjects" />
+      <TextField fx:id="fieldOfInterestInput" layoutX="462.0" layoutY="526.0" minWidth="320.0" promptText="Preferred topics(e.g: tech,nature,gaming...)" />
 
       <!-- Register Button -->
-      <Button fx:id="btRegister" layoutX="548.0" layoutY="578.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="51.0" prefWidth="143.0" text="Register" />
+      <Button fx:id="btRegister" layoutX="548.0" layoutY="627.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="39.0" prefWidth="144.0" style="-fx-font-size:16px;" text="Register" />
 
       <!-- Close Button -->
-      <Button fx:id="btClose" layoutX="548.0" layoutY="508.0" mnemonicParsing="false" onAction="#closeCurrentStage" prefHeight="51.0" prefWidth="143.0" style="-fx-background-color: red;" text="Close" />
+      <Button fx:id="btClose" layoutX="548.0" layoutY="578.0" mnemonicParsing="false" onAction="#closeCurrentStage" prefHeight="39.0" prefWidth="137.0" style="-fx-background-color: red; -fx-font-size:16px;" text="Close" />
 
       <!-- Checkbox to Show/Hide Password -->
-      <CheckBox fx:id="showPassCheck" onAction="#togglePassVisibility" layoutX="675.0" layoutY="231.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="35.0" />
+      <CheckBox fx:id="showPassCheck" layoutX="675.0" layoutY="313.0" mnemonicParsing="false" onAction="#togglePassVisibility" prefHeight="39.0" prefWidth="35.0" />
 
       <!-- Ambient Light for Design (Optional) -->
       <AmbientLight layoutX="361.0" layoutY="293.0" lightOn="true">
@@ -73,6 +80,7 @@
             <Color red="0.8151639103889465" green="1.0" />
          </color>
       </AmbientLight>
+      <Hyperlink fx:id="btChooseImage" layoutX="558.0" layoutY="163.0" onAction="#chooseProfileImage" prefHeight="22.0" prefWidth="119.0" style="-fx-font-size:12px;" text="pick a profile picture" textFill="#331fb3" />
 
    </children>
 </AnchorPane>

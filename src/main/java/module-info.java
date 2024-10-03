@@ -16,4 +16,6 @@ module com.example.solvesphere {
     exports com.example.solvesphere;
     exports com.example.solvesphere.SecurityUnit;
     opens com.example.solvesphere.SecurityUnit to javafx.fxml;
+    exports com.example.solvesphere.UserData;
+    opens com.example.solvesphere.UserData to javafx.fxml;
 }

@@ -2,7 +2,7 @@ package com.example.solvesphere;
 
 import javafx.scene.control.Alert;
 
-abstract class AlertsUnit {
+public abstract class AlertsUnit {
 
     public static void showInvalidDataAlert(){
         Alert a = new Alert(Alert.AlertType.INFORMATION);
