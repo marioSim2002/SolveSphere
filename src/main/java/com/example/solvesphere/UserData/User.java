@@ -1,4 +1,4 @@
-package com.example.solvesphere;
+package com.example.solvesphere.UserData;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,7 +16,7 @@ public class User implements Serializable {
     private LocalDate registrationDate;  // Date of registration
     private String profilePicture;  // URL or path to profile picture
 
-    // Constructor
+
     public User(String username, String email, String password, String dateOfBirth, String country,
                 Map<String, Integer> fieldsOfInterest,
                 LocalDate registrationDate, String profilePicture) {
@@ -30,7 +30,6 @@ public class User implements Serializable {
         this.profilePicture = profilePicture;  // Set profile picture URL
     }
 
-    // Getters and Setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
@@ -63,10 +62,8 @@ public class User implements Serializable {
         LocalDate currentDate = LocalDate.now();                  // Get the current date
         return Period.between(birthDate, currentDate).getYears(); // Calculate age in years
     }
-
-    // Determine if the user is underaged (e.g., under 18 years old)
     public boolean isUnderage() {
-        return calculateAge() < 18;  // Set age threshold to 18
+        return calculateAge() < 18;  // s et age threshold to 18
     }
 
     @Override
