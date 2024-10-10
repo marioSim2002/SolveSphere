@@ -42,6 +42,8 @@
       <artifactId>javafx-fxml</artifactId>
       <version>19.0.2</version>
     </dependency>
+
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
@@ -119,6 +121,12 @@
       <artifactId>spring-security-core</artifactId>
       <version>[5.8.0,6.0.0)</version> <!-- Allows any version from 5.8.0 to less than 6.0.0 -->
     </dependency>
+      <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <version>7.10.1</version>
+          <scope>compile</scope>
+      </dependency>
 
   </dependencies>
 
