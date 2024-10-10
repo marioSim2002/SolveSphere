@@ -13,3 +13,6 @@ public class UserFactory {
                 fieldsOfInterest, registrationDate, profilePicture);
     }
 }
+
+
+/* factory pattern - helps maintain compatibility for future changes */

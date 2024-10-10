@@ -11,6 +11,7 @@ module com.example.solvesphere {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires spring.security.crypto;
+    requires java.sql;
 
     opens com.example.solvesphere to javafx.fxml;
     exports com.example.solvesphere;

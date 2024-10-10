@@ -1,11 +1,18 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.UserDAO;
+import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
+import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.UserData.UserFactory;
 
-import java.io.BufferedReader;
+import java.io.*;
+import java.net.Socket;
+import java.time.LocalDate;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 class UserRegistrationHandler implements Runnable {
@@ -18,21 +25,22 @@ class UserRegistrationHandler implements Runnable {
 
     @Override
     public void run() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
+        try (ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+             ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
 
-            // read the command sent by the client
-            String command = in.readLine();
+            // Read the command sent by the client
+            String command = (String) in.readObject();  // Read command as Object
+            System.out.println("Command received: " + command);  // Debugging
 
             if ("REGISTER".equalsIgnoreCase(command)) {
-                handleRegistration(in, out);
+                handleRegistration(in, out); // Pass ObjectInputStream and ObjectOutputStream for registration
             } else if ("LOGIN".equalsIgnoreCase(command)) {
-                handleLogin(in, out);
+                handleLogin(in, out); // Pass ObjectInputStream and ObjectOutputStream for login
             } else {
-                out.println("Invalid command. Please use REGISTER or LOGIN.");
+                out.writeObject("Invalid command. Please use REGISTER or LOGIN."); // Send response
             }
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -43,42 +51,51 @@ class UserRegistrationHandler implements Runnable {
         }
     }
 
-    private void handleRegistration(BufferedReader in, PrintWriter out) throws IOException {
-        // Read registration data from the client
-        String username = in.readLine();
-        String email = in.readLine();
-        String password = in.readLine();  // Plain-text password received from the client
+    private void handleRegistration(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+        try {
+            // Read user data
+            User newUser = (User) in.readObject();  // Expecting User object
 
-        // hash pass before storing
-        PasswordHasher hasher = new PasswordHasher();
-        String hashedPassword = hasher.hashPassword(password);
+            System.out.println("Registering user: " + newUser.getUsername());  // Debugging
+            System.out.println("Email: " + newUser.getEmail());                // Debugging
 
-        System.out.println("Registering user: " + username);
-        System.out.println("Email: " + email);
-        System.out.println("Plain-Text Password: " + password); // og pass - testing
-        System.out.println("Hashed Password: " + hashedPassword); // hashed password for secure storage
+            UserDAO userDAO = new UserDAOImpl();
 
-        // TODO: Add logic to store the user in a database with the hashed password instead of plain-text
+            // Check if user already exists
+            if (userDAO.userExists(newUser.getUsername(), newUser.getEmail())) {
+                out.writeObject("Username or email already exists.");
+                return; // Stop further processing
+            }
 
-        // confirmation to the client
-        out.println("User " + username + " registered successfully.");
+            PasswordHasher hasher = new PasswordHasher();
+            String hashedPassword = hasher.hashPassword(newUser.getPassword());  // Hashing password
+
+            newUser.setPassword(hashedPassword);  // Set hashed password back to user object
+            userDAO.addUser(newUser);  // Add user to the database
+
+            out.writeObject("User " + newUser.getUsername() + " registered successfully.");  // Send success response
+            AlertsUnit.showSuccessAlert();  // Notify the client
+        } catch (ClassNotFoundException e) {
+            out.writeObject("Error: Unable to read user data.");
+            e.printStackTrace();
+        }
     }
 
-    private void handleLogin(BufferedReader in, PrintWriter out) throws IOException {
+    private void handleLogin(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
         // login process
-        String username = in.readLine();
-        String password = in.readLine();
+        String username = (String) in.readObject();
+        String password = (String) in.readObject();
 
-        System.out.println("Logging in user: " + username);
-        System.out.println("Password: " + password);
+        System.out.println("Logging in user: " + username); // Debugging
 
-        // TODO: Implement login DB logic here (e.g., validate username and password against database)
+        // Retrieve the user from the database
+        UserDAO userDAO = new UserDAOImpl();
+        User user = userDAO.getUserByUsernameAndPassword(username, password); // Validate username and password
 
-        // dummy validation for demonstration
-        if ("testUser".equals(username) && "testPass".equals(password)) {
-            out.println("Login successful!");
+        if (user != null) {
+            out.writeObject("Login successful!"); // Send success message
         } else {
-            out.println("Invalid username or password.");
+            out.writeObject("Invalid username or password."); // Send failure message
         }
     }
 }

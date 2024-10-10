@@ -18,4 +18,19 @@ public abstract class AlertsUnit {
         a.setContentText("Account already Registered, go back to log-in");
         a.show();
     }
+
+    public static void showSuccessAlert(){
+        Alert a  = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Success");
+        a.setContentText("Registered Successfully!");
+        a.show();
+    }
+
+    public static void showErrorAlert(String response) {
+
+        Alert a  = new Alert(Alert.AlertType.ERROR);
+        a.setTitle("Error Occurred");
+        a.setContentText("Error connecting user!/n"+response);
+        a.show();
+    }
 }

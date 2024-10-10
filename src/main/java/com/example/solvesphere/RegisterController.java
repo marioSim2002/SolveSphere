@@ -3,6 +3,7 @@ package com.example.solvesphere;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.UserData.UserFactory;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +49,7 @@ public class RegisterController {
     public RegisterController() {
         serverCommunicator = new ServerCommunicator("localhost", 12345);  // Initialize server communicator
     }
+
     @FXML
     public void closeCurrentStage(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -62,7 +65,6 @@ public class RegisterController {
         String password = TxtPass.getText();
         LocalDate dateOfBirth = DateOfBirthVal.getValue();
         String country = CountryInput.getValue();
-
         String dateOfBirthString = (dateOfBirth != null) ? dateOfBirth.toString() : "";
 
         // Validate data before sending to the server
@@ -72,14 +74,43 @@ public class RegisterController {
             return;
         }
 
-        // create user ob , using user factory
-        User newUser = UserFactory.createUser(username, email, password, dateOfBirthString, country, getWordsFromFieldOfInterest(),LocalDate.now(),getProfileImagePath());
+        // Create user object using UserFactory
+        User newUser = UserFactory.createUser(username, email, password, dateOfBirthString, country, getWordsFromFieldOfInterest(), LocalDate.now(), getProfileImagePath());
 
-        // send the registration request using ServerCommunicator
-        String response = serverCommunicator.sendRegistrationRequest(newUser);
-        System.out.println("Server response: " + response);
+        // Run registration in a separate thread
+        Task<String> registrationTask = new Task<String>() {
+            @Override
+            protected String call() {
+                return serverCommunicator.sendRegistrationRequest(newUser);
+            }
+
+            @Override
+            protected void succeeded() {
+                String response = getValue();
+                System.out.println("Server response: " + response); // debugging (check response)
+                AlertsUnit.showSuccessAlert(); // Show success alert if registration is successful
+                clearInputFields();
+            }
+
+            @Override
+            protected void failed() {
+                Throwable ex = getException();
+                ex.printStackTrace(); // Print the exception
+                AlertsUnit.showInvalidDataAlert(); // Show error alert if registration failed
+            }
+        };
+        new Thread(registrationTask).start();
     }
 
+    private void clearInputFields() {
+            TxtUsername.clear();
+            TxtMail.clear();
+            TxtPass.clear();
+            DateOfBirthVal.setValue(null);
+            CountryInput.setValue(null);
+            fieldOfInterestInput.clear();
+            profileImageView.setImage(null);
+    }
 
     public void togglePassVisibility(ActionEvent actionEvent) {
         if (showPassCheck.isSelected()) {
