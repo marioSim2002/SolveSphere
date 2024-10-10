@@ -6,7 +6,7 @@ import java.util.Map;
 public class UserFactory {
 
     public static User createUser(String username, String email, String password,
-                                  String dateOfBirth, String country,
+                                  LocalDate dateOfBirth, String country,
                                   Map<String, Integer> fieldsOfInterest,
                                   LocalDate registrationDate, String profilePicture) {
         return new User(username, email, password, dateOfBirth, country,

@@ -61,17 +61,17 @@ class UserRegistrationHandler implements Runnable {
 
             UserDAO userDAO = new UserDAOImpl();
 
-            // Check if user already exists
+            // check if user already exists
             if (userDAO.userExists(newUser.getUsername(), newUser.getEmail())) {
                 out.writeObject("Username or email already exists.");
-                return; // Stop further processing
+                return; // stop further processing
             }
 
             PasswordHasher hasher = new PasswordHasher();
             String hashedPassword = hasher.hashPassword(newUser.getPassword());  // Hashing password
 
-            newUser.setPassword(hashedPassword);  // Set hashed password back to user object
-            userDAO.addUser(newUser);  // Add user to the database
+            newUser.setPassword(hashedPassword);  // set hashed password back to user object
+            userDAO.addUser(newUser);  // add user to the database
 
             out.writeObject("User " + newUser.getUsername() + " registered successfully.");  // Send success response
             AlertsUnit.showSuccessAlert();  // Notify the client

@@ -10,14 +10,14 @@ public class User implements Serializable {
     private String username;
     private String email;
     private String password;
-    private String dateOfBirth;  // Stores date of birth as String in "YYYY-MM-DD" format
+    private LocalDate dateOfBirth;  // stores date of birth as String in "YYYY-MM-DD" format
     private String country;
     private Map<String, Integer> fieldsOfInterest;  // Map to store interest levels for various fields
     private LocalDate registrationDate;  // Date of registration
     private String profilePicture;  // URL or path to profile picture
 
 
-    public User(String username, String email, String password, String dateOfBirth, String country,
+    public User(String username, String email, String password, LocalDate dateOfBirth, String country,
                 Map<String, Integer> fieldsOfInterest,
                 LocalDate registrationDate, String profilePicture) {
         this.username = username;
@@ -39,8 +39,8 @@ public class User implements Serializable {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
@@ -58,10 +58,10 @@ public class User implements Serializable {
 
     // Calculate the user's age based on dateOfBirth
     public int calculateAge() {
-        LocalDate birthDate = LocalDate.parse(this.dateOfBirth);  // Convert the String date to LocalDate
-        LocalDate currentDate = LocalDate.now();                  // Get the current date
-        return Period.between(birthDate, currentDate).getYears(); // Calculate age in years
+        LocalDate currentDate = LocalDate.now(); //current date
+        return Period.between(this.dateOfBirth, currentDate).getYears(); // calc age in years
     }
+
     public boolean isUnderage() {
         return calculateAge() < 18;  // s et age threshold to 18
     }

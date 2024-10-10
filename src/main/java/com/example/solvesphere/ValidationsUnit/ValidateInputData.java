@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public abstract class ValidateInputData {
 
-    public static boolean validData(String[] dataArr){
+    public static boolean validTxtData(String[] dataArr){
         for (String data : dataArr) {
             if (data == null || data.trim().isEmpty()) {
                 return false;
@@ -18,4 +18,11 @@ public abstract class ValidateInputData {
     public static boolean validEmail(String email){
         return email.contains("@");
     }
+
+    public static boolean validDate(LocalDate pickedDate){
+        LocalDate today = LocalDate.now();
+        return pickedDate!=null && pickedDate.isBefore(today);
+    }
+
+
 }

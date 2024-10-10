@@ -1,5 +1,6 @@
 package com.example.solvesphere;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 public abstract class AlertsUnit {
@@ -13,10 +14,12 @@ public abstract class AlertsUnit {
     }
 
     public static void userAlreadyRegistered(){
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("Account already Registered");
-        a.setContentText("Account already Registered, go back to log-in");
-        a.show();
+            Alert a = new Alert(Alert.AlertType.WARNING);
+            a.setTitle("Registration Warning");
+            a.setHeaderText("User already exists");
+            a.setContentText("The username or email you entered is already registered.");
+            a.showAndWait();
+
     }
 
     public static void showSuccessAlert(){

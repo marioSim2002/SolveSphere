@@ -65,17 +65,20 @@ public class RegisterController {
         String password = TxtPass.getText();
         LocalDate dateOfBirth = DateOfBirthVal.getValue();
         String country = CountryInput.getValue();
-        String dateOfBirthString = (dateOfBirth != null) ? dateOfBirth.toString() : "";
 
         // Validate data before sending to the server
-        String[] userDataArr = {username, email, password, dateOfBirthString, country, getWordsFromFieldOfInterest().toString()};
-        if (!ValidateInputData.validData(userDataArr) || !ValidateInputData.validEmail(email)) {
+        String[] userDataArr = {username, email, password, country};
+        if (!ValidateInputData.validTxtData(userDataArr) ||
+                !ValidateInputData.validEmail(email) ||
+                !ValidateInputData.validDate(dateOfBirth)) {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
 
         // Create user object using UserFactory
-        User newUser = UserFactory.createUser(username, email, password, dateOfBirthString, country, getWordsFromFieldOfInterest(), LocalDate.now(), getProfileImagePath());
+        User newUser = UserFactory.createUser(username, email, password,
+                dateOfBirth, country, getWordsFromFieldOfInterest(),
+                LocalDate.now(), getProfileImagePath());
 
         // Run registration in a separate thread
         Task<String> registrationTask = new Task<String>() {
@@ -87,9 +90,16 @@ public class RegisterController {
             @Override
             protected void succeeded() {
                 String response = getValue();
-                System.out.println("Server response: " + response); // debugging (check response)
-                AlertsUnit.showSuccessAlert(); // Show success alert if registration is successful
-                clearInputFields();
+                System.out.println("Server response: " + response); // Debugging (check response)
+
+                if (response.contains("User registered successfully")) {
+                    AlertsUnit.showSuccessAlert(); // Show success alert if registration is successful
+                    clearInputFields(); // Clear input fields on success
+                } else if (response.contains("Username or email already exists")) {
+                    AlertsUnit.userAlreadyRegistered(); // Alert for existing user
+                } else {
+                    AlertsUnit.showInvalidDataAlert(); // Show general error alert
+                }
             }
 
             @Override
@@ -99,8 +109,10 @@ public class RegisterController {
                 AlertsUnit.showInvalidDataAlert(); // Show error alert if registration failed
             }
         };
-        new Thread(registrationTask).start();
+
+        new Thread(registrationTask).start(); // Start the task in a new thread
     }
+
 
     private void clearInputFields() {
             TxtUsername.clear();

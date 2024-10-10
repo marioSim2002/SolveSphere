@@ -12,6 +12,7 @@ module com.example.solvesphere {
     requires com.almasb.fxgl.all;
     requires spring.security.crypto;
     requires java.sql;
+    requires org.testng;
 
     opens com.example.solvesphere to javafx.fxml;
     exports com.example.solvesphere;
@@ -19,4 +20,8 @@ module com.example.solvesphere {
     opens com.example.solvesphere.SecurityUnit to javafx.fxml;
     exports com.example.solvesphere.UserData;
     opens com.example.solvesphere.UserData to javafx.fxml;
+    exports com.example.solvesphere.TestUnit;
+    opens com.example.solvesphere.TestUnit to javafx.fxml;
+
+
 }

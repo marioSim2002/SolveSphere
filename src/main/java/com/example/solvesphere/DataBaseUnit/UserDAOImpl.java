@@ -26,14 +26,14 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("username"),
                         rs.getString("email"),
                         rs.getString("password"), // this is the hashed password
-                        rs.getString("date_of_birth"),
+                        rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         null,  // handle fields_of_interest separately
                         rs.getDate("registration_date").toLocalDate(),
                         rs.getString("profile_picture")
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return user;
@@ -42,10 +42,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserByUsernameAndPassword(String username, String password) {
         User user = null;
-        String sql = UserQueries.SELECT_USER_BY_USERNAME_AND_PASSWORD;
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_PASSWORD)) {
 
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
@@ -56,7 +55,7 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("username"),
                         rs.getString("email"),
                         rs.getString("password"), // this is the hashed password
-                        rs.getString("date_of_birth"),
+                        rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         null,  // handle fields_of_interest separately
                         rs.getDate("registration_date").toLocalDate(),
@@ -69,7 +68,7 @@ public class UserDAOImpl implements UserDAO {
                     user = null; // password does not match, return null
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return user; // Return the user if credentials are valid, otherwise null
@@ -77,20 +76,19 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void addUser(User user) {
-        String sql = UserQueries.INSERT_USER; // Use the insert query from UserQueries
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.INSERT_USER)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
-            stmt.setString(4, user.getDateOfBirth());
+            stmt.setDate(4, java.sql.Date.valueOf(user.getDateOfBirth()));
             stmt.setString(5, user.getCountry());
             stmt.setDate(6, java.sql.Date.valueOf(user.getRegistrationDate())); // Convert LocalDate to java.sql.Date
             stmt.setString(7, user.getProfilePicture());
 
             stmt.executeUpdate(); // execute the insert
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -106,7 +104,7 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 return rs.getInt(1) > 0; // Return true if a user exists
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return false; // user does not exist
