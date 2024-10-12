@@ -47,7 +47,7 @@ public class RegisterController {
     private final ServerCommunicator serverCommunicator;
 
     public RegisterController() {
-        serverCommunicator = new ServerCommunicator("localhost", 12345);  // Initialize server communicator
+        serverCommunicator = new ServerCommunicator("localhost", 12345);  // initialize server communicator
     }
 
     @FXML
@@ -59,14 +59,14 @@ public class RegisterController {
 
     @FXML
     public void registerUser() {
-        // Collect user data
+        // collect user data
         String username = TxtUsername.getText();
         String email = TxtMail.getText();
-        String password = TxtPass.getText();
+        String password = getPassword();
         LocalDate dateOfBirth = DateOfBirthVal.getValue();
         String country = CountryInput.getValue();
 
-        // Validate data before sending to the server
+        // validate data before sending to the server
         String[] userDataArr = {username, email, password, country};
         if (!ValidateInputData.validTxtData(userDataArr) ||
                 !ValidateInputData.validEmail(email) ||
@@ -75,12 +75,11 @@ public class RegisterController {
             return;
         }
 
-        // Create user object using UserFactory
         User newUser = UserFactory.createUser(username, email, password,
                 dateOfBirth, country, getWordsFromFieldOfInterest(),
                 LocalDate.now(), getProfileImagePath());
 
-        // Run registration in a separate thread
+        // run registration in a separate THREAD
         Task<String> registrationTask = new Task<String>() {
             @Override
             protected String call() {
@@ -90,23 +89,23 @@ public class RegisterController {
             @Override
             protected void succeeded() {
                 String response = getValue();
-                System.out.println("Server response: " + response); // Debugging (check response)
+                System.out.println("Server response: " + response); // debugging (check response)
 
                 if (response.contains("User registered successfully")) {
-                    AlertsUnit.showSuccessAlert(); // Show success alert if registration is successful
-                    clearInputFields(); // Clear input fields on success
+                    AlertsUnit.showSuccessAlert(); // success alert if registration is successful
+                    clearInputFields(); // clear input fields on success
                 } else if (response.contains("Username or email already exists")) {
-                    AlertsUnit.userAlreadyRegistered(); // Alert for existing user
+                    AlertsUnit.userAlreadyRegistered(); //alert for existing user
                 } else {
-                    AlertsUnit.showInvalidDataAlert(); // Show general error alert
+                    AlertsUnit.showInvalidDataAlert(); //show general error alert
                 }
             }
 
             @Override
             protected void failed() {
                 Throwable ex = getException();
-                ex.printStackTrace(); // Print the exception
-                AlertsUnit.showInvalidDataAlert(); // Show error alert if registration failed
+                ex.printStackTrace(); // print the exception / debug
+                AlertsUnit.showErrorAlert(ex.getMessage()); //show error alert if registration failed
             }
         };
 
@@ -170,6 +169,10 @@ public class RegisterController {
             Image image = new Image(selectedFile.toURI().toString());
             profileImageView.setImage(image);
         }
+    }
+    public String getPassword() {
+        if (TxtPassVisible.isVisible()) {return TxtPassVisible.getText();}
+        else {return TxtPass.getText();}
     }
 
     public String getProfileImagePath() {

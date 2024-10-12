@@ -10,7 +10,7 @@ public class DatabaseConnectionManager {
     private static final String USER = "root";
     private static final String PASSWORD = "mario123";
 
-    // Method to establish and return a connection
+    //establish and return a connection
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");  // register MySQL driver
         return DriverManager.getConnection(URL, USER, PASSWORD);

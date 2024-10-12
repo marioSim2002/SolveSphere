@@ -9,7 +9,7 @@ public class ServerCommunicator {
     private String serverHost;
     private int serverPort;
 
-    // Constructor to initialize host and port
+    // constructor to initialize host and port
     public ServerCommunicator(String serverHost, int serverPort) {
         this.serverHost = serverHost;
         this.serverPort = serverPort;
