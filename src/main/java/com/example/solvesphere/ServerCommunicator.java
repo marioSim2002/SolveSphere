@@ -4,6 +4,7 @@ import com.example.solvesphere.UserData.User;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ServerCommunicator {
     private String serverHost;
@@ -26,12 +27,11 @@ public class ServerCommunicator {
             objectOut.writeObject(command);
             System.out.println("Sending command: " + command);  // Debug message
 
-            // If there is additional data (like a User object), send it
-            if (data != null) {
-                objectOut.writeObject(data);
-                System.out.println("Sending data: " + data.toString()); // Debugging
-                objectOut.flush();
-            }
+            // Send the entire object (User for registration, String[] for login)
+            objectOut.writeObject(data);
+            System.out.println("Sending data: " + data); // Debugging for user or login data
+
+            objectOut.flush();
 
             // Read the server's response
             return (String) objectIn.readObject();
@@ -42,17 +42,18 @@ public class ServerCommunicator {
         }
     }
 
+
     // Specialized method for sending registration data
     public String sendRegistrationRequest(User user) {
         return sendRequest("REGISTER", user);
     }
 
-    // Specialized method for sending login data
     public String sendLoginRequest(String username, String password) {
         return sendRequest("LOGIN", new String[]{username, password});
     }
 
-    // Method to send a request to reset the user's password
+
+    // method to send a request to reset the user's password
     public String sendPasswordResetRequest(String username) {
         return sendRequest("RESET_PASSWORD", username);
     }

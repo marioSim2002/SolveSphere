@@ -91,8 +91,8 @@ public class RegisterController {
                 String response = getValue();
                 System.out.println("Server response: " + response); // debugging (check response)
 
-                if (response.contains("User registered successfully")) {
-                    AlertsUnit.showSuccessAlert(); // success alert if registration is successful
+                if (response.contains("successfully")) {
+                    AlertsUnit.showSuccessRegistrationAlert(); // success alert if registration is successful
                     clearInputFields(); // clear input fields on success
                 } else if (response.contains("Username or email already exists")) {
                     AlertsUnit.userAlreadyRegistered(); //alert for existing user

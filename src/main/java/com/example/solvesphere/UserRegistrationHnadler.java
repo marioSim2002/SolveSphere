@@ -3,6 +3,7 @@ package com.example.solvesphere;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
+import com.example.solvesphere.UserData.AuthenticationService;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.UserData.UserFactory;
 
@@ -58,7 +59,6 @@ class UserRegistrationHandler implements Runnable {
 
             System.out.println("Registering user: " + newUser.getUsername());  // Debugging
             System.out.println("Email: " + newUser.getEmail());                // Debugging
-
             UserDAO userDAO = new UserDAOImpl();
 
             // check if user already exists
@@ -66,7 +66,6 @@ class UserRegistrationHandler implements Runnable {
                 out.writeObject("Username or email already exists.");
                 return; // stop further processing
             }
-
             PasswordHasher hasher = new PasswordHasher();
             String hashedPassword = hasher.hashPassword(newUser.getPassword());  // Hashing password
 
@@ -74,7 +73,7 @@ class UserRegistrationHandler implements Runnable {
             userDAO.addUser(newUser);  // add user to the database
 
             out.writeObject("User " + newUser.getUsername() + " registered successfully.");  // Send success response
-            AlertsUnit.showSuccessAlert();  // Notify the client
+            AlertsUnit.showSuccessRegistrationAlert();  // Notify the client
         } catch (ClassNotFoundException e) {
             out.writeObject("Error: Unable to read user data.");
             e.printStackTrace();
@@ -82,20 +81,31 @@ class UserRegistrationHandler implements Runnable {
     }
 
     private void handleLogin(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
-        // login process
-        String username = (String) in.readObject();
-        String password = (String) in.readObject();
+        // First, read the object from the input stream
+        Object data = in.readObject();
 
-        System.out.println("Logging in user: " + username); // Debugging
+        // Check if the received object is indeed a String array
+        if (data instanceof String[]) {
+            String[] loginData = (String[]) data;
+            String username = loginData[0];
+            String password = loginData[1];
 
-        // Retrieve the user from the database
-        UserDAO userDAO = new UserDAOImpl();
-        User user = userDAO.getUserByUsernameAndPassword(username, password); // Validate username and password
+            System.out.println("Logging in user: " + username); // Debugging
 
-        if (user != null) {
-            out.writeObject("Login successful!"); // Send success message
+            // Retrieve the user from the database
+            UserDAO userDAO = new UserDAOImpl();
+            User user = userDAO.getUserByUsernameAndPassword(username, password); // Validate username and password
+
+            if (user != null) {
+                out.writeObject("Login successful!"); // Send success message
+            } else {
+                out.writeObject("Invalid username or password."); // Send failure message
+            }
         } else {
-            out.writeObject("Invalid username or password."); // Send failure message
+            // Handle the case where the data isn't a String[]
+            out.writeObject("Error: Invalid data format for login.");
+            System.out.println("Received invalid data for login: " + data); // Debugging
         }
     }
+
 }

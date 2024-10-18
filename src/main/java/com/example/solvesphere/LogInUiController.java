@@ -1,7 +1,10 @@
 package com.example.solvesphere;
 
 import com.example.solvesphere.AlertsUnit;
+import com.example.solvesphere.DataBaseUnit.UserDAO;
+import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.ServerCommunicator;
+import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,14 +41,32 @@ public class LogInUiController {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
-
-        // Gather login data
         String username = userNameFld.getText();
         String password = userPassFld.getText();
-
-        // Send login request to the server
+        System.out.println(username+" " + password);
+        UserDAO userDAO = new UserDAOImpl();
+        if (!userDAO.userExists(username,password)){
+            AlertsUnit.userNotRegisteredAlert();
+            return;
+        }
         String response = serverCommunicator.sendLoginRequest(username, password);
-        System.out.println(response);
+        System.out.println("communicator response "+ response); /// debug
+        responseStatus(response);
+
+        /// todo
+        // modify user alert to match user acc status (error -> wrong data)
+        }
+
+
+    public void responseStatus(String response) {
+        if (response.contains("Login successful")) {
+            AlertsUnit.showSuccessLogInAlert();
+            //  transitionToUserDashboard(); // Placeholder method for navigation to dashboard
+        } else if (response.contains("Wrong password")) {
+            AlertsUnit.showErrorAlert("Incorrect password. Please try again.");
+        } else {
+            AlertsUnit.showErrorAlert("Unknown error occurred. Please try again.");
+        }
     }
     @FXML
      protected void onRegisterClick(){

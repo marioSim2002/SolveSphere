@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -44,20 +45,20 @@ public class UserDAOImpl implements UserDAO {
         User user = null;
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_PASSWORD)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME)) {
 
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                //retrieve the user details
+                // Retrieve user details
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        rs.getString("password"), // this is the hashed password
+                        rs.getString("password"), // This is the hashed password
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
-                        null,  // handle fields_of_interest separately
+                        new HashMap<>(),
                         rs.getDate("registration_date").toLocalDate(),
                         rs.getString("profile_picture")
                 );
@@ -71,8 +72,14 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return user; // Return the user if credentials are valid, otherwise null
+        return user; // return the user if credentials are valid, otherwise null
     }
+
+    @Override
+    public User getUserByUserName(String username) {
+        return null;
+    }
+
 
     @Override
     public void addUser(User user) {
@@ -108,6 +115,33 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return false; // user does not exist
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        User user = null;
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User(
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getDate("date_of_birth").toLocalDate(),
+                        rs.getString("country"),
+                        null,
+                        rs.getDate("registration_date").toLocalDate(),
+                        rs.getString("profile_picture")
+                );
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }
 

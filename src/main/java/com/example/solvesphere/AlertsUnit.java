@@ -4,36 +4,43 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 public abstract class AlertsUnit {
-
-    public static void showInvalidDataAlert(){
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("Invalid Data!");
-        a.setResizable(false);
-        a.setContentText("At least one of your info aren't correct.");
-        a.show();
+    private static void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(alertType);
+            alert.setTitle(title);
+            alert.setHeaderText(headerText);
+            alert.setContentText(contentText);
+            alert.setResizable(false);
+            alert.showAndWait();
+        });
     }
 
-    public static void userAlreadyRegistered(){
-            Alert a = new Alert(Alert.AlertType.WARNING);
-            a.setTitle("Registration Warning");
-            a.setHeaderText("User already exists");
-            a.setContentText("The username or email you entered is already registered.");
-            a.showAndWait();
-
+    private static void showAlert(Alert.AlertType alertType, String title, String contentText) {
+        showAlert(alertType, title, null, contentText);
     }
 
-    public static void showSuccessAlert(){
-        Alert a  = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("Success");
-        a.setContentText("Registered Successfully!");
-        a.show();
+    // Specific alerts using the generic method
+    public static void showInvalidDataAlert() {
+        showAlert(Alert.AlertType.INFORMATION, "Invalid Data!", "At least one of your info isn't correct.");
+    }
+
+    public static void userAlreadyRegistered() {
+        showAlert(Alert.AlertType.WARNING, "Registration Warning", "User already exists", "The username or email you entered is already registered.");
+    }
+
+    public static void showSuccessRegistrationAlert() {
+        showAlert(Alert.AlertType.INFORMATION, "Success", "Registered Successfully!");
+    }
+
+    public static void showSuccessLogInAlert() {
+        showAlert(Alert.AlertType.INFORMATION, "Success", "User logged in successfully!");
     }
 
     public static void showErrorAlert(String response) {
+        showAlert(Alert.AlertType.ERROR, "Error Occurred", "Error connecting user!\n" + response);
+    }
 
-        Alert a  = new Alert(Alert.AlertType.ERROR);
-        a.setTitle("Error Occurred");
-        a.setContentText("Error connecting user!/n"+response);
-        a.show();
+    public static void userNotRegisteredAlert() {
+        showAlert(Alert.AlertType.WARNING, "User not registered", "Please register before attempting login!");
     }
 }
