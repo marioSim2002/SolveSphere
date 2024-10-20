@@ -73,10 +73,10 @@ public class ProblemDAOImpl implements ProblemDAO {
                 rs.getInt("id"),
                 rs.getString("title"),
                 rs.getString("description"),
-                rs.getInt("user_id"),  // Map to the userId field
+                rs.getInt("user_id"),
                 rs.getTimestamp("created_at").toLocalDateTime(),  // Convert SQL Timestamp to LocalDateTime
                 rs.getString("category"),
-                tags  // list of tags for the problem
+                tags
         );
     }
 
@@ -96,5 +96,20 @@ public class ProblemDAOImpl implements ProblemDAO {
             e.printStackTrace();
         }
         return tags;
+    }
+
+    @Override
+    public List<Problem> fetchAllProblems() {
+            List<Problem> problems = new ArrayList<>();
+            try (Connection conn = DatabaseConnectionManager.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_ALL_PROBLEMS)) {
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    problems.add(mapResultSetToProblem(rs));
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return problems;
     }
 }
