@@ -9,6 +9,8 @@ import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,20 +22,25 @@ import java.util.Map;
 
 public class MainDashController {
     @FXML
-    public ImageView addProblemButton;
+    private VBox problemListContainer;
     @FXML
-    private VBox problemListContainer;  // a container in the dashboard to hold the problems
+    private ComboBox<String> filterOptions;
+
+    private User currentUser;  // This should be set when the user logs in
 
     public void initUserData(User user) {
-        ProblemDAO problemDAO = new ProblemDAOImpl();
-        Map<String,Integer> interests = user.getFieldsOfInterest();
-        List<Problem> userProblems = problemDAO.getProblemsByUserInterest(interests);
-        user.setProblems(userProblems);
-        displayProblems(user.getProblems());
+        this.currentUser = user;
+        displayAllProblems();
     }
 
-    public void displayProblems(List<Problem> problems) {
-        System.out.println(problems);
+    private void displayAllProblems() {
+        ProblemDAO problemDAO = new ProblemDAOImpl();
+        List<Problem> allProblems = problemDAO.fetchAllProblems();
+        displayProblems(allProblems);
+    }
+
+    private void displayProblems(List<Problem> problems) {
+        problemListContainer.getChildren().clear(); // Clear existing problems
         for (Problem problem : problems) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));
@@ -49,6 +56,34 @@ public class MainDashController {
             }
         }
     }
+
+    @FXML
+    private void handleFilterSelection() {
+        String selectedFilter = filterOptions.getValue();
+        System.out.println("Selected Filter: " + selectedFilter);
+        applyFilter(selectedFilter);
+    }
+
+    private void applyFilter(String filter) {
+        ProblemDAO problemDAO = new ProblemDAOImpl();
+        switch (filter) {
+            case "None":
+                displayAllProblems();
+                break;
+            case "Interests":
+                    List<Problem> problems = problemDAO.getProblemsByUserInterest(currentUser.getFieldsOfInterest());
+                    displayProblems(problems);
+                break;
+            case "In Your Country":
+                if (currentUser != null) {
+                    //List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
+                    //displayProblems(problemsByCountry);
+                    System.out.println("getting by country");
+                }
+                break;
+        }
+    }
+
 
     @FXML
     public void addProblem() {
@@ -69,11 +104,11 @@ public class MainDashController {
     public void onLogoutClick(ActionEvent actionEvent) {
     }
 
-
-
     public void onSettingsClick(ActionEvent actionEvent) {
     }
 
     public void onFilterClick(ActionEvent actionEvent) {
     }
+
+
 }

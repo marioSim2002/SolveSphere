@@ -2,9 +2,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.ProblemItemController">
-    <Label fx:id="problemTitle" styleClass="problem-title"/>
-    <Label fx:id="problemDescription" wrapText="true"/>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.ProblemItemController" spacing="10" maxWidth="450" style="-fx-border-color: #475a88; -fx-padding: 10; ">
+    <Label fx:id="problemTitle" styleClass="problem-title" style="-fx-font-size: 17;"/>
+    <Label fx:id="problemDescription" wrapText="true" style="-fx-font-size: 14;"/>
     <HBox>
        <!-- <Button text="Suggest A Solution" onAction="#onSolveClick"/> -->
         <Button text="View Problem Details" onAction="#onDetailsClick"/>
