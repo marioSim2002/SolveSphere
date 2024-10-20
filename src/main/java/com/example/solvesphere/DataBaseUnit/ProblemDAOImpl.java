@@ -46,23 +46,6 @@ public class ProblemDAOImpl implements ProblemDAO {
     }
 
 
-    @Override
-    public Problem getProblemById(int problemId) {
-        Problem problem = null;
-        try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_BY_ID)) {
-
-            stmt.setInt(1, problemId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                problem = mapResultSetToProblem(rs);
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return problem;
-    }
 
     @Override
     public List<Problem> searchProblems(String keyword) {

@@ -19,4 +19,6 @@ public interface UserDAO {
     User getUserByUsername(String username);
 
     void addUserInterests(long userId, Map<String, Integer> interests) throws SQLException, ClassNotFoundException;
+
+    Long getUserIdByUsernameAndEmail(String username, String email);
 }

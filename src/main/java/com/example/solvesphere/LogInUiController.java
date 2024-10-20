@@ -17,6 +17,8 @@ import java.io.IOException;
 
 public class LogInUiController {
     @FXML
+    public Button logInBt;
+    @FXML
     private Label welcomeText;
     @FXML
     private TextField userNameFld;
@@ -45,26 +47,48 @@ public class LogInUiController {
 
         String username = userNameFld.getText();
         String password = getPasswordTxt();
-
         Object response = serverCommunicator.sendLoginRequest(username, password);
 
+        // Handle the response based on its type
         if (response instanceof User) {
             User user = (User) response;
-            System.out.println("Login successful for: " + user.getUsername()); // Debugging
-            //transitionToUserDashboard(user); // Pass the user to the dashboard method
-            System.out.println(user.getFieldsOfInterest());
-            AlertsUnit.showSuccessLogInAlert();
+            transitionToUserDashboard(user); // navigate to the dashboard with the user object
         } else if (response instanceof String) {
-            String errorMsg = (String) response;
-            responseStatus(errorMsg); // Handle the error messages
+            String message = (String) response;
+            responseStatus(message); //handle response messages
+        } else {
+            AlertsUnit.showErrorAlert("Unexpected response type received.");
         }
     }
 
 
+
+    private void transitionToUserDashboard(User user) {
+        try {
+            // Close the current window
+            Stage currentStage = (Stage) logInBt.getScene().getWindow();
+            currentStage.close();
+
+            // Load the dashboard
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainDashboard.fxml"));
+            Parent root = loader.load();
+
+            Stage dashboardStage = new Stage();
+            dashboardStage.setTitle("User Dashboard");
+            dashboardStage.setScene(new Scene(root));
+
+            MainDashController controller = loader.getController();
+            controller.initUserData(user); // Ensure you have this method in your MainDashboardController
+            dashboardStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertsUnit.showErrorAlert(e.toString());
+        }
+    }
+
     public void responseStatus(String response) {
-        if (response.contains("Login successful")) {
+        if (response.contains("successful")) {
             AlertsUnit.showSuccessLogInAlert();
-            //transitionToUserDashboard(); //method for navigation to dashboard
         } else if (response.contains("Invalid")) {
             AlertsUnit.showErrorAlert("Incorrect username or password.\nPlease try again.");
         } else {

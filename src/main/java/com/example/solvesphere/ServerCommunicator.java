@@ -53,11 +53,26 @@ public class ServerCommunicator {
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
+            // Send login command and credentials
             out.writeObject("LOGIN");
             out.writeObject(new String[]{username, password});
             out.flush();
 
-            return in.readObject(); // This should correctly read both User objects and Strings
+            // Read the response from the server
+            Object response = in.readObject();
+
+            // Handle the response based on its type
+            if (response instanceof User) {
+                User user = (User) response;
+                System.out.println("Login successful for: " + user.getUsername());
+                return user;
+            } else if (response instanceof String) {
+                String message = (String) response;
+                System.out.println("Login response: " + message);
+                return message;
+            } else {
+                return "Unexpected response type from server.";
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return "Error: Unable to connect to the server.";

@@ -7,6 +7,5 @@ import java.util.Map;
 
 public interface ProblemDAO {
     List<Problem> getProblemsByUserInterest(Map<String, Integer> userInterests);
-    Problem getProblemById(int problemId);
     List<Problem> searchProblems(String keyword);
 }

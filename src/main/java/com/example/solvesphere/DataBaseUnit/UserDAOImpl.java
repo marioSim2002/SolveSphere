@@ -231,5 +231,28 @@ public class UserDAOImpl implements UserDAO {
             if (conn != null) conn.close();
         }
     }
+
+
+    /// once logged in , a method to get user ID for further operations ///
+    @Override
+    public Long getUserIdByUsernameAndEmail(String username, String email) {
+        Long userId = null;
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_ID_BY_USERNAME_AND_EMAIL)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getLong("id");
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("Error fetching user ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return userId;
+    }
 }
 

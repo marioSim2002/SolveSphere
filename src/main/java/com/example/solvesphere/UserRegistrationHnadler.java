@@ -104,22 +104,24 @@ class UserRegistrationHandler implements Runnable {
 
             // retrieve the user from the database
             UserDAO userDAO = new UserDAOImpl();
-            User user = userDAO.getUserByUsernameAndPassword(username, password); //validate username and password
+            User user = userDAO.getUserByUsernameAndPassword(username, password); // validate username and password
 
             if (user != null) {
-                out.writeObject("Login successful!"); //success message
-                ProblemDAO problemDAO = new ProblemDAOImpl();
-                Map<String, Integer> userInterests = user.getFieldsOfInterest(); //returns a Map<String, Integer>
-                List<Problem> problems = problemDAO.getProblemsByUserInterest(userInterests);
-                user.setProblems(problems);
+                //ProblemDAO problemDAO = new ProblemDAOImpl();
+                Map<String, Integer> userInterests = user.getFieldsOfInterest();
+                System.out.println(userInterests);
+                user.setFieldsOfInterest(userInterests);
+                //send the user object
+                out.writeObject(user);
             } else {
-                out.writeObject("Invalid username or password."); //failure message
+                out.writeObject("Invalid username or password."); // failure message
             }
         } else {
-            //not an array
+            // not an array
             out.writeObject("Error: Invalid data format for login.");
             System.out.println("Received invalid data for login: " + data); // Debugging
         }
     }
+
 
 }

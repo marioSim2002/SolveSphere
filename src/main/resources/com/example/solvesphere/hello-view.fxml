@@ -35,6 +35,6 @@
     <Hyperlink fx:id="registerLink" alignment="CENTER" onAction="#onRegisterClick" text="Register" style="-fx-font-size: 18px;" />
     <Hyperlink fx:id="forgotDataLink" alignment="CENTER" onAction="#onLogInButtonClick" text="Forgot password" style="-fx-font-size: 18px;" />
 
-    <Button onAction="#onLogInButtonClick" text="Log In" style="-fx-font-size: 18px; -fx-background-radius: 15px;" />
+    <Button onAction="#onLogInButtonClick" text="Log In" style="-fx-font-size: 18px; -fx-background-radius: 15px;" fx:id="logInBt" />
   </VBox>
 </StackPane>
