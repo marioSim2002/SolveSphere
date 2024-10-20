@@ -4,6 +4,7 @@ import com.example.solvesphere.AlertsUnit;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.ServerCommunicator;
+import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,33 +38,35 @@ public class LogInUiController {
 
     @FXML
     protected void onLogInButtonClick() {
-        if (userNameFld.getText().isEmpty() || userPassFld.getText().isEmpty()) {
+        if (userNameFld.getText().isEmpty() || getPasswordTxt().isEmpty()) {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
-        String username = userNameFld.getText();
-        String password = userPassFld.getText();
-        System.out.println(username+" " + password);
-        UserDAO userDAO = new UserDAOImpl();
-        if (!userDAO.userExists(username,password)){
-            AlertsUnit.userNotRegisteredAlert();
-            return;
-        }
-        String response = serverCommunicator.sendLoginRequest(username, password);
-        System.out.println("communicator response "+ response); /// debug
-        responseStatus(response);
 
-        /// todo
-        // modify user alert to match user acc status (error -> wrong data)
+        String username = userNameFld.getText();
+        String password = getPasswordTxt();
+
+        Object response = serverCommunicator.sendLoginRequest(username, password);
+
+        if (response instanceof User) {
+            User user = (User) response;
+            System.out.println("Login successful for: " + user.getUsername()); // Debugging
+            //transitionToUserDashboard(user); // Pass the user to the dashboard method
+            System.out.println(user.getFieldsOfInterest());
+            AlertsUnit.showSuccessLogInAlert();
+        } else if (response instanceof String) {
+            String errorMsg = (String) response;
+            responseStatus(errorMsg); // Handle the error messages
         }
+    }
 
 
     public void responseStatus(String response) {
         if (response.contains("Login successful")) {
             AlertsUnit.showSuccessLogInAlert();
-            //  transitionToUserDashboard(); // Placeholder method for navigation to dashboard
-        } else if (response.contains("Wrong password")) {
-            AlertsUnit.showErrorAlert("Incorrect password. Please try again.");
+            //transitionToUserDashboard(); //method for navigation to dashboard
+        } else if (response.contains("Invalid")) {
+            AlertsUnit.showErrorAlert("Incorrect username or password.\nPlease try again.");
         } else {
             AlertsUnit.showErrorAlert("Unknown error occurred. Please try again.");
         }
@@ -99,6 +102,11 @@ public class LogInUiController {
             userPassTextFld.setVisible(false);
             userPassTextFld.setManaged(false);
         }
+    }
+
+    public String getPasswordTxt() {
+        if (userPassTextFld.isVisible()) {return userPassTextFld.getText();}
+        else {return userPassFld.getText();}
     }
     @FXML
     protected void onForgotCradentialsClick(){

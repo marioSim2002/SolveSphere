@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.solvesphere.MainDashboardController"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.MainDashController">
 
-</AnchorPane>
+    <!-- Navbar -->
+    <top>
+        <HBox alignment="center" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 10;">
+            <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="SolveSphere" />
+            <TextField fx:id="searchField" onKeyReleased="#searchForInput" promptText="Search for problems..." style="-fx-pref-width: 300px;" />
+            <ComboBox fx:id="filterOptions" prefHeight="25.0" prefWidth="67.0" promptText="Filter by category" style="-fx-pref-width: 150px;" />
+            <Button onAction="#onFilterClick" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Filter" />
+        </HBox>
+    </top>
+
+    <!-- Sidebar for navigation -->
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #333333; -fx-padding: 10;">
+            <Button onAction="#onHomeClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
+            <Button onAction="#onProfileClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="My Profile" />
+            <Button onAction="#onSettingsClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Settings" />
+            <Button onAction="#onLogoutClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Logout" />
+        </VBox>
+    </left>
+
+    <!-- Main content area to display problems -->
+    <center>
+        <StackPane>
+            <VBox fx:id="problemListContainer" spacing="10" style="-fx-padding: 10;">
+                <ScrollPane fitToWidth="true">
+                    <VBox fx:id="problemContainer" spacing="10" style="-fx-padding: 10;">
+                        <!-- Problem items will be dynamically added here -->
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+            <!-- Add Problem button in the lower right corner -->
+            <ImageView fx:id="addProblemButton" fitHeight="40" fitWidth="40" onMouseClicked="#addProblem" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                <Image url="@Images/addBt.png" />
+                <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+            </ImageView>
+        </StackPane>
+    </center>
+
+</BorderPane>

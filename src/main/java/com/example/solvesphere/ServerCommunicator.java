@@ -23,17 +23,17 @@ public class ServerCommunicator {
              ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream())) {
 
-            // Send command to indicate the type of request (e.g., REGISTER, LOGIN)
+            // send command to indicate the type of request (e.g., REGISTER, LOGIN)
             objectOut.writeObject(command);
             System.out.println("Sending command: " + command);  // Debug message
 
-            // Send the entire object (User for registration, String[] for login)
+            // send the entire object (User for registration, String[] for login)
             objectOut.writeObject(data);
             System.out.println("Sending data: " + data); // Debugging for user or login data
 
             objectOut.flush();
 
-            // Read the server's response
+            // read the server's response
             return (String) objectIn.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
@@ -48,8 +48,20 @@ public class ServerCommunicator {
         return sendRequest("REGISTER", user);
     }
 
-    public String sendLoginRequest(String username, String password) {
-        return sendRequest("LOGIN", new String[]{username, password});
+    public Object sendLoginRequest(String username, String password) {
+        try (Socket socket = new Socket(serverHost, serverPort);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            out.writeObject("LOGIN");
+            out.writeObject(new String[]{username, password});
+            out.flush();
+
+            return in.readObject(); // This should correctly read both User objects and Strings
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return "Error: Unable to connect to the server.";
+        }
     }
 
 
