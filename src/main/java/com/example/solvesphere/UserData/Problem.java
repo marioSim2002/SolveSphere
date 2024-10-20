@@ -17,6 +17,7 @@ public class Problem implements Serializable {
     private String category;
     private List<String> tags;
 
+
     public Problem(int id, String title, String description, int userId, LocalDateTime createdAt,String category, List<String> tags) {
         this.id = id;
         this.title = title;

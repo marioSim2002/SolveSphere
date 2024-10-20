@@ -46,7 +46,6 @@ public class MainDashController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));
                 VBox problemItem = loader.load();
 
-                // Set problem data
                 ProblemItemController controller = loader.getController();
                 controller.setProblemData(problem.getTitle(), problem.getDescription());
 
@@ -76,9 +75,8 @@ public class MainDashController {
                 break;
             case "In Your Country":
                 if (currentUser != null) {
-                    //List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
-                    //displayProblems(problemsByCountry);
-                    System.out.println("getting by country");
+                    List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
+                    displayProblems(problemsByCountry);
                 }
                 break;
         }

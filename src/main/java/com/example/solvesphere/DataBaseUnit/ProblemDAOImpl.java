@@ -19,10 +19,8 @@ public class ProblemDAOImpl implements ProblemDAO {
             return problems;  // Return empty if no interests
         }
 
-        // Extract the keys from the map to use as categories
+        // extract the keys from the map to use as categories
         List<String> categories = new ArrayList<>(userInterests.keySet());
-
-        // Build the SQL with the correct number of placeholders for categories
         String inSql = String.join(",", Collections.nCopies(categories.size(), "?"));
         String sql = "SELECT * FROM problems WHERE category IN (" + inSql + ")";
 
@@ -46,7 +44,6 @@ public class ProblemDAOImpl implements ProblemDAO {
     }
 
 
-
     @Override
     public List<Problem> searchProblems(String keyword) {
         List<Problem> problems = new ArrayList<>();
@@ -65,7 +62,7 @@ public class ProblemDAOImpl implements ProblemDAO {
         return problems;
     }
 
-    // Modified to include fetching tags associated with each problem
+    //include fetching tags associated with each problem
     private Problem mapResultSetToProblem(ResultSet rs) throws SQLException {
         List<String> tags = getTagsForProblem(rs.getInt("id"));
 
@@ -112,4 +109,23 @@ public class ProblemDAOImpl implements ProblemDAO {
             }
             return problems;
     }
+
+    @Override
+    public List<Problem> getProblemsByCountry(String country) {
+        List<Problem> problems = new ArrayList<>();
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEMS_IN_USER_COUNTRY)){
+
+            stmt.setString(1, country);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                problems.add(mapResultSetToProblem(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return problems;
+    }
+
 }
