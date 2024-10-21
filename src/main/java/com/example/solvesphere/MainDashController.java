@@ -9,14 +9,18 @@ import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -26,28 +30,32 @@ public class MainDashController {
     @FXML
     private ComboBox<String> filterOptions;
 
+
     private User currentUser;  // This should be set when the user logs in
 
     public void initUserData(User user) {
         this.currentUser = user;
-        displayAllProblems();
+        envokeAllProblemsDisplay();
     }
 
-    private void displayAllProblems() {
+    private void envokeAllProblemsDisplay() {
         ProblemDAO problemDAO = new ProblemDAOImpl();
         List<Problem> allProblems = problemDAO.fetchAllProblems();
         displayProblems(allProblems);
     }
 
     private void displayProblems(List<Problem> problems) {
-        problemListContainer.getChildren().clear(); // Clear existing problems
+        UserDAO userDAO = new UserDAOImpl();
+        problemListContainer.getChildren().clear(); //clear existing problems
         for (Problem problem : problems) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));
                 VBox problemItem = loader.load();
 
                 ProblemItemController controller = loader.getController();
-                controller.setProblemData(problem.getTitle(), problem.getDescription());
+                String problemPublisher = userDAO.getUserById(problem.getUserId()).getUsername();
+                LocalDateTime dateTime = problem.getCreatedAt();
+                controller.setProblemData(problem.getTitle(), problem.getDescription(),problemPublisher, (dateTime));
 
                 problemListContainer.getChildren().add(problemItem);
             } catch (IOException e) {
@@ -67,7 +75,7 @@ public class MainDashController {
         ProblemDAO problemDAO = new ProblemDAOImpl();
         switch (filter) {
             case "None":
-                displayAllProblems();
+                envokeAllProblemsDisplay();
                 break;
             case "Interests":
                     List<Problem> problems = problemDAO.getProblemsByUserInterest(currentUser.getFieldsOfInterest());
@@ -108,5 +116,16 @@ public class MainDashController {
     public void onFilterClick(ActionEvent actionEvent) {
     }
 
+    @FXML
+    private void onHoverEnter(MouseEvent event) {
+        Button button = (Button) event.getSource();
+        button.setStyle("-fx-background-color: #555555; -fx-text-fill: white;-fx-font-size:14;");
+    }
+
+    @FXML
+    private void onHoverExit(MouseEvent event) {
+        Button button = (Button) event.getSource();
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;-fx-font-size:14;");
+    }
 
 }

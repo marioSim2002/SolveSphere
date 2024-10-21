@@ -109,7 +109,7 @@ public class RegisterController {
             }
         };
 
-        new Thread(registrationTask).start(); // Start the task in a new thread
+        new Thread(registrationTask).start(); //start the task in a new thread
     }
 
 
@@ -142,7 +142,7 @@ public class RegisterController {
     }
 
     public Map<String, Integer> getWordsFromFieldOfInterest() {
-        final int DEFAULT_PRIORITY = 1;
+        final int DEFAULT_PRIORITY = 2;
 
         String inputText = fieldOfInterestInput.getText();
         Map<String, Integer> wordMap = new HashMap<>();

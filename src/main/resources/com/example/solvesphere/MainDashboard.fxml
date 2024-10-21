@@ -22,11 +22,11 @@
         <HBox alignment="center" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 10;">
             <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="SolveSphere" />
             <TextField fx:id="searchField" onKeyReleased="#searchForInput" promptText="Search for problems..." style="-fx-pref-width: 300px;" />
-            <ComboBox fx:id="filterOptions" onAction="#handleFilterSelection" prefHeight="25.0" prefWidth="150" promptText="Filter by category">
+            <ComboBox fx:id="filterOptions" onAction="#handleFilterSelection" prefHeight="25.0" prefWidth="150" promptText="Filter">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="None" />
-                        <String fx:value="Interests" />
+                        <String fx:value="Interests Related" />
                         <String fx:value="In Your Country" />
                     </FXCollections>
                 </items>
@@ -37,11 +37,11 @@
 
     <!-- Sidebar for navigation -->
     <left>
-        <VBox spacing="10" style="-fx-background-color: #333333; -fx-padding: 10;">
-            <Button onAction="#onHomeClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
-            <Button onAction="#onProfileClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="My Profile" />
-            <Button onAction="#onSettingsClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Settings" />
-            <Button onAction="#onLogoutClick" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Logout" />
+        <VBox spacing="14" style="-fx-background-color: #333333; -fx-padding: 10;">
+            <Button onAction="#onHomeClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Home" />
+            <Button onAction="#onProfileClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="My Profile" />
+            <Button onAction="#onSettingsClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Settings" />
+            <Button onAction="#onLogoutClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Logout" />
         </VBox>
     </left>
 
