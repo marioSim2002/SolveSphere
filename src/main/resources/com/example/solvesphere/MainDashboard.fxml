@@ -25,9 +25,10 @@
             <ComboBox fx:id="filterOptions" onAction="#handleFilterSelection" prefHeight="25.0" prefWidth="150" promptText="Filter">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="None" />
+                        <String fx:value="No Filter" />
                         <String fx:value="Interests Related" />
                         <String fx:value="In Your Country" />
+                        <String fx:value="Posted By You" />
                     </FXCollections>
                 </items>
             </ComboBox>

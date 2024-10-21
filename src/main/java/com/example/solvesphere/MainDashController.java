@@ -48,21 +48,27 @@ public class MainDashController {
         UserDAO userDAO = new UserDAOImpl();
         problemListContainer.getChildren().clear(); //clear existing problems
         for (Problem problem : problems) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));
-                VBox problemItem = loader.load();
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));
+                    VBox problemItem = loader.load();
 
-                ProblemItemController controller = loader.getController();
-                String problemPublisher = userDAO.getUserById(problem.getUserId()).getUsername();
-                LocalDateTime dateTime = problem.getCreatedAt();
-                controller.setProblemData(problem.getTitle(), problem.getDescription(),problemPublisher, (dateTime));
+                    ProblemItemController controller = loader.getController();
+                    User problemUser = userDAO.getUserById(problem.getUserId());
 
-                problemListContainer.getChildren().add(problemItem);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    // Use the provided method to check if the current user posted this problem
+                    boolean isCurrentUserThePublisher = checkCurrentUserAgainstPublisher(problemUser.getEmail(), currentUser.getEmail());
+                    String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
+
+                    controller.setProblemData(problem.getTitle(), problemPublisherName, problem.getCreatedAt());
+                    problemListContainer.getChildren().add(problemItem);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
     }
+    public boolean checkCurrentUserAgainstPublisher(String emailA , String emailB){
+        System.out.println(emailA+" " + emailB);
+        return emailB.equals(emailA);}
 
     @FXML
     private void handleFilterSelection() {
@@ -73,11 +79,12 @@ public class MainDashController {
 
     private void applyFilter(String filter) {
         ProblemDAO problemDAO = new ProblemDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();;
         switch (filter) {
-            case "None":
+            case "No Filter":
                 envokeAllProblemsDisplay();
                 break;
-            case "Interests":
+            case "Interests Related":
                     List<Problem> problems = problemDAO.getProblemsByUserInterest(currentUser.getFieldsOfInterest());
                     displayProblems(problems);
                 break;
@@ -86,6 +93,11 @@ public class MainDashController {
                     List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
                     displayProblems(problemsByCountry);
                 }
+            case "Posted By You":
+                assert currentUser != null;
+                long userId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+                problems = problemDAO.getProblemsPostedByCurrentUser(userId);
+                displayProblems(problems);
                 break;
         }
     }
@@ -119,7 +131,7 @@ public class MainDashController {
     @FXML
     private void onHoverEnter(MouseEvent event) {
         Button button = (Button) event.getSource();
-        button.setStyle("-fx-background-color: #555555; -fx-text-fill: white;-fx-font-size:14;");
+        button.setStyle("-fx-background-color: #555555; -fx-text-fill: white;-fx-font-size:15;");
     }
 
     @FXML

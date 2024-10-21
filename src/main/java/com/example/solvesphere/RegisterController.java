@@ -32,17 +32,14 @@ public class RegisterController {
     private ComboBox<String> CountryInput;
     @FXML
     private TextField fieldOfInterestInput;
-
     @FXML
     private CheckBox showPassCheck;
     @FXML
     private TextField TxtPassVisible;
     @FXML
     private ImageView profileImageView;
-
     @FXML
     private Hyperlink btChooseImage;
-
     private String imagePath;
     private final ServerCommunicator serverCommunicator;
 

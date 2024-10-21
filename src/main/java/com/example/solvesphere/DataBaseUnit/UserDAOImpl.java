@@ -141,7 +141,7 @@ public class UserDAOImpl implements UserDAO {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                Long id = rs.getLong("id");  // Assuming the ID is stored under the column 'id'
+                long id = rs.getLong("id");  // Assuming the ID is stored under the column 'id'
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(id); // Hypothetical method to fetch interests
                 List<Problem> problems = fetchProblems(id); // Hypothetical method to fetch problems
 

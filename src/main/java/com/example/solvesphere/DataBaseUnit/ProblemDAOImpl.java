@@ -111,6 +111,22 @@ public class ProblemDAOImpl implements ProblemDAO {
     }
 
     @Override
+    public List<Problem> getProblemsPostedByCurrentUser(long userId) {
+        List<Problem> problems = new ArrayList<>();
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_BY_USER_ID)) {
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                problems.add(mapResultSetToProblem(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return problems;
+    }
+
+    @Override
     public List<Problem> getProblemsByCountry(String country) {
         List<Problem> problems = new ArrayList<>();
         try (Connection conn = DatabaseConnectionManager.getConnection();

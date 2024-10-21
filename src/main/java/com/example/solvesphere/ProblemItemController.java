@@ -1,5 +1,10 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.ProblemDAO;
+import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
+import com.example.solvesphere.DataBaseUnit.UserDAO;
+import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
@@ -13,13 +18,13 @@ public class ProblemItemController {
     @FXML
     private Text postDate;
     @FXML private Label problemTitle;
-    @FXML private Label problemDescription;
+    private User currentUser; // This should be set when the controller is initialized
 
-    public void setProblemData(String title, String description, String publisher, LocalDateTime date) {
+    public void setProblemData(String title, String publisher, LocalDateTime date) {
         this.problemTitle.setText(title);
-        this.problemDescription.setText(description);
         this.postedBy.setText(publisher);
         this.postDate.setText(formatDateTime(date));
+
     }
 
     @FXML
