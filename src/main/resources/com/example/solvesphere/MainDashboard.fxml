@@ -46,6 +46,7 @@
         </VBox>
     </left>
 
+
     <!-- main content area to display problems -->
     <center>
         <StackPane>

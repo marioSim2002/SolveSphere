@@ -1,10 +1,13 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ServerCommunicator {
     private String serverHost;
@@ -43,7 +46,29 @@ public class ServerCommunicator {
     }
 
 
-    // Specialized method for sending registration data
+    public List<Problem> sendFetchProblemsRequest(String command) {
+        System.out.println("Sending command to fetch problems: " + command);
+        try (Socket socket = new Socket(serverHost, serverPort);
+             ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream())) {
+
+            objectOut.writeObject(command);
+            objectOut.flush();
+            Object response = objectIn.readObject();
+            if (response instanceof List<?>) {
+                return (List<Problem>) response;  // safely cast and return the List
+            } else {
+                System.out.println("Received incorrect data type: " + response);
+                return new ArrayList<>();  // Return empty list on type mismatch or error
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+
+    //specialized method for sending registration data
     public String sendRegistrationRequest(User user) {
         return sendRequest("REGISTER", user);
     }

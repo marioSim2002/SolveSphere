@@ -37,18 +37,23 @@ class UserRegistrationHandler implements Runnable {
         try (ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
              ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
 
-            // Read the command sent by the client
-            String command = (String) in.readObject();  // Read command as Object
-            System.out.println("Command received: " + command);  // Debugging
+            String command = (String) in.readObject();
+            System.out.println("Command received: " + command);
 
-            if ("REGISTER".equalsIgnoreCase(command)) {
-                handleRegistration(in, out); // Pass ObjectInputStream and ObjectOutputStream for registration
-            } else if ("LOGIN".equalsIgnoreCase(command)) {
-                handleLogin(in, out); // Pass ObjectInputStream and ObjectOutputStream for login
-            } else {
-                out.writeObject("Invalid command. Please use REGISTER or LOGIN."); // Send response
+            switch (command.toUpperCase()) {
+                case "REGISTER":
+                    handleRegistration(in, out);
+                    break;
+                case "LOGIN":
+                    handleLogin(in, out);
+                    break;
+                case "FETCH_PROBLEMS":
+                    handleFetchProblems(out);
+                    break;
+                default:
+                    out.writeObject("Invalid command. Please use REGISTER, LOGIN or FETCH_PROBLEMS.");
+                    break;
             }
-
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -59,6 +64,24 @@ class UserRegistrationHandler implements Runnable {
             }
         }
     }
+
+    private void handleFetchProblems(ObjectOutputStream out) {
+        try {
+            // todo
+            // modify method to match filtering handling
+            ProblemDAO problemDAO = new ProblemDAOImpl();
+            List<Problem> problems = problemDAO.fetchAllProblems();
+            out.writeObject(problems);  //send the list of problems to the client
+        } catch (Exception e) {
+            try {
+                System.err.println("Failed to fetch problems: " + e.getMessage());
+                out.writeObject(new ArrayList<Problem>());  //send an empty list on error
+            } catch (IOException ioException) {
+                System.err.println("Error sending error response: " + ioException.getMessage());
+            }
+        }
+    }
+
 
     private void handleRegistration(ObjectInputStream in, ObjectOutputStream out) throws IOException {
         try {

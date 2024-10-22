@@ -39,10 +39,12 @@ public class MainDashController {
     }
 
     private void envokeAllProblemsDisplay() {
-        ProblemDAO problemDAO = new ProblemDAOImpl();
-        List<Problem> allProblems = problemDAO.fetchAllProblems();
+        // Assuming sendRequest now returns an Object that could be a List<Problem>
+        ServerCommunicator serverCommunicator = new ServerCommunicator("localhost", 12345);
+        List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest("FETCH_PROBLEMS");
         displayProblems(allProblems);
-    }
+        }
+
 
     private void displayProblems(List<Problem> problems) {
         UserDAO userDAO = new UserDAOImpl();
