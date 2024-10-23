@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Problem implements Serializable {
-    private int id;
+    private long id;
     private String title;
     private String description;
     private int userId;
@@ -18,7 +18,7 @@ public class Problem implements Serializable {
     private List<String> tags;
 
 
-    public Problem(int id, String title, String description, int userId, LocalDateTime createdAt,String category, List<String> tags) {
+    public Problem(long id, String title, String description, int userId, LocalDateTime createdAt,String category, List<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,7 +28,7 @@ public class Problem implements Serializable {
         this.tags = tags;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -1,4 +1,6 @@
-package com.example.solvesphere;
+package com.example.solvesphere.SecurityUnit;
+
+import com.example.solvesphere.ServerUnit.UserRegistrationHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;

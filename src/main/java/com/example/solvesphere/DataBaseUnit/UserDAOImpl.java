@@ -225,7 +225,7 @@ public class UserDAOImpl implements UserDAO {
                     e.printStackTrace();
                 }
             }
-            throw ex; // Re-throw the exception
+            throw ex;
         } finally {
             if (stmt != null) stmt.close();
             if (conn != null) conn.close();

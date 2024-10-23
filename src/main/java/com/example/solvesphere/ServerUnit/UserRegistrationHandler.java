@@ -1,5 +1,6 @@
-package com.example.solvesphere;
+package com.example.solvesphere.ServerUnit;
 
+import com.example.solvesphere.AlertsUnit;
 import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class UserRegistrationHandler implements Runnable {
+public class UserRegistrationHandler implements Runnable {
 
     private final Socket clientSocket;
 
@@ -51,7 +52,7 @@ class UserRegistrationHandler implements Runnable {
                     handleFetchProblems(out);
                     break;
                 default:
-                    out.writeObject("Invalid command. Please use REGISTER, LOGIN or FETCH_PROBLEMS.");
+                    out.writeObject("Invalid command. av.cmds: REGISTER, LOGIN , FETCH_PROBLEMS.");
                     break;
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -85,8 +86,8 @@ class UserRegistrationHandler implements Runnable {
 
     private void handleRegistration(ObjectInputStream in, ObjectOutputStream out) throws IOException {
         try {
-            // Read user data
-            User newUser = (User) in.readObject();  // Expecting User object
+            //read user data
+            User newUser = (User) in.readObject();  //expecting User object
 
             System.out.println("Registering user: " + newUser.getUsername());  // Debugging
             System.out.println("Email: " + newUser.getEmail());                // Debugging

@@ -1,5 +1,7 @@
-package com.example.solvesphere;
+package com.example.solvesphere.ServerUnit;
 
+import com.example.solvesphere.AlertsUnit;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.UserData.UserFactory;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
@@ -15,7 +17,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class RegisterController {
     private final ServerCommunicator serverCommunicator;
 
     public RegisterController() {
-        serverCommunicator = new ServerCommunicator("localhost", 12345);  // initialize server communicator
+        serverCommunicator = new ServerCommunicator();  // initialize server communicator
     }
 
     @FXML

@@ -4,6 +4,7 @@ import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
@@ -11,18 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 public class MainDashController {
     @FXML
@@ -39,8 +33,8 @@ public class MainDashController {
     }
 
     private void envokeAllProblemsDisplay() {
-        // Assuming sendRequest now returns an Object that could be a List<Problem>
-        ServerCommunicator serverCommunicator = new ServerCommunicator("localhost", 12345);
+        // sendRequest now returns an Object that could be a List<Problem>
+        ServerCommunicator serverCommunicator = new ServerCommunicator();
         List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest("FETCH_PROBLEMS");
         displayProblems(allProblems);
         }
@@ -55,17 +49,15 @@ public class MainDashController {
                     VBox problemItem = loader.load();
 
                     ProblemItemController controller = loader.getController();
-                    User problemUser = userDAO.getUserById(problem.getUserId());
+                    User problemUser = userDAO.getUserById(problem.getUserId()); ///fixed
 
-                    // Use the provided method to check if the current user posted this problem
+                    //use the provided method to check if the current user posted this problem
                     boolean isCurrentUserThePublisher = checkCurrentUserAgainstPublisher(problemUser.getEmail(), currentUser.getEmail());
                     String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
 
                     controller.setProblemData(problem.getTitle(), problemPublisherName, problem.getCreatedAt());
                     problemListContainer.getChildren().add(problemItem);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) {e.printStackTrace();}
             }
     }
     public boolean checkCurrentUserAgainstPublisher(String emailA , String emailB){

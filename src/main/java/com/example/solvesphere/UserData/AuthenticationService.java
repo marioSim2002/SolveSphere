@@ -11,13 +11,15 @@ public class AuthenticationService {
         this.userDAO = userDAO;
     }
 
+    // todo , implement usage of class methods
     public String authenticateUser(String username, String password) {
         //check if the user exists
-        User user = userDAO.getUserByUsername(username);
+        User user = userDAO.getUserByUsernameAndPassword(username,password);
         if (user == null) {
-            return "User not registered";  // User not found
+            return "User not registered";  //user not found
         }
 
+        /// optional - pass is being already checked against the stored ///
         //compare password with the stored hashed password
         PasswordHasher hasher = new PasswordHasher();
         if (!hasher.verifyPassword(password, user.getPassword())) {

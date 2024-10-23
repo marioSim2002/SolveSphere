@@ -1,11 +1,7 @@
 package com.example.solvesphere;
 
-import com.example.solvesphere.AlertsUnit;
-import com.example.solvesphere.DataBaseUnit.UserDAO;
-import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
-import com.example.solvesphere.ServerCommunicator;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.User;
-import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,7 +31,7 @@ public class LogInUiController {
     private final ServerCommunicator serverCommunicator;
 
     public LogInUiController() {
-        serverCommunicator = new ServerCommunicator("localhost", 12345);
+        serverCommunicator = new ServerCommunicator();
     }
 
     @FXML

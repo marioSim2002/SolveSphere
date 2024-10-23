@@ -1,4 +1,4 @@
-package com.example.solvesphere;
+package com.example.solvesphere.ServerUnit;
 
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
@@ -12,14 +12,25 @@ import java.util.List;
 public class ServerCommunicator {
     private String serverHost;
     private int serverPort;
+    private static ServerCommunicator instance;
 
-    // constructor to initialize host and port
-    public ServerCommunicator(String serverHost, int serverPort) {
-        this.serverHost = serverHost;
-        this.serverPort = serverPort;
+    // private constructor to enforce singleton pattern
+    public ServerCommunicator() {
+        ConfigLoader configLoader = ConfigLoader.getInstance();
+        this.serverHost = configLoader.getProperty("server.host");
+        this.serverPort = configLoader.getIntProperty("server.port");
+
     }
 
-    // General method to send a request and receive a response
+    //singleton getInstance method
+    public static ServerCommunicator getInstance() {
+        if (instance == null) {
+            instance = new ServerCommunicator();
+        }
+        return instance;
+    }
+
+    //general method to send a (log+reg)request and receive a response
     public String sendRequest(String command, Object data) {
         System.out.println("Sending command: " + command);  // Debug message
         try (Socket socket = new Socket(serverHost, serverPort);
@@ -59,7 +70,7 @@ public class ServerCommunicator {
                 return (List<Problem>) response;  // safely cast and return the List
             } else {
                 System.out.println("Received incorrect data type: " + response);
-                return new ArrayList<>();  // Return empty list on type mismatch or error
+                return new ArrayList<>();  // return empty list on type mismatch or error
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
