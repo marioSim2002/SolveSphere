@@ -25,7 +25,7 @@ public class MainDashController {
     private ComboBox<String> filterOptions;
 
 
-    private User currentUser;  // This should be set when the user logs in
+    private User currentUser;  //connected user e.g current user
 
     public void initUserData(User user) {
         this.currentUser = user;
@@ -55,7 +55,7 @@ public class MainDashController {
                     boolean isCurrentUserThePublisher = checkCurrentUserAgainstPublisher(problemUser.getEmail(), currentUser.getEmail());
                     String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
 
-                    controller.setProblemData(problem.getTitle(), problemPublisherName, problem.getCreatedAt());
+                    controller.setProblemData(problem,problemPublisherName);
                     problemListContainer.getChildren().add(problemItem);
                 } catch (IOException e) {e.printStackTrace();}
             }

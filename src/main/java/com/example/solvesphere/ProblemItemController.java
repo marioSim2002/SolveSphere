@@ -4,6 +4,7 @@ import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -18,18 +19,20 @@ public class ProblemItemController {
     @FXML
     private Text postDate;
     @FXML private Label problemTitle;
-    private User currentUser; // This should be set when the controller is initialized
+    private User currentUser; //the current connected use e.g signed in
 
-    public void setProblemData(String title, String publisher, LocalDateTime date) {
-        this.problemTitle.setText(title);
+    public void setProblemData(Problem problem,String publisher) {
+        this.problemTitle.setText(problem.getTitle());
         this.postedBy.setText(publisher);
-        this.postDate.setText(formatDateTime(date));
+        this.postDate.setText(formatDateTime(problem.getCreatedAt()));
 
     }
 
     @FXML
     private void onDetailsClick() {
-        // logic to show details
+        //todo ,
+        // check user age,
+        // allow access accordingly
     }
 
 
@@ -37,5 +40,9 @@ public class ProblemItemController {
     private String formatDateTime(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm");
         return dateTime.format(formatter);
+    }
+
+    public boolean validateUserAgeForContentAccess(Problem clickedProblem,User user){
+            return  false;
     }
 }

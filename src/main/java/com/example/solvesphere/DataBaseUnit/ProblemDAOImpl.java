@@ -65,14 +65,16 @@ public class ProblemDAOImpl implements ProblemDAO {
     //include fetching tags associated with each problem
     private Problem mapResultSetToProblem(ResultSet rs) throws SQLException {
         List<String> tags = getTagsForProblem(rs.getInt("id"));
+        boolean isAgeRestricted = rs.getBoolean("is_age_restricted");  // Fetch the boolean value from ResultSet
 
         return new Problem(
-                rs.getInt("id"),
+                rs.getLong("id"),  // Changed from getInt to getLong to match your constructor
                 rs.getString("title"),
                 rs.getString("description"),
                 rs.getInt("user_id"),
                 rs.getTimestamp("created_at").toLocalDateTime(),  // Convert SQL Timestamp to LocalDateTime
                 rs.getString("category"),
+                isAgeRestricted,  // Add this to match your constructor
                 tags
         );
     }

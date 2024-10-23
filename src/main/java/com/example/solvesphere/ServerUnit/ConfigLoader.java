@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigLoader {
-
+    /* class to get config properties */
     private static ConfigLoader instance;
     private Properties properties;
 
@@ -37,8 +37,7 @@ public class ConfigLoader {
     public String getProperty(String key) {
         String value = properties.getProperty(key);
         if (value == null) {
-            System.err.println("Property " + key + " is missing.");
-            throw new IllegalArgumentException("Missing property: " + key);
+            throw new IllegalArgumentException("missing property: " + key);
         }
         return value.trim();
     }
@@ -48,7 +47,6 @@ public class ConfigLoader {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            System.err.println("Invalid format for integer property: " + key + " with value: " + value);
             throw e;
         }
     }

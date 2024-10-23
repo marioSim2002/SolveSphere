@@ -184,12 +184,13 @@ public class UserDAOImpl implements UserDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Problem problem = new Problem(
-                        rs.getInt("id"),
+                        rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("description"),
-                        (int) rs.getLong("user_id"),
+                        rs.getInt("user_id"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getString("category"),
+                        rs.getBoolean("is_age_restricted"),
                         Arrays.asList(rs.getString("tags").split(",")) // Assuming tags are stored as a comma-separated values
                 );
                 problems.add(problem);

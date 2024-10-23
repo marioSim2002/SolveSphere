@@ -1,5 +1,6 @@
 package com.example.solvesphere.UserData;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -9,22 +10,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Problem implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 7765231569024119311L;
     private long id;
     private String title;
     private String description;
     private int userId;
     private LocalDateTime createdAt;
     private String category;
+    private boolean isAgeRestricted;
     private List<String> tags;
 
 
-    public Problem(long id, String title, String description, int userId, LocalDateTime createdAt,String category, List<String> tags) {
+    public Problem(long id, String title, String description, int userId, LocalDateTime createdAt,String category, Boolean isAgeRestricted,List<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.userId = userId;
         this.createdAt = createdAt;
         this.category = category;
+        this.isAgeRestricted = isAgeRestricted;
         this.tags = tags;
     }
 
@@ -79,6 +84,8 @@ public class Problem implements Serializable {
     public List<String> getTags() {
         return tags;
     }
+
+    public boolean isAgeRestricted(){return isAgeRestricted;}
 
     public void setTags(List<String> tags) {
         this.tags = tags;
