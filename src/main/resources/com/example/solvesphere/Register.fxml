@@ -14,9 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="736.0" prefWidth="1209.0" stylesheets="@registerStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="736.0" prefWidth="1209.0" stylesheets="@registerStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.ServerUnit.RegisterController">
    <children>
-      <!-- Title Text (Centered at the top) -->
+      <!-- title Text (Centered at the top) -->
       <Text layoutX="570.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New User" textAlignment="CENTER" wrappingWidth="106.40545654296875">
          <font>
             <Font size="24.0" />
