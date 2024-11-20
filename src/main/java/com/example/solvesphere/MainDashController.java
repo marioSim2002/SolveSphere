@@ -95,12 +95,28 @@ public class MainDashController {
                 break;
         }
     }
-
-
-    @FXML
+   @FXML
     public void addProblem() {
-    }
+        try {
+            // טוען את קובץ ה-FXML של טופס הוספת בעיה
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("addProblem.fxml"));
+            VBox addProblemRoot = loader.load();
 
+            // יוצר סצנה חדשה עבור חלון הוספת בעיה
+            Scene scene = new Scene(addProblemRoot);
+            Stage stage = new Stage();
+            stage.setTitle("Add New Problem");
+            stage.setScene(scene);
+
+            // קישור המשתמש הנוכחי לחלון ההוספה
+//            AddProblemController controller = loader.getController();
+//            controller.setCurrentUserId(currentUser);
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     public void searchForInput() {
     }

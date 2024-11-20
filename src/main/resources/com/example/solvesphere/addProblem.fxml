@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.solvesphere.AddProblemController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Add New Problem" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="titleField" promptText="Title" />
+    <TextArea fx:id="descriptionField" promptText="Description" wrapText="true" />
+    <TextField fx:id="categoryField" promptText="Category" />
+    <TextField fx:id="tagsField" promptText="Tags (comma separated)" />
+
+    <Button text="Submit" onAction="#submitProblem" style="-fx-padding: 10px 20px; -fx-font-size: 14px;"/>
+
+</VBox>
+

@@ -145,5 +145,30 @@ public class ProblemDAOImpl implements ProblemDAO {
         }
         return problems;
     }
+    
+@Override
+    public boolean addProblem(Problem problem) {
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_INSERT_PROBLEM_SQL)) {
 
+            // Set values for the placeholders in the SQL statement
+            stmt.setString(1, problem.getTitle());
+            stmt.setString(2, problem.getDescription());
+            stmt.setLong(3, problem.getUserId());
+            stmt.setString(4, problem.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            stmt.setString(5, problem.getCategory());
+
+            // Join tags list into a comma-separated string for storage
+            String tagsString = String.join(",", problem.getTags());
+            stmt.setString(6, tagsString);
+
+            // Execute update and return true if insertion was successful
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

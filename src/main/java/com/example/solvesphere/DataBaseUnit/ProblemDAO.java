@@ -14,4 +14,5 @@ public interface ProblemDAO {
 
     List<Problem> getProblemsPostedByCurrentUser(long userId);  //fetch problems posted by the current user
     List<Problem> getProblemsByCountry(String country);
+    boolean addProblem(Problem problem);
 }

@@ -2,7 +2,7 @@ package com.example.solvesphere;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-
+//example
 public abstract class AlertsUnit {
     private static void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Platform.runLater(() -> {
