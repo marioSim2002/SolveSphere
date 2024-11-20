@@ -12,6 +12,8 @@ public class ProblemQueries {
             "JOIN users u ON p.user_id = u.id\n" +
             "WHERE u.country = ?;\n";
 
-     public static final String SELECT_INSERT_PROBLEM_SQL =
-            "INSERT INTO problems (title, description, user_id, created_at, category, tags) VALUES (?, ?, ?, ?, ?, ?)";
+     public static final String INSERT_PROBLEM_SQL =
+            "INSERT INTO problems (title, description, user_id, created_at, category) VALUES (?, ?, ?, ?, ?)";
+
+     public static final String SELECT_PROBLEM_TAGS = "SELECT t.tag_name FROM tags t JOIN problem_tags pt ON t.id = pt.tag_id WHERE pt.problem_id = ?";
 }

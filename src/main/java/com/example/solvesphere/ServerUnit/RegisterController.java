@@ -1,9 +1,7 @@
 package com.example.solvesphere.ServerUnit;
 
 import com.example.solvesphere.AlertsUnit;
-import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.User;
-import com.example.solvesphere.UserData.UserFactory;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -73,7 +71,7 @@ public class RegisterController {
             return;
         }
 
-        User newUser = UserFactory.createUser(username, email, password,
+        User newUser = new User(username, email, password,
                 dateOfBirth, country, getWordsFromFieldOfInterest(),
                 LocalDate.now(), getProfileImagePath());
 

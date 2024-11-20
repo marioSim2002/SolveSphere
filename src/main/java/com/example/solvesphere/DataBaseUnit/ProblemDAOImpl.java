@@ -3,10 +3,7 @@ package com.example.solvesphere.DataBaseUnit;
 import com.example.solvesphere.DBQueries.ProblemQueries;
 import com.example.solvesphere.UserData.Problem;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public class ProblemDAOImpl implements ProblemDAO {
@@ -27,7 +24,7 @@ public class ProblemDAOImpl implements ProblemDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Set the values for each placeholder
+            // set the values for each placeholder
             int index = 1;
             for (String category : categories) {
                 stmt.setString(index++, category);
@@ -83,11 +80,9 @@ public class ProblemDAOImpl implements ProblemDAO {
     private List<String> getTagsForProblem(int problemId) {
         List<String> tags = new ArrayList<>();
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_BY_ID)) {
-
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_TAGS)) {
             stmt.setInt(1, problemId);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 tags.add(rs.getString("tag_name"));
             }
@@ -149,20 +144,18 @@ public class ProblemDAOImpl implements ProblemDAO {
 @Override
     public boolean addProblem(Problem problem) {
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_INSERT_PROBLEM_SQL)) {
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.INSERT_PROBLEM_SQL)) {
 
-            // Set values for the placeholders in the SQL statement
+            // set values for the placeholders in the SQL statement
             stmt.setString(1, problem.getTitle());
             stmt.setString(2, problem.getDescription());
             stmt.setLong(3, problem.getUserId());
-            stmt.setString(4, problem.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            stmt.setTimestamp(4, Timestamp.valueOf(problem.getCreatedAt()));
             stmt.setString(5, problem.getCategory());
+//            String tagsString = String.join(",", problem.getTags());
+//            stmt.setString(6, tagsString);
 
-            // Join tags list into a comma-separated string for storage
-            String tagsString = String.join(",", problem.getTags());
-            stmt.setString(6, tagsString);
-
-            // Execute update and return true if insertion was successful
+            // execute update and return true if insertion was successful
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
 

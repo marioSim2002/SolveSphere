@@ -15,14 +15,14 @@ public class Problem implements Serializable {
     private long id;
     private String title;
     private String description;
-    private int userId;
+    private long userId;
     private LocalDateTime createdAt;
     private String category;
     private boolean isAgeRestricted;
     private List<String> tags;
 
 
-    public Problem(long id, String title, String description, int userId, LocalDateTime createdAt,String category, Boolean isAgeRestricted,List<String> tags) {
+    public Problem(long id, String title, String description, long userId, LocalDateTime createdAt,String category, Boolean isAgeRestricted,List<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -36,10 +36,7 @@ public class Problem implements Serializable {
     public long getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(long id) {this.id = id;}
 
     public String getTitle() {
         return title;
@@ -57,7 +54,7 @@ public class Problem implements Serializable {
         this.description = description;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 

@@ -24,6 +24,11 @@ public abstract class AlertsUnit {
         showAlert(Alert.AlertType.INFORMATION, "Invalid Data!", "At least one of your info isn't correct.");
     }
 
+    public static void successAddAlert() {
+        showAlert(Alert.AlertType.INFORMATION, "Success", "Your problem has been posted\nothers can interact with it and suggest solutions.");
+    }
+
+
     public static void userAlreadyRegistered() {
         showAlert(Alert.AlertType.WARNING, "Registration Warning", "User already exists", "The username or email you entered is already registered.");
     }

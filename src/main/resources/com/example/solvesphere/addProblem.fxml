@@ -14,8 +14,8 @@
     <TextArea fx:id="descriptionField" promptText="Description" wrapText="true" />
     <TextField fx:id="categoryField" promptText="Category" />
     <TextField fx:id="tagsField" promptText="Tags (comma separated)" />
+    <CheckBox fx:id="ageRestrictionCheckbox" text="Age Restricted" />
 
     <Button text="Submit" onAction="#submitProblem" style="-fx-padding: 10px 20px; -fx-font-size: 14px;"/>
 
 </VBox>
-

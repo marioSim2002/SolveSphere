@@ -6,24 +6,19 @@ import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
-import com.example.solvesphere.UserData.AuthenticationService;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
-import com.example.solvesphere.UserData.UserFactory;
 
-import java.io.*;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserRegistrationHandler implements Runnable {
 
@@ -51,6 +46,9 @@ public class UserRegistrationHandler implements Runnable {
                 case "FETCH_PROBLEMS":
                     handleFetchProblems(out);
                     break;
+                case "FETCH_USER_ID":
+                    handleFetchUserId(in, out);
+                    break;
                 default:
                     out.writeObject("Invalid command. av.cmds: REGISTER, LOGIN , FETCH_PROBLEMS.");
                     break;
@@ -64,6 +62,17 @@ public class UserRegistrationHandler implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void handleFetchUserId(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
+        String[] userInfo = (String[]) in.readObject();
+        String username = userInfo[0];
+        String email = userInfo[1];
+        UserDAO userDAO = new UserDAOImpl();
+        try {
+            long userId = userDAO.getUserIdByUsernameAndEmail(username, email);
+            out.writeObject(userId);
+        }catch (NullPointerException ex){System.out.println("ID NULL");}
     }
 
     private void handleFetchProblems(ObjectOutputStream out) {
@@ -114,6 +123,10 @@ public class UserRegistrationHandler implements Runnable {
         }
     }
 
+    public long getUserIdByCredentials(String username, String password) {
+        UserDAO userDAO = new UserDAOImpl();
+        return userDAO.getUserIdByUsernameAndEmail(username, password);
+    }
     private void handleLogin(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
         //read the object from the input stream
         Object data = in.readObject();
@@ -146,6 +159,4 @@ public class UserRegistrationHandler implements Runnable {
             System.out.println("Received invalid data for login: " + data); // Debugging
         }
     }
-
-
 }

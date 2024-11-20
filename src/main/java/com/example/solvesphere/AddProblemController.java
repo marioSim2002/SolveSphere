@@ -2,9 +2,13 @@ package com.example.solvesphere;
 
 import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
+import com.example.solvesphere.DataBaseUnit.UserDAO;
+import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
@@ -16,6 +20,8 @@ import java.util.List;
 
 public class AddProblemController {
 
+    @FXML
+    public CheckBox ageRestrictionCheckbox;
     @FXML
     private TextField titleField;
     @FXML
@@ -39,42 +45,41 @@ public class AddProblemController {
         String category = categoryField.getText();
         String tagsText = tagsField.getText();
 
-        // בדיקה שכל השדות מלאים
         if (title.isEmpty() || description.isEmpty() || category.isEmpty() || tagsText.isEmpty()) {
-            showAlert("All fields are required!", AlertType.WARNING);
+            AlertsUnit.showInvalidDataAlert();
             return;
         }
 
-        // פיצול התגים לפי פסיקים והסרת רווחים מיותרים
         List<String> tags = Arrays.asList(tagsText.split("\\s*,\\s*"));
+        boolean isAgeRestricted = ageRestrictionCheckbox.isSelected();  //age restriction status
 
-        // יצירת אובייקט Problem חדש
-        Problem problem = new Problem(0, title, description, currentUser.getId(), LocalDateTime.now(), category, tags);
+        ServerCommunicator communicator = ServerCommunicator.getInstance();
+        Long userId = communicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        if (userId != null) {
+            System.out.println("Fetched User ID: " + userId);
+        } else {
+            System.out.println("User not found.");
+        }
+        if (userId==null) {
+            System.err.println("error, ID retrieved NULL");return;}
 
-        // הוספת הבעיה למסד הנתונים
-        ProblemDAO problemDAO = new ProblemDAOImpl();
-        boolean isSuccess = problemDAO.addProblem(problem);
-
-        // הודעה על הצלחה או כישלון
+            Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted, tags);
+            ProblemDAO problemDAO = new ProblemDAOImpl();
+            boolean isSuccess = problemDAO.addProblem(problem);
+    // TODO , refresh problems list
         if (isSuccess) {
-            showAlert("Problem added successfully!", AlertType.INFORMATION);
+            AlertsUnit.successAddAlert();
             clearFields();
         } else {
-            showAlert("Failed to add problem. Please try again.", AlertType.ERROR);
+            AlertsUnit.showErrorAlert("error occurred.");
         }
     }
-
     private void clearFields() {
         titleField.clear();
         descriptionField.clear();
         categoryField.clear();
         tagsField.clear();
-    }
-
-    private void showAlert(String message, AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setContentText(message);
-        alert.showAndWait();
+        ageRestrictionCheckbox.setSelected(false);
     }
 }
 

@@ -10,10 +10,12 @@ import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -98,19 +100,18 @@ public class MainDashController {
    @FXML
     public void addProblem() {
         try {
-            // טוען את קובץ ה-FXML של טופס הוספת בעיה
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("addProblem.fxml"));
             VBox addProblemRoot = loader.load();
 
-            // יוצר סצנה חדשה עבור חלון הוספת בעיה
+            //new problem scene
             Scene scene = new Scene(addProblemRoot);
             Stage stage = new Stage();
             stage.setTitle("Add New Problem");
             stage.setScene(scene);
 
-            // קישור המשתמש הנוכחי לחלון ההוספה
-//            AddProblemController controller = loader.getController();
-//            controller.setCurrentUserId(currentUser);
+           AddProblemController controller = loader.getController();
+           controller.setCurrentUser(currentUser);
 
             stage.show();
         } catch (IOException e) {
