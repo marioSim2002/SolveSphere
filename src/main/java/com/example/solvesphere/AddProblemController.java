@@ -7,6 +7,7 @@ import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
@@ -30,10 +31,9 @@ public class AddProblemController {
     private TextField categoryField;
     @FXML
     private TextField tagsField;
+    private User currentUser;
 
-    private User currentUser;  // מחזיק את כל פרטי המשתמש
 
-    // מתודה לאתחול פרטי המשתמש
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
@@ -45,7 +45,8 @@ public class AddProblemController {
         String category = categoryField.getText();
         String tagsText = tagsField.getText();
 
-        if (title.isEmpty() || description.isEmpty() || category.isEmpty() || tagsText.isEmpty()) {
+        String [] inputData = {title,description,category,tagsText};
+        if (!ValidateInputData.validTxtData(inputData)) {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
@@ -59,10 +60,9 @@ public class AddProblemController {
             System.out.println("Fetched User ID: " + userId);
         } else {
             System.out.println("User not found.");
+            return;
         }
-        if (userId==null) {
-            System.err.println("error, ID retrieved NULL");return;}
-
+        System.out.println(isAgeRestricted);
             Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted, tags);
             ProblemDAO problemDAO = new ProblemDAOImpl();
             boolean isSuccess = problemDAO.addProblem(problem);
@@ -70,9 +70,7 @@ public class AddProblemController {
         if (isSuccess) {
             AlertsUnit.successAddAlert();
             clearFields();
-        } else {
-            AlertsUnit.showErrorAlert("error occurred.");
-        }
+        } else {AlertsUnit.showErrorAlert("error occurred.");}
     }
     private void clearFields() {
         titleField.clear();

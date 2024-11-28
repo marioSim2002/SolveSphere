@@ -62,7 +62,7 @@ public class ProblemDAOImpl implements ProblemDAO {
     //include fetching tags associated with each problem
     private Problem mapResultSetToProblem(ResultSet rs) throws SQLException {
         List<String> tags = getTagsForProblem(rs.getInt("id"));
-        boolean isAgeRestricted = rs.getBoolean("is_age_restricted");  // Fetch the boolean value from ResultSet
+      //  boolean isAgeRestricted
 
         return new Problem(
                 rs.getLong("id"),  // Changed from getInt to getLong to match your constructor
@@ -71,7 +71,7 @@ public class ProblemDAOImpl implements ProblemDAO {
                 rs.getInt("user_id"),
                 rs.getTimestamp("created_at").toLocalDateTime(),  // Convert SQL Timestamp to LocalDateTime
                 rs.getString("category"),
-                isAgeRestricted,  // Add this to match your constructor
+                rs.getBoolean("is_age_restricted"),
                 tags
         );
     }
@@ -140,28 +140,26 @@ public class ProblemDAOImpl implements ProblemDAO {
         }
         return problems;
     }
-    
+
 @Override
-    public boolean addProblem(Problem problem) {
-        try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.INSERT_PROBLEM_SQL)) {
+public boolean addProblem(Problem problem) {
+    try (Connection conn = DatabaseConnectionManager.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(ProblemQueries.INSERT_PROBLEM_SQL)) {
 
-            // set values for the placeholders in the SQL statement
-            stmt.setString(1, problem.getTitle());
-            stmt.setString(2, problem.getDescription());
-            stmt.setLong(3, problem.getUserId());
-            stmt.setTimestamp(4, Timestamp.valueOf(problem.getCreatedAt()));
-            stmt.setString(5, problem.getCategory());
-//            String tagsString = String.join(",", problem.getTags());
-//            stmt.setString(6, tagsString);
+        stmt.setString(1, problem.getTitle());
+        stmt.setString(2, problem.getDescription());
+        stmt.setLong(3, problem.getUserId());
+        stmt.setTimestamp(4, Timestamp.valueOf(problem.getCreatedAt()));
+        stmt.setString(5, problem.getCategory());
+        stmt.setBoolean(6, problem.isAgeRestricted()); // Correctly bind the isAgeRestricted field
+//        String tagsString = String.join(",", problem.getTags());
+//        stmt.setString(7, tagsString); // not yet implemented
 
-            // execute update and return true if insertion was successful
-            int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
-
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
+        int affectedRows = stmt.executeUpdate();
+        return affectedRows > 0;
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+        return false;
     }
+}
 }

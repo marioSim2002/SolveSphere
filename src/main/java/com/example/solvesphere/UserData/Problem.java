@@ -18,7 +18,7 @@ public class Problem implements Serializable {
     private long userId;
     private LocalDateTime createdAt;
     private String category;
-    private boolean isAgeRestricted;
+    private final boolean isAgeRestricted;
     private List<String> tags;
 
 

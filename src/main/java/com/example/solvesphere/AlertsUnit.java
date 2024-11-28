@@ -48,4 +48,8 @@ public abstract class AlertsUnit {
     public static void userNotRegisteredAlert() {
         showAlert(Alert.AlertType.WARNING, "User not registered", "Please register before attempting login!");
     }
+
+    public static void userUnderAgeAlert() {
+        showAlert(Alert.AlertType.WARNING, "Access Denied: Age-Restricted Content", "This content has age restrictions and is not available for viewing.");
+    }
 }

@@ -13,7 +13,7 @@ public class ProblemQueries {
             "WHERE u.country = ?;\n";
 
      public static final String INSERT_PROBLEM_SQL =
-            "INSERT INTO problems (title, description, user_id, created_at, category) VALUES (?, ?, ?, ?, ?)";
+            "INSERT INTO problems (title, description, user_id, created_at, category, is_age_restricted) VALUES (?, ?, ?, ?, ?, ?);";
 
      public static final String SELECT_PROBLEM_TAGS = "SELECT t.tag_name FROM tags t JOIN problem_tags pt ON t.id = pt.tag_id WHERE pt.problem_id = ?";
 }

@@ -26,7 +26,6 @@ public class MainDashController {
     @FXML
     private ComboBox<String> filterOptions;
 
-
     private User currentUser;  //connected user e.g current user
 
     public void initUserData(User user) {
@@ -57,13 +56,13 @@ public class MainDashController {
                     boolean isCurrentUserThePublisher = checkCurrentUserAgainstPublisher(problemUser.getEmail(), currentUser.getEmail());
                     String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
 
-                    controller.setProblemData(problem,problemPublisherName);
+                    controller.setProblemData(problem,problemPublisherName,currentUser);
                     problemListContainer.getChildren().add(problemItem);
                 } catch (IOException e) {e.printStackTrace();}
             }
     }
     public boolean checkCurrentUserAgainstPublisher(String emailA , String emailB){
-        System.out.println(emailA+" " + emailB);
+        System.out.println(emailA+" " + emailB); //debug
         return emailB.equals(emailA);}
 
     @FXML
@@ -100,7 +99,6 @@ public class MainDashController {
    @FXML
     public void addProblem() {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("addProblem.fxml"));
             VBox addProblemRoot = loader.load();
 
