@@ -45,7 +45,7 @@ public class AddProblemController {
         String category = categoryField.getText();
         String tagsText = tagsField.getText();
 
-        String [] inputData = {title,description,category,tagsText};
+        String[] inputData = {title, description, category, tagsText};
         if (!ValidateInputData.validTxtData(inputData)) {
             AlertsUnit.showInvalidDataAlert();
             return;
@@ -63,15 +63,18 @@ public class AddProblemController {
             return;
         }
         System.out.println(isAgeRestricted);
-            Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted, tags);
-            ProblemDAO problemDAO = new ProblemDAOImpl();
-            boolean isSuccess = problemDAO.addProblem(problem);
-    // TODO , refresh problems list
+        Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted, tags);
+        ProblemDAO problemDAO = new ProblemDAOImpl();
+        boolean isSuccess = problemDAO.addProblem(problem);
+        // TODO , refresh problems list
         if (isSuccess) {
             AlertsUnit.successAddAlert();
             clearFields();
-        } else {AlertsUnit.showErrorAlert("error occurred.");}
+        } else {
+            AlertsUnit.showErrorAlert("error occurred.");
+        }
     }
+
     private void clearFields() {
         titleField.clear();
         descriptionField.clear();
