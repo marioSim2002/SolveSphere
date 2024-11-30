@@ -33,7 +33,7 @@ public class MainDashController {
 
     public void initUserData(User user) {
         this.currentUser = user;
-        fetchAndDisplayProblems();  // Initial call
+        fetchAndDisplayProblems();
 
         // initialize and schedule the fetch-and-display task
         if (scheduler == null || scheduler.isShutdown()) {
