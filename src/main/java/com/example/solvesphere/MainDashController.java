@@ -95,14 +95,34 @@ public class MainDashController {
                 break;
         }
     }
-
-
     @FXML
     public void addProblem() {
     }
 
-    @FXML
+   @FXML
     public void searchForInput() {
+        String searchText = searchField.getText().trim();
+
+        //If not there is no text showing all the problems
+        if (searchText.isEmpty()) {
+            envokeAllProblemsDisplay();
+            return;
+        }
+
+        ProblemDAO problemDAO = new ProblemDAOImpl();
+
+        // Searching for suitable problems
+        List<Problem> matchingProblems = problemDAO.searchProblems(searchText);
+
+        //If no problems are found
+        if (matchingProblems.isEmpty()) {
+            System.out.println("No problems were found according to the search: " + searchText);
+            problemListContainer.getChildren().clear(); //Clearing the problem list
+
+        } else {
+            // presenting the appropriate problems
+            displayProblems(matchingProblems);
+        }
     }
 
     @FXML
