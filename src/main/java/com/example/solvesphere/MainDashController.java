@@ -16,6 +16,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -25,24 +28,24 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class MainDashController {
     @FXML
+    private ImageView profileImg;
+    @FXML
     private VBox problemListContainer;
     @FXML
     private ComboBox<String> filterOptions;
+    @FXML
+    private TextField searchField;
     private ScheduledExecutorService scheduler;
     private User currentUser;  //connected user e.g current user
 
     public void initUserData(User user) {
         this.currentUser = user;
+        buildImage(currentUser);
         fetchAndDisplayProblems();
 
-        // initialize and schedule the fetch-and-display task
-        if (scheduler == null || scheduler.isShutdown()) {
-            scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleAtFixedRate(this::envokeAllProblemsDisplay, 0, 10, TimeUnit.SECONDS);
-        }
+
     }
     private void envokeAllProblemsDisplay() {
-        System.out.println("Scheduled fetch started.");
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest("FETCH_PROBLEMS");
         Platform.runLater(() -> {
@@ -126,10 +129,9 @@ public class MainDashController {
             Stage stage = new Stage();
             stage.setTitle("Add New Problem");
             stage.setScene(scene);
-
            AddProblemController controller = loader.getController();
            controller.setCurrentUser(currentUser);
-
+            stage.setOnHidden(event -> fetchAndDisplayProblems());
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,26 +140,39 @@ public class MainDashController {
 
     public void searchForInput() {
         String searchText = searchField.getText().trim();
-
-        //If not there is no text showing all the problems
         if (searchText.isEmpty()) {
             envokeAllProblemsDisplay();
             return;
         }
-
         ProblemDAO problemDAO = new ProblemDAOImpl();
 
-        // Searching for suitable problems
+        // searching for suitable problems via query
         List<Problem> matchingProblems = problemDAO.searchProblems(searchText);
-
-        //If no problems are found
         if (matchingProblems.isEmpty()) {
             System.out.println("No problems were found according to the search: " + searchText);
-            problemListContainer.getChildren().clear(); //Clearing the problem list
+            problemListContainer.getChildren().clear(); //clearing the problem list
 
         } else {
             // presenting the appropriate problems
             displayProblems(matchingProblems);
+        }
+    }
+
+    private void buildImage(User user){
+        String profilePicturePath = user.getProfilePicture();
+
+        if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+            try {
+                //convert the string path to an Image
+                Image image = new Image(profilePicturePath);
+                profileImg.setImage(image);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid image path: " + profilePicturePath);
+                profileImg.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
+            }
+        } else {
+            //default image (null or empty)
+            profileImg.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
         }
     }
 

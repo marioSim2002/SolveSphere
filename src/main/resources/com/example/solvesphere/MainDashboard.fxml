@@ -15,8 +15,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.MainDashController">
-
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.MainDashController"
+            stylesheets="@dataStyling.css">
     <!-- Navbar -->
     <top>
         <HBox alignment="center" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 10;">
@@ -32,13 +32,13 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Button onAction="#onFilterClick" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Filter" />
         </HBox>
     </top>
 
     <!-- Sidebar for navigation -->
     <left>
         <VBox spacing="14" style="-fx-background-color: #333333; -fx-padding: 10;">
+            <ImageView fx:id="profileImg" styleClass="image-view" fitWidth="90" fitHeight="90" preserveRatio="true"/>
             <Button onAction="#onHomeClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Home" />
             <Button onAction="#onProfileClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="My Profile" />
             <Button onAction="#onSettingsClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Settings" />

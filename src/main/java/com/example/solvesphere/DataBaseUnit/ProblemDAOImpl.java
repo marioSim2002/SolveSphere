@@ -47,7 +47,9 @@ public class ProblemDAOImpl implements ProblemDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SEARCH_PROBLEMS)) {
 
-            stmt.setString(1, "%" + keyword + "%");
+            stmt.setString(1, "%" + keyword + "%"); // title
+            stmt.setString(2, "%" + keyword + "%"); // desc
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
