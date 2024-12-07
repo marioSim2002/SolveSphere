@@ -1,5 +1,4 @@
 package com.example.solvesphere;
-
 import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
@@ -19,20 +18,27 @@ public class ProblemItemController {
     @FXML
     private Text postDate;
     @FXML private Label problemTitle;
+    private Problem passedProblem;
     private User currentUser; //the current connected use e.g signed in
 
-    public void setProblemData(Problem problem,String publisher) {
+    public void setProblemData(Problem problem,String publisher,User passedUser) {
         this.problemTitle.setText(problem.getTitle());
         this.postedBy.setText(publisher);
         this.postDate.setText(formatDateTime(problem.getCreatedAt()));
+        this.passedProblem = problem;
+        this.currentUser = passedUser;
 
     }
 
     @FXML
     private void onDetailsClick() {
+        if(!validateUserAgeForContentAccess(passedProblem, currentUser.calculateAge())){
+            System.out.println("im here");
+            AlertsUnit.userUnderAgeAlert();
+            return;
+        }
         //todo ,
-        // check user age,
-        // allow access accordingly
+        // show problem details (open problem)
     }
 
 
@@ -42,7 +48,7 @@ public class ProblemItemController {
         return dateTime.format(formatter);
     }
 
-    public boolean validateUserAgeForContentAccess(Problem clickedProblem,User user){
-            return  false;
+    public boolean validateUserAgeForContentAccess(Problem clickedProblem,int currentUserAge){
+        return !clickedProblem.isAgeRestricted() || currentUserAge >= 18;
     }
 }

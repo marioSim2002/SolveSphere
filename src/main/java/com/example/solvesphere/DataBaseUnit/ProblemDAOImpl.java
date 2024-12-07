@@ -3,10 +3,7 @@ package com.example.solvesphere.DataBaseUnit;
 import com.example.solvesphere.DBQueries.ProblemQueries;
 import com.example.solvesphere.UserData.Problem;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public class ProblemDAOImpl implements ProblemDAO {
@@ -27,7 +24,7 @@ public class ProblemDAOImpl implements ProblemDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Set the values for each placeholder
+            // set the values for each placeholder
             int index = 1;
             for (String category : categories) {
                 stmt.setString(index++, category);
@@ -65,7 +62,7 @@ public class ProblemDAOImpl implements ProblemDAO {
     //include fetching tags associated with each problem
     private Problem mapResultSetToProblem(ResultSet rs) throws SQLException {
         List<String> tags = getTagsForProblem(rs.getInt("id"));
-        boolean isAgeRestricted = rs.getBoolean("is_age_restricted");  // Fetch the boolean value from ResultSet
+      //  boolean isAgeRestricted
 
         return new Problem(
                 rs.getLong("id"),  // Changed from getInt to getLong to match your constructor
@@ -74,7 +71,7 @@ public class ProblemDAOImpl implements ProblemDAO {
                 rs.getInt("user_id"),
                 rs.getTimestamp("created_at").toLocalDateTime(),  // Convert SQL Timestamp to LocalDateTime
                 rs.getString("category"),
-                isAgeRestricted,  // Add this to match your constructor
+                rs.getBoolean("is_age_restricted"),
                 tags
         );
     }
@@ -83,11 +80,9 @@ public class ProblemDAOImpl implements ProblemDAO {
     private List<String> getTagsForProblem(int problemId) {
         List<String> tags = new ArrayList<>();
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_BY_ID)) {
-
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_TAGS)) {
             stmt.setInt(1, problemId);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 tags.add(rs.getString("tag_name"));
             }
@@ -146,4 +141,25 @@ public class ProblemDAOImpl implements ProblemDAO {
         return problems;
     }
 
+@Override
+public boolean addProblem(Problem problem) {
+    try (Connection conn = DatabaseConnectionManager.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(ProblemQueries.INSERT_PROBLEM_SQL)) {
+
+        stmt.setString(1, problem.getTitle());
+        stmt.setString(2, problem.getDescription());
+        stmt.setLong(3, problem.getUserId());
+        stmt.setTimestamp(4, Timestamp.valueOf(problem.getCreatedAt()));
+        stmt.setString(5, problem.getCategory());
+        stmt.setBoolean(6, problem.isAgeRestricted()); // Correctly bind the isAgeRestricted field
+//        String tagsString = String.join(",", problem.getTags());
+//        stmt.setString(7, tagsString); // not yet implemented
+
+        int affectedRows = stmt.executeUpdate();
+        return affectedRows > 0;
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

@@ -11,13 +11,13 @@ import java.util.*;
 public class UserDAOImpl implements UserDAO {
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(long id) {
         User user = null;
         /// get DB connection
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UserQueries.GET_USER_VIA_ID)) {
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -106,6 +106,7 @@ public class UserDAOImpl implements UserDAO {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         userId = rs.getLong(1);  //retrieve the generated ID
+                        user.setId(userId); // set to gen ID
                     }
                 }
             }

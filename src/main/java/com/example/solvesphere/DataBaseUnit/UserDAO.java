@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public interface UserDAO {
-    User getUserById(int id);   // Fetch a user by ID
+    User getUserById(long id);   // Fetch a user by ID
 
     User getUserByUsernameAndPassword(String username, String password);
 

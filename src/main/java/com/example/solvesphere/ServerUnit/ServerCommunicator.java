@@ -114,7 +114,27 @@ public class ServerCommunicator {
             return "Error: Unable to connect to the server.";
         }
     }
+    public Long fetchUserIdByUsernameAndEmail(String username, String email) {
+        try (Socket socket = new Socket(serverHost, serverPort);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
+            out.writeObject("FETCH_USER_ID");
+            out.writeObject(new String[]{username, email});
+            out.flush();
+
+            Object response = in.readObject();
+            if (response instanceof Long) {
+                return (Long) response;
+            } else {
+                System.err.println("Unexpected response type: " + response);
+                return null;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     // method to send a request to reset the user's password
     public String sendPasswordResetRequest(String username) {
