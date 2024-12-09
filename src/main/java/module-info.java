@@ -13,6 +13,7 @@ module com.example.solvesphere {
     requires spring.security.crypto;
     requires java.sql;
     requires org.testng;
+    requires annotations;
 
     opens com.example.solvesphere to javafx.fxml;
     exports com.example.solvesphere;

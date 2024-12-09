@@ -22,6 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,17 +39,16 @@ public class MainDashController {
     private TextField searchField;
     private ScheduledExecutorService scheduler;
     private User currentUser;  //connected user e.g current user
+    private final String fetch_problems_cmd = "FETCH_PROBLEMS";
 
     public void initUserData(User user) {
         this.currentUser = user;
         buildImage(currentUser);
         fetchAndDisplayProblems();
-
-
     }
     private void envokeAllProblemsDisplay() {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
-        List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest("FETCH_PROBLEMS");
+        List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest(fetch_problems_cmd);
         Platform.runLater(() -> {
             System.out.println("Updating UI with new problem/s data.");
             displayProblems(allProblems);
@@ -79,7 +80,7 @@ public class MainDashController {
 
     public void fetchAndDisplayProblems() {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
-        List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest("FETCH_PROBLEMS");
+        List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest(fetch_problems_cmd);
         Platform.runLater(() -> displayProblems(allProblems));  // ensure UI updates are done on the JavaFX Application Thread
     }
 
@@ -158,7 +159,8 @@ public class MainDashController {
         }
     }
 
-    private void buildImage(User user){
+    // method converts the path(string) to an image
+    private void buildImage(@NotNull User user){
         String profilePicturePath = user.getProfilePicture();
 
         if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
@@ -166,7 +168,7 @@ public class MainDashController {
                 //convert the string path to an Image
                 Image image = new Image(profilePicturePath);
                 profileImg.setImage(image);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) { // prevent error in loading
                 System.out.println("Invalid image path: " + profilePicturePath);
                 profileImg.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
             }
@@ -182,15 +184,13 @@ public class MainDashController {
 
     @FXML
     public void onProfileClick() {
+
     }
 
     public void onLogoutClick(ActionEvent actionEvent) {
     }
 
     public void onSettingsClick(ActionEvent actionEvent) {
-    }
-
-    public void onFilterClick(ActionEvent actionEvent) {
     }
 
     @FXML

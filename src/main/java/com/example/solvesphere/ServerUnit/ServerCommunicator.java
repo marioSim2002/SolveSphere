@@ -30,7 +30,7 @@ public class ServerCommunicator {
         return instance;
     }
 
-    //general method to send a (log+reg)request and receive a response
+    //general method to send a (login+reg)request and receive a response
     public String sendRequest(String command, Object data) {
         System.out.println("Sending command: " + command);  // Debug message
         try (Socket socket = new Socket(serverHost, serverPort);

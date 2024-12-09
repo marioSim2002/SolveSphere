@@ -54,11 +54,11 @@
                 <VBox fx:id="problemListContainer" spacing="10" />
             </ScrollPane>
             <!-- Add Problem button in the lower right corner -->
-            <ImageView fx:id="addProblemButton" fitHeight="46.0" fitWidth="48.0" onMouseClicked="#addProblem" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+            <ImageView fx:id="addProblemButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#addProblem" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                 <Image url="@Images/addBt.png" />
                 <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
                 <StackPane.margin>
-                    <Insets bottom="15.0" right="20.0" />
+                    <Insets bottom="17.0" right="25.0" />
                 </StackPane.margin>
             </ImageView>
         </StackPane>
