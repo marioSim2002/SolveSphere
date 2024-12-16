@@ -38,7 +38,6 @@ public class MainDashController {
     private ComboBox<String> filterOptions;
     @FXML
     private TextField searchField;
-    private ScheduledExecutorService scheduler;
     private User currentUser;  //connected user e.g current user
     @FXML
 

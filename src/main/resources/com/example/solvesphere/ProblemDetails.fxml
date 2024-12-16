@@ -2,24 +2,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.ProblemDetailsController" prefHeight="400.0" prefWidth="600.0">
+<AnchorPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.solvesphere.ProblemDetailsController"
+            prefHeight="400.0" prefWidth="600.0">
     <children>
-        <VBox alignment="CENTER" layoutX="0.0" layoutY="0.0" spacing="10" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-            <padding>
-                <Insets top="20" right="200" bottom="20" left="200"/>
-            </padding>
+        <VBox alignment="CENTER" spacing="10"
+              AnchorPane.bottomAnchor="0"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0"
+              AnchorPane.topAnchor="0">
             <Label text="Problem Details" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
             <Separator/>
             <VBox spacing="5" alignment="TOP_CENTER">
                 <Label text="Title" style="-fx-font-weight: bold; -fx-font-size: 26px;"/>
-                <Label fx:id="problemTitle" text="[Problem Title Here]" style="-fx-font-size: 16px;"/>
+                <Label fx:id="problemTitle" style="-fx-font-size: 16px;"/>
                 <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="100.0"/>
             </VBox>
             <Label text="Comments" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <ScrollPane fitToWidth="true">
-                <ListView fx:id="commentList" prefHeight="200.0"/>
+            <ScrollPane fitToWidth="true" prefHeight="200.0">
+                <VBox fx:id="commentListContainer" spacing="10"/> <!-- Changed ListView to VBox for dynamic content -->
             </ScrollPane>
             <HBox spacing="10" alignment="CENTER">
                 <TextField fx:id="commentField" promptText="Add a comment..." HBox.hgrow="ALWAYS"/>

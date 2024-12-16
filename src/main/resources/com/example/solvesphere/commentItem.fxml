@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.text.Text?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.solvesphere.CommentItemController"
-            prefHeight="400.0" prefWidth="600.0">
-    <HBox alignment="CENTER_LEFT" spacing="10" padding="10">
-        <VBox spacing="5">
-            <Text fx:id="commentText" text="Sample comment text" wrappingWidth="550" style="-fx-font-size: 14px;"/>
-            <Text fx:id="commentAuthor" text="User Name" style="-fx-font-size: 10px; -fx-fill: gray;"/>
-            <Text fx:id="commentDate" text="Date posted" style="-fx-font-size: 10px; -fx-fill: gray;"/>
-        </VBox>
-    </HBox>
-</AnchorPane>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.solvesphere.CommentItemController"
+      spacing="10" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="600.0"
+      style="-fx-padding: 0 0 0 20;"> <!-- Add padding to the left -->
+    <Text fx:id="commentText" wrappingWidth="530" style="-fx-font-size: 14px;"/> <!-- Reduced wrapping width -->
+    <Text fx:id="commentAuthor" style="-fx-font-size: 10px; -fx-fill: gray;"/>
+    <Text fx:id="commentDate" style="-fx-font-size: 10px; -fx-fill: gray;"/>
+</VBox>
