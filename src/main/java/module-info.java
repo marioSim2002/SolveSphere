@@ -14,6 +14,10 @@ module com.example.solvesphere {
     requires java.sql;
     requires org.testng;
     requires annotations;
+    requires fontawesomefx;
+    requires okhttp3;
+    requires java.json;
+    requires com.google.gson;
 
     opens com.example.solvesphere to javafx.fxml;
     exports com.example.solvesphere;

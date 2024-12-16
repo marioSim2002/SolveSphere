@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,6 +40,10 @@ public class MainDashController {
     private TextField searchField;
     private ScheduledExecutorService scheduler;
     private User currentUser;  //connected user e.g current user
+    @FXML
+
+
+
     private final String fetch_problems_cmd = "FETCH_PROBLEMS";
 
     public void initUserData(User user) {

@@ -57,8 +57,6 @@ public class LogInUiController {
         }
     }
 
-
-
     private void transitionToUserDashboard(User user) {
         try {
             // Close the current window

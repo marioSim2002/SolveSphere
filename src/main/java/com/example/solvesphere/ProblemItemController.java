@@ -38,13 +38,11 @@ public class ProblemItemController {
     @FXML
     private void onDetailsClick() {
         if(!validateUserAgeForContentAccess(passedProblem, currentUser.calculateAge())){
-            System.out.println("im here");
             AlertsUnit.userUnderAgeAlert();
+            return;
         }
-        //todo ,
-        // show problem details (open problem)
         try {
-            // Load the problem details FXML file
+            //load the problem details FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemDetails.fxml"));
             Parent root = loader.load();
             ProblemDetailsController controller = loader.getController();
@@ -55,10 +53,7 @@ public class ProblemItemController {
             stage.setScene(scene);
             stage.show();
 
-        }  catch (IOException e) {
-            throw new RuntimeException(e);
-    }
-
+        }  catch (IOException e) {throw new RuntimeException(e);}
     }
 
 

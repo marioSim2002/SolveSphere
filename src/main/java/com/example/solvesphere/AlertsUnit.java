@@ -1,13 +1,21 @@
 package com.example.solvesphere;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.scene.paint.Color;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public abstract class AlertsUnit {
     private static void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Platform.runLater(() -> {
             Alert alert = new Alert(alertType);
             alert.setTitle(title);
+            FontIcon ico_exclamation = new FontIcon("fas-exclamation-triangle");
+            ico_exclamation.setIconColor(Color.RED);
+            ico_exclamation.setIconSize(20);
+            alert.setGraphic(ico_exclamation);
             alert.setHeaderText(headerText);
             alert.setContentText(contentText);
             alert.setResizable(false);
@@ -50,6 +58,6 @@ public abstract class AlertsUnit {
     }
 
     public static void userUnderAgeAlert() {
-        showAlert(Alert.AlertType.WARNING, "Access Denied: Age-Restricted Content", "This content has age restrictions and is not available for viewing.");
+            showAlert(Alert.AlertType.WARNING, "Access Denied: Age-Restricted Content", "This content has age restrictions and is not available for viewing.");
     }
 }

@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.SplitPane?>
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.MainDashController"
             stylesheets="@dataStyling.css">
     <!-- Navbar -->
@@ -46,22 +48,30 @@
         </VBox>
     </left>
 
-
-    <!-- main content area to display problems -->
+    <!-- Main content area to display problems -->
     <center>
-        <StackPane>
-            <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-padding: 10 10 10 30;"> <!-- Increase left padding -->
-                <VBox fx:id="problemListContainer" spacing="10" />
-            </ScrollPane>
-            <!-- Add Problem button in the lower right corner -->
-            <ImageView fx:id="addProblemButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#addProblem" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                <Image url="@Images/addBt.png" />
-                <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
-                <StackPane.margin>
-                    <Insets bottom="17.0" right="25.0" />
-                </StackPane.margin>
-            </ImageView>
-        </StackPane>
+        <SplitPane dividerPositions="0.5" orientation="HORIZONTAL">
+            <items>
+                <VBox>
+                    <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-padding: 10 10 10 30;">
+                        <VBox fx:id="problemListContainer" spacing="10" />
+                    </ScrollPane>
+                    <!-- Add Problem button in the lower right corner -->
+                    <ImageView fx:id="addProblemButton" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#addProblem" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                        <Image url="@Images/addBt.png" />
+                        <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+                        <StackPane.margin>
+                            <Insets bottom="17.0" right="70.0" />
+                        </StackPane.margin>
+                    </ImageView>
+                </VBox>
+                <VBox spacing="20" style="-fx-padding: 20;">
+                    <Label text="upcoming feature" style="-fx-font-size: 18; -fx-text-fill: #2C3E50;"/>
+                    <TextField fx:id="aiQueryField" promptText="Enter your question here" />
+                    <Button text="Submit"/>
+                    <TextArea fx:id="aiResponseArea" editable="false" prefHeight="200"/>
+                </VBox>
+            </items>
+        </SplitPane>
     </center>
-
 </BorderPane>
