@@ -19,21 +19,18 @@ public class UserDAOImpl implements UserDAO {
 
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
-                long userId = rs.getLong("id");
-                Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
-
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        rs.getString("password"), // This is the hashed password
+                        rs.getString("password"),
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
-                        fieldsOfInterest,
+                        new HashMap<>(), // Populate fields of interest if applicable
                         rs.getDate("registration_date").toLocalDate(),
                         rs.getString("profile_picture")
                 );
+                user.setId(rs.getLong("id")); // Set the ID
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -46,15 +43,18 @@ public class UserDAOImpl implements UserDAO {
         User user = null;
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME)) {
-
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_PASSWORD)) {
+            PasswordHasher hasher = new PasswordHasher();
             stmt.setString(1, username);
+            String pss = hasher.hashPassword(password);
+            stmt.setString(2, pss);
+            System.out.println(pss);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                long userId = rs.getLong("id");
-                Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
-
+                long userId = rs.getLong("id"); // Retrieve the user ID from the database
+                Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId); // Fetch fields of interest based on userId
+                System.out.println(userId +"ID RETRIEVED");
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
@@ -67,15 +67,15 @@ public class UserDAOImpl implements UserDAO {
                 );
 
                 // Compare the hashed password
-                PasswordHasher hasher = new PasswordHasher();
                 if (!hasher.verifyPassword(password, user.getPassword())) {
-                    user = null; // password does not match, return null
+                    user = null; // Password does not match, return null
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return user; // return the user if credentials are valid, otherwise null
+
+        return user; //return the user if credentials are valid, otherwise null
     }
 
 
@@ -145,7 +145,6 @@ public class UserDAOImpl implements UserDAO {
                 long id = rs.getLong("id");  // Assuming the ID is stored under the column 'id'
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(id); // Hypothetical method to fetch interests
                 List<Problem> problems = fetchProblems(id); // Hypothetical method to fetch problems
-
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),

@@ -98,8 +98,7 @@ public class ServerCommunicator {
             Object response = in.readObject();
 
             // Handle the response based on its type
-            if (response instanceof User) {
-                User user = (User) response;
+            if (response instanceof User user) {
                 System.out.println("Login successful for: " + user.getUsername());
                 return user;
             } else if (response instanceof String) {

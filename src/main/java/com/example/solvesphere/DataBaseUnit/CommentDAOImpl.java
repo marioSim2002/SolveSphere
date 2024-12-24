@@ -3,10 +3,8 @@ package com.example.solvesphere.DataBaseUnit;
 import com.example.solvesphere.DBQueries.CommentsQueries;
 import com.example.solvesphere.UserData.Comment;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +25,11 @@ public class CommentDAOImpl implements CommentDAO {
     public void addComment(Comment comment) {
         try (PreparedStatement stmt = connection.prepareStatement(CommentsQueries.INSERT_COMMENT)) {
             stmt.setLong(1, comment.getProblemId());
-            stmt.setLong(2, comment.getUserId());
+            stmt.setLong(2, comment.getUserId()); ////
             stmt.setString(3, comment.getContent());
+            stmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now())); //created at
+            System.out.println(comment.getProblemId());
+            System.out.println( );
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

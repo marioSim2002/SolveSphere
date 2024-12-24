@@ -136,7 +136,7 @@ public class UserRegistrationHandler implements Runnable {
             String username = loginData[0];
             String password = loginData[1];
 
-            System.out.println("Logging in user: " + username); // Debugging
+            System.out.println("Logging in user: " + username); //debugging
 
             // retrieve the user from the database
             UserDAO userDAO = new UserDAOImpl();
@@ -147,6 +147,7 @@ public class UserRegistrationHandler implements Runnable {
                 Map<String, Integer> userInterests = user.getFieldsOfInterest();
                 System.out.println(userInterests);
                 user.setFieldsOfInterest(userInterests);
+                System.out.println("id "+user.getId());
                 //send the user object
                 out.writeObject(user);
             } else {

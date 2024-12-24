@@ -45,7 +45,7 @@ public class LogInUiController {
         String password = getPasswordTxt();
         Object response = serverCommunicator.sendLoginRequest(username, password);
 
-        // Handle the response based on its type
+        // handle the response based on its type
         if (response instanceof User) {
             User user = (User) response;
             transitionToUserDashboard(user); // navigate to the dashboard with the user object
@@ -72,7 +72,8 @@ public class LogInUiController {
             dashboardStage.setScene(new Scene(root));
 
             MainDashController controller = loader.getController();
-            controller.initUserData(user); // Ensure you have this method in your MainDashboardController
+            controller.initUserData(user); //ensure you have this method in your MainDashboardController
+            System.out.println("logging in .," +user.getId());
             dashboardStage.show();
         } catch (IOException e) {
             e.printStackTrace();

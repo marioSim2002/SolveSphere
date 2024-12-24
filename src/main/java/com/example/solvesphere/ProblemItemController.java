@@ -48,6 +48,7 @@ public class ProblemItemController {
             ProblemDetailsController controller = loader.getController();
             //pass relevant data to initialize
             controller.initData(passedProblem,currentUser);
+            System.out.println("on details click data init .," +currentUser.getId());////////
             Scene scene = new Scene(root);
             Stage stage = (Stage) postedBy.getScene().getWindow();
             stage.setScene(scene);

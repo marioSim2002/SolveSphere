@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class User implements Serializable {
-    private long id = -1; // ID initialized as -1 to indicate it's not set initially
+    private long id;
     private String username;
     private String email;
     private String password;
@@ -23,7 +23,6 @@ public class User implements Serializable {
 
     public User(String username, String email, String password, LocalDate dateOfBirth, String country,
                 Map<String, Integer> fieldsOfInterest, LocalDate registrationDate, String profilePicture) {
-        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -34,6 +33,8 @@ public class User implements Serializable {
         this.profilePicture = profilePicture;
         this.problems = new ArrayList<>();  // Initialize the problems list
     }
+
+
 
     // getters and setters, including for the new ID field
     public long getId() { return id; }

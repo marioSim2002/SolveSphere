@@ -4,6 +4,8 @@ import com.example.solvesphere.DataBaseUnit.CommentDAO;
 import com.example.solvesphere.DataBaseUnit.CommentDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.SecurityUnit.PasswordHasher;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
@@ -34,14 +36,16 @@ public class ProblemDetailsController {
     private VBox commentListContainer; ///// here ////
 
     private CommentDAO commentDAO;
-
+    private ServerCommunicator serverCommunicator;
     private Problem currentProblem; // Current post
     private User currentUser; // Current user
-
-    public void initData(Problem passedProblem, User currentUser) {
+    private Long currentUserId ;
+    public void initData(Problem passedProblem, User passedUser) {
+        ServerCommunicator serverCommunicator = new ServerCommunicator();
         this.currentProblem = passedProblem;
-        this.currentUser = currentUser;
+        this.currentUser = passedUser;
         this.commentDAO = new CommentDAOImpl();
+        currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(passedUser.getUsername(), passedUser.getEmail());
         showData();
         loadComments();
     }
@@ -61,13 +65,13 @@ public class ProblemDetailsController {
         UserDAO user = new UserDAOImpl();
         for (Comment comment : comments) {
             try {
-                // Load the FXML file for a single comment item
+                //load the FXML file for a single comment item
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("commentItem.fxml"));
                 VBox commentItem = loader.load();
 
-                // Get the controller and set the comment data
+                //get the controller and set the comment data
                 CommentItemController controller = loader.getController();
-                controller.setCommentData(comment,user.getUserById(comment.getUserId()).getUsername());
+                controller.setCommentData(comment,user.getUserById(comment.getUserId()).getUsername(),currentUser);
 
                 // Add the comment item to the container
                 commentListContainer.getChildren().add(commentItem);
@@ -84,12 +88,12 @@ public class ProblemDetailsController {
         if (!content.isEmpty()) {
             Comment newComment = new Comment();
             newComment.setProblemId(currentProblem.getId());
-            newComment.setUserId(currentUser.getId());
+            newComment.setUserId(currentUserId);
             newComment.setContent(content);
 
-            commentDAO.addComment(newComment); // Add comment to the database via DAO method
-            commentField.clear(); // Clear the input field
-            loadComments(); // Refresh comments
+            commentDAO.addComment(newComment); //add comment to the database via DAO method
+            commentField.clear();
+            loadComments(); // refresh comments
         }
     }
 }

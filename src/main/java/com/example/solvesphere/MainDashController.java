@@ -41,8 +41,6 @@ public class MainDashController {
     private User currentUser;  //connected user e.g current user
     @FXML
 
-
-
     private final String fetch_problems_cmd = "FETCH_PROBLEMS";
 
     public void initUserData(User user) {
@@ -76,6 +74,7 @@ public class MainDashController {
                         String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
 
                         controller.setProblemData(problem,problemPublisherName,currentUser);
+
                         problemListContainer.getChildren().add(problemItem);
                     } catch (IOException e) {e.printStackTrace();}
                 }
