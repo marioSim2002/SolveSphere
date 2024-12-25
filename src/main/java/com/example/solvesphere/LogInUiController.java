@@ -83,10 +83,12 @@ public class LogInUiController {
 
     public void responseStatus(String response) {
         if (response.contains("successful")) {
+            System.out.println("response on login click "+response);
             AlertsUnit.showSuccessLogInAlert();
         } else if (response.contains("Invalid")) {
             AlertsUnit.showErrorAlert("Incorrect username or password.\nPlease try again.");
         } else {
+            System.out.println("response on login click "+response);
             AlertsUnit.showErrorAlert("Unknown error occurred. Please try again.");
         }
     }

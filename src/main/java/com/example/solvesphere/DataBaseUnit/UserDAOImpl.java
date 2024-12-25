@@ -43,22 +43,24 @@ public class UserDAOImpl implements UserDAO {
         User user = null;
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_PASSWORD)) {
-            PasswordHasher hasher = new PasswordHasher();
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME)) {
+
             stmt.setString(1, username);
-            String pss = hasher.hashPassword(password);
-            stmt.setString(2, pss);
-            System.out.println(pss);
+            System.out.println("Fetching user for username: " + username);
+
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                long userId = rs.getLong("id"); // Retrieve the user ID from the database
-                Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId); // Fetch fields of interest based on userId
-                System.out.println(userId +"ID RETRIEVED");
+                long userId = rs.getLong("id");
+                Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
+                String storedHashedPassword = rs.getString("password"); // Get the hashed password from the database
+
+                System.out.println("Stored Hashed Password: " + storedHashedPassword);
+
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        rs.getString("password"), // This is the hashed password
+                        storedHashedPassword, // Use the stored hashed password
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         fieldsOfInterest,
@@ -66,17 +68,22 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("profile_picture")
                 );
 
-                // Compare the hashed password
-                if (!hasher.verifyPassword(password, user.getPassword())) {
-                    user = null; // Password does not match, return null
+                // Compare the plain password with the stored hashed password
+                PasswordHasher hasher = new PasswordHasher();
+                if (!hasher.verifyPassword(password, storedHashedPassword)) {
+                    System.out.println("Password verification failed");
+                    user = null; // Password does not match
+                } else {
+                    System.out.println("Password verification succeeded");
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return user; //return the user if credentials are valid, otherwise null
+        return user; // Return the user if credentials are valid, otherwise null
     }
+
 
 
     @Override

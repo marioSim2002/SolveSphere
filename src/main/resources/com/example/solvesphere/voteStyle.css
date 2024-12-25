@@ -1,0 +1,21 @@
+/* Default size */
+.image-button {
+    -fx-fit-width: 21px;
+    -fx-fit-height: 21px;
+}
+
+/* Hover effect: increase size */
+.image-button:hover {
+    -fx-fit-width: 26px;
+    -fx-fit-height: 26px;
+}
+
+/* pos */
+.image-container {
+    -fx-alignment: center-right; /* Align images to the center-right */
+    -fx-padding: 0 10 0 0;
+}
+
+.image-button {
+    -fx-translate-y: -50%;
+}

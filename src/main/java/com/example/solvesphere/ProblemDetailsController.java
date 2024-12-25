@@ -46,6 +46,7 @@ public class ProblemDetailsController {
         this.currentUser = passedUser;
         this.commentDAO = new CommentDAOImpl();
         currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(passedUser.getUsername(), passedUser.getEmail());
+        System.out.println(currentUserId);
         showData();
         loadComments();
     }
@@ -89,6 +90,7 @@ public class ProblemDetailsController {
             Comment newComment = new Comment();
             newComment.setProblemId(currentProblem.getId());
             newComment.setUserId(currentUserId);
+            System.out.println("in posting "+currentUserId);
             newComment.setContent(content);
 
             commentDAO.addComment(newComment); //add comment to the database via DAO method

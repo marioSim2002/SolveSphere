@@ -10,13 +10,17 @@ public class PasswordHasher {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    // Hash the password for storage
     public String hashPassword(String password) {
-        System.out.println(passwordEncoder.encode(password));
-        return passwordEncoder.encode(password);
+        String hashedPassword = passwordEncoder.encode(password);
+        System.out.println("Generated Hash: " + hashedPassword);
+        return hashedPassword;
     }
 
-    // method to verify a password against a stored hash
+    // Verify a password against the stored hash
     public boolean verifyPassword(String password, String hashedPassword) {
-        return passwordEncoder.matches(password, hashedPassword);
+        boolean matches = passwordEncoder.matches(password, hashedPassword);
+        System.out.println("Password Verification Result: " + matches);
+        return matches;
     }
 }

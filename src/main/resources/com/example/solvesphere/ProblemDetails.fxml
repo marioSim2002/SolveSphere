@@ -9,24 +9,25 @@
             prefHeight="400.0" prefWidth="600.0">
     <children>
         <VBox alignment="CENTER" spacing="10"
-              AnchorPane.bottomAnchor="0"
-              AnchorPane.leftAnchor="0"
-              AnchorPane.rightAnchor="0"
-              AnchorPane.topAnchor="0">
+              AnchorPane.bottomAnchor="10"
+              AnchorPane.leftAnchor="10"
+              AnchorPane.rightAnchor="10"
+              AnchorPane.topAnchor="10"
+              style="-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-border-color: lightgray; -fx-border-width: 1;">
             <Label text="Problem Details" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
             <Separator/>
-            <VBox spacing="5" alignment="TOP_CENTER">
+            <VBox spacing="5" alignment="TOP_CENTER" style="-fx-padding: 10;">
                 <Label text="Title" style="-fx-font-weight: bold; -fx-font-size: 26px;"/>
                 <Label fx:id="problemTitle" style="-fx-font-size: 16px;"/>
-                <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="100.0"/>
+                <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="100.0" style="-fx-padding: 5;"/>
             </VBox>
             <Label text="Comments" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <ScrollPane fitToWidth="true" prefHeight="200.0">
-                <VBox fx:id="commentListContainer" spacing="10"/> <!-- Changed ListView to VBox for dynamic content -->
+            <ScrollPane fitToWidth="true" prefHeight="200.0" style="-fx-padding: 5;">
+                <VBox fx:id="commentListContainer" spacing="10" style="-fx-padding: 10; -fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1;"/>
             </ScrollPane>
-            <HBox spacing="10" alignment="CENTER">
-                <TextField fx:id="commentField" promptText="Add a comment..." HBox.hgrow="ALWAYS"/>
-                <Button text="Post Comment" onAction="#postComment"/>
+            <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+                <TextField fx:id="commentField" promptText="Add a comment..." HBox.hgrow="ALWAYS" style="-fx-padding: 5;"/>
+                <Button text="Post Comment" onAction="#postComment" style="-fx-padding: 5 10;"/>
             </HBox>
         </VBox>
     </children>
