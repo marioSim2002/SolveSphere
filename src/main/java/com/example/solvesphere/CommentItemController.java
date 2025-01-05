@@ -1,5 +1,10 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.CommentDAO;
+import com.example.solvesphere.DataBaseUnit.CommentDAOImpl;
+import com.example.solvesphere.DataBaseUnit.UserVotesDAO;
+import com.example.solvesphere.DataBaseUnit.UserVotesDAOImpl;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
 import com.example.solvesphere.UserData.User;
 import javafx.animation.ScaleTransition;
@@ -12,6 +17,10 @@ import javafx.util.Duration;
 public class CommentItemController {
 
     @FXML
+    private Text downvoteCount;
+    @FXML
+    private Text upvoteCount;
+    @FXML
     private Text commentText;
     @FXML
     private Text commentAuthor;
@@ -19,32 +28,89 @@ public class CommentItemController {
     private Text commentDate;
     @FXML
     private ImageView upvoteButton;
-    private User currentUser;
     @FXML
     private ImageView downvoteButton;
 
+    private User currentUser;
+    private final CommentDAO commentDAO = new CommentDAOImpl();
+    private final UserVotesDAO voteDAO = new UserVotesDAOImpl();
+    ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void setCommentData(Comment comment, String username, User passedUser) {
         commentText.setText(comment.getContent());
         commentAuthor.setText("By " + username);
         commentDate.setText(comment.getCreatedAt().toString());
         this.currentUser = passedUser;
+        //initialize the buttons and update vote counts
         initButtons(comment);
-
+        updateVoteCounts(comment);
     }
+
     @FXML
     public void initButtons(Comment comment) {
-        // Initialize button click listeners
+        //check if the user has already voted
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        if (voteDAO.hasUserVoted(currentUserId, comment.getId())) {
+            String voteType = voteDAO.getUserVoteType(currentUser.getId(), comment.getId());
+            if ("upvote".equals(voteType)) {
+                upvoteButton.setDisable(true);
+            } else if ("downvote".equals(voteType)) {
+                downvoteButton.setDisable(true);
+            }
+        }
         upvoteButton.setOnMouseClicked(mouseEvent -> handleUpvote(comment));
         downvoteButton.setOnMouseClicked(mouseEvent -> handleDownvote(comment));
 
-        // Add hover effects for upvote and downvote buttons
+        // hover effects
         addHoverEffect(upvoteButton);
         addHoverEffect(downvoteButton);
 
         // Add tooltips
         Tooltip.install(upvoteButton, new Tooltip("Up-vote this comment"));
         Tooltip.install(downvoteButton, new Tooltip("Down-vote this comment"));
+    }
+
+    @FXML
+    public void handleUpvote(Comment comment) {
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
+
+        if ("upvote".equals(currentVoteType)) {
+            System.out.println("User has already upvoted this comment.");
+            return;
+        }
+
+        voteDAO.recordVote(currentUserId, comment.getId(), "upvote");
+        voteDAO.incrementUpvote(comment.getId());
+        if ("downvote".equals(currentVoteType)) {
+            voteDAO.decrementDownvote(comment.getId()); // remove the previous downvote
+        }
+        updateVoteCounts(comment);
+    }
+
+    @FXML
+    public void handleDownvote(Comment comment) {
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
+
+        if ("downvote".equals(currentVoteType)) {
+            System.out.println("User has already downvoted this comment.");
+            return;
+        }
+
+        voteDAO.recordVote(currentUserId, comment.getId(), "downvote");
+        voteDAO.incrementDownvote(comment.getId());
+        if ("upvote".equals(currentVoteType)) {
+            voteDAO.decrementUpvote(comment.getId()); // remove the previous upvote
+        }
+        updateVoteCounts(comment);
+    }
+
+    private void updateVoteCounts(Comment comment) {
+        Comment updatedComment = commentDAO.getCommentById(comment.getId());
+        //update the UI with the new counts
+        upvoteCount.setText(String.valueOf(updatedComment.getUpvotes()));
+        downvoteCount.setText(String.valueOf(updatedComment.getDownvotes()));
     }
 
     /**
@@ -68,15 +134,6 @@ public class CommentItemController {
         return transition;
     }
 
-
-
-    private void handleUpvote(Comment comment) {
-        System.out.println("Upvote clicked for comment ID: " + comment.getId());
-        // Implement upvote logic
-    }
-
-    private void handleDownvote(Comment comment) {
-        System.out.println("Downvote clicked for comment ID: " + comment.getId());
-        // Implement downvote logic
-    }
+    /// todo
+    // user to only upvote or downvote .
 }

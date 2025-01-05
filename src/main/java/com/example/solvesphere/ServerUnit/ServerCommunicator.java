@@ -6,7 +6,6 @@ import com.example.solvesphere.UserData.User;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ServerCommunicator {
@@ -144,4 +143,5 @@ public class ServerCommunicator {
     public String sendUpdateProfileRequest(User updatedUser) {
         return sendRequest("UPDATE_PROFILE", updatedUser);
     }
+
 }

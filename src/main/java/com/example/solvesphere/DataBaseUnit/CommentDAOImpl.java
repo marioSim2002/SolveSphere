@@ -1,6 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
 import com.example.solvesphere.DBQueries.CommentsQueries;
+import com.example.solvesphere.DBQueries.VoteQueries;
 import com.example.solvesphere.UserData.Comment;
 
 import java.sql.*;
@@ -36,23 +37,51 @@ public class CommentDAOImpl implements CommentDAO {
         }
     }
 
-    //get comments by problem ID
     @Override
-    public List<Comment> getCommentsByProblemId(long problemId) {
-        List<Comment> comments = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(CommentsQueries.GET_COMMENTS_BY_PROBLEM_ID)) {
-            stmt.setLong(1, problemId);
+    public Comment getCommentById(long commentId) {
+        Comment comment = null;
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM comments WHERE id = ?")) {
+            stmt.setLong(1, commentId);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Comment comment = new Comment();
+            if (rs.next()) {
+                comment = new Comment();
                 comment.setId(rs.getLong("id"));
                 comment.setProblemId(rs.getLong("problem_id"));
                 comment.setUserId(rs.getLong("user_id"));
                 comment.setContent(rs.getString("content"));
-                comment.setCreatedAt(rs.getTimestamp("created_at"));
-                comments.add(comment);
+                comment.setCreatedAt(Timestamp.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
+                comment.setUpvotes(rs.getInt("upvotes")); // Fetch upvotes
+                comment.setDownvotes(rs.getInt("downvotes")); // Fetch downvotes
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return comment;
+    }
+
+    //get comments by problem ID
+    @Override
+    public List<Comment> getCommentsByProblemId(long problemId) {
+        List<Comment> comments = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(CommentsQueries.GET_COMMENTS_BY_PROBLEM_ID)) {
+            stmt.setLong(1, problemId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Comment comment = new Comment();
+                    comment.setId(rs.getLong("id"));
+                    comment.setProblemId(rs.getLong("problem_id"));
+                    comment.setUserId(rs.getLong("user_id"));
+                    comment.setContent(rs.getString("content"));
+                    comment.setCreatedAt(Timestamp.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
+                    comment.setUpvotes(rs.getInt("upvotes")); // Fetch upvotes
+                    comment.setDownvotes(rs.getInt("downvotes")); // Fetch downvotes
+                    comments.add(comment);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException("Error fetching comments for problem ID: " + problemId, e);
         }

@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -42,17 +44,23 @@ public class ProblemItemController {
             return;
         }
         try {
-            //load the problem details FXML file
+            // Load the FXML for the new screen
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemDetails.fxml"));
-            Parent root = loader.load();
+            AnchorPane problemDetailsRoot = loader.load();
+
             ProblemDetailsController controller = loader.getController();
-            //pass relevant data to initialize
-            controller.initData(passedProblem,currentUser);
-            System.out.println("on details click data init .," +currentUser.getId());////////
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) postedBy.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            controller.initData(passedProblem, currentUser);
+
+            //create a NEW stage for the new screen
+            Stage newStage = new Stage();
+            newStage.setTitle("Problem Details");
+            newStage.setScene(new Scene(problemDetailsRoot));
+            newStage.show();
+
+            // Do NOT close or overwrite the main dash:
+            // No calls to 'stage.close()' or 'stage.setScene(...)' on the main dash
+            // So the main dash remains open.
+
 
         }  catch (IOException e) {throw new RuntimeException(e);}
     }

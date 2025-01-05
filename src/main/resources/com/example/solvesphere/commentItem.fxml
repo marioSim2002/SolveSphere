@@ -14,18 +14,24 @@
     <Text fx:id="commentAuthor" style="-fx-font-size: 10px; -fx-fill: gray;"/>
     <Text fx:id="commentDate" style="-fx-font-size: 10px; -fx-fill: gray;"/>
 
-    <!-- HBox to hold the images -->
-    <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="image-container">
-        <ImageView fx:id="upvoteButton" fitWidth="32" fitHeight="32" preserveRatio="true" styleClass="image-button">
-            <image>
-                <Image url="@Images/upvote_icon.png" />
-            </image>
-        </ImageView>
-        <ImageView fx:id="downvoteButton" fitWidth="32" fitHeight="32" preserveRatio="true" styleClass="image-button">
-            <image>
-                <Image url="@Images/downvote_icon.png" />
-            </image>
-        </ImageView>
+    <!-- HBox to hold the images and counters -->
+    <HBox alignment="CENTER_RIGHT" spacing="20" styleClass="image-container">
+        <VBox alignment="CENTER">
+            <ImageView fx:id="upvoteButton" fitWidth="32" fitHeight="32" preserveRatio="true" styleClass="image-button">
+                <image>
+                    <Image url="@Images/upvote_icon.png" />
+                </image>
+            </ImageView>
+            <Text fx:id="upvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/> <!-- Upvote counter -->
+        </VBox>
+        <VBox alignment="CENTER">
+            <ImageView fx:id="downvoteButton" fitWidth="32" fitHeight="32" preserveRatio="true" styleClass="image-button">
+                <image>
+                    <Image url="@Images/downvote_icon.png" />
+                </image>
+            </ImageView>
+            <Text fx:id="downvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/> <!-- Downvote counter -->
+        </VBox>
     </HBox>
     <!-- Separator to divide comments -->
     <Separator orientation="HORIZONTAL" style="-fx-background-color: darkgray;"/>

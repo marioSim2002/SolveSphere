@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class MainDashController {
         buildImage(currentUser);
         fetchAndDisplayProblems();
     }
+
     private void envokeAllProblemsDisplay() {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest(fetch_problems_cmd);
@@ -76,6 +78,7 @@ public class MainDashController {
                         controller.setProblemData(problem,problemPublisherName,currentUser);
 
                         problemListContainer.getChildren().add(problemItem);
+
                     } catch (IOException e) {e.printStackTrace();}
                 }
         }
@@ -179,6 +182,14 @@ public class MainDashController {
             //default image (null or empty)
             profileImg.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
         }
+    }
+
+    public void setupClosePrevention() {
+        Stage stage = (Stage) problemListContainer.getScene().getWindow();
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Closing prevented!");
+            event.consume(); // Always consume the event to prevent closing
+        });
     }
 
     @FXML
