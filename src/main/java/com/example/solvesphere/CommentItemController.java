@@ -48,7 +48,7 @@ public class CommentItemController {
 
     @FXML
     public void initButtons(Comment comment) {
-        //check if the user has already voted
+        //check if the user has already voted//
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
         if (voteDAO.hasUserVoted(currentUserId, comment.getId())) {
             String voteType = voteDAO.getUserVoteType(currentUser.getId(), comment.getId());
@@ -64,19 +64,21 @@ public class CommentItemController {
         // hover effects
         addHoverEffect(upvoteButton);
         addHoverEffect(downvoteButton);
-
-        // Add tooltips
+        // tool tips AKA alt text //
         Tooltip.install(upvoteButton, new Tooltip("Up-vote this comment"));
         Tooltip.install(downvoteButton, new Tooltip("Down-vote this comment"));
     }
 
+    /**
+     * handles up-voting for a comment
+     * **/
     @FXML
     public void handleUpvote(Comment comment) {
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
         String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
 
         if ("upvote".equals(currentVoteType)) {
-            System.out.println("User has already upvoted this comment.");
+            System.out.println("User has already upvoted this comment.");//dg
             return;
         }
 
@@ -88,6 +90,10 @@ public class CommentItemController {
         updateVoteCounts(comment);
     }
 
+
+    /**
+     * handles down-voting for a comment
+     * **/
     @FXML
     public void handleDownvote(Comment comment) {
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
@@ -106,6 +112,10 @@ public class CommentItemController {
         updateVoteCounts(comment);
     }
 
+
+    /**
+     * counts the current number of upvotes/downvotes of the comment
+     * **/
     private void updateVoteCounts(Comment comment) {
         Comment updatedComment = commentDAO.getCommentById(comment.getId());
         //update the UI with the new counts
@@ -133,7 +143,4 @@ public class CommentItemController {
         transition.setToY(scale);
         return transition;
     }
-
-    /// todo
-    // user to only upvote or downvote .
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -7,7 +9,9 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.solvesphere.ProblemDetailsController"
             prefHeight="400.0" prefWidth="600.0">
+
     <children>
+
         <VBox alignment="CENTER" spacing="10"
               AnchorPane.bottomAnchor="10"
               AnchorPane.leftAnchor="10"

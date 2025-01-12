@@ -5,6 +5,7 @@ import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -44,7 +45,7 @@ public class ProblemItemController {
             return;
         }
         try {
-            // Load the FXML for the new screen
+            //load the FXML for the new screen
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemDetails.fxml"));
             AnchorPane problemDetailsRoot = loader.load();
 
@@ -74,5 +75,10 @@ public class ProblemItemController {
 
     public boolean validateUserAgeForContentAccess(Problem clickedProblem,int currentUserAge){
         return !clickedProblem.isAgeRestricted() || currentUserAge >= 18;
+    }
+
+    @FXML
+    private void onReportClick() {
+
     }
 }
