@@ -4,16 +4,17 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.ProblemItemController" spacing="10" maxWidth="450" style="-fx-border-color: #475a88; -fx-padding: 10; -fx-background-color:#e8ecec">
-    <Label fx:id="problemTitle" styleClass="problem-title" style="-fx-font-size: 17;"/>
-    <Text fx:id="postedBy" style="-fx-font-size: 14; -fx-fill: gray;">Posted by: </Text>
-    <Text fx:id="postDate" style="-fx-font-size: 14; -fx-fill: gray;">Date: </Text>
-    <HBox>
-        <!-- <Button text="Suggest A Solution" onAction="#onSolveClick"/> -->
-        <Button text="View Problem Details" onAction="#onDetailsClick" style="-fx-font-size: 12"/>
-        <Button text="Report This Post" onAction="#onReportClick" style="-fx-font-size: 12"/>
-
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.ProblemItemController" spacing="20" maxWidth="450"
+      style="-fx-border-color: #475a88; -fx-padding: 20; -fx-background-color:#e8ecec; -fx-border-radius: 10; -fx-background-radius: 10;"
+      stylesheets="@voteStyle.css">
+    <Label fx:id="problemTitle" styleClass="problem-title" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+    <Text fx:id="postedBy" style="-fx-font-size: 14; -fx-fill: #666;"/>
+    <Text fx:id="postDate" style="-fx-font-size: 14; -fx-fill: #666;"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="View Problem Details" onAction="#onDetailsClick" styleClass="button-view-details"/>
+    </HBox>
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <Label fx:id="commentCountTxt" textAlignment="RIGHT" style="-fx-font-size: 10; -fx-font-weight: bold;"/>
+        <Label text="Comments" textAlignment="RIGHT" style="-fx-font-size: 10;"/>
     </HBox>
 </VBox>

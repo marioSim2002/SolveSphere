@@ -19,3 +19,29 @@
 .image-button {
     -fx-translate-y: -50%;
 }
+
+
+
+.button-view-details {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #ccc;
+    -fx-padding: 5 10;
+    -fx-font-size: 12;
+}
+
+.button-view-details:hover {
+    -fx-background-color: #dfdfdf;
+    -fx-border-color: #bbb;
+}
+
+.button-report {
+    -fx-background-color: #f8d7da;
+    -fx-border-color: #f5c6cb;
+    -fx-padding: 5 10;
+    -fx-font-size: 12;
+}
+
+.button-report:hover {
+    -fx-background-color: #f2b2b5;
+    -fx-border-color: #f0a1a4;
+}

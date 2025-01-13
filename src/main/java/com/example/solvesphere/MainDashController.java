@@ -1,8 +1,5 @@
 package com.example.solvesphere;
-import com.example.solvesphere.DataBaseUnit.ProblemDAO;
-import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
-import com.example.solvesphere.DataBaseUnit.UserDAO;
-import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
@@ -74,9 +71,10 @@ public class MainDashController {
                         //use the provided method to check if the current user posted this problem
                         boolean isCurrentUserThePublisher = checkCurrentUserAgainstPublisher(problemUser.getEmail(), currentUser.getEmail());
                         String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
-
-                        controller.setProblemData(problem,problemPublisherName,currentUser);
-
+                        CommentDAO commentDAO = new CommentDAOImpl();
+                        int count = commentDAO.getCommentCountByProblemId(problem.getId());
+                        controller.setProblemData(problem,problemPublisherName,currentUser,count);
+                        System.out.println("comments count for problem id "+problem.getId()+" is "+count);
                         problemListContainer.getChildren().add(problemItem);
 
                     } catch (IOException e) {e.printStackTrace();}

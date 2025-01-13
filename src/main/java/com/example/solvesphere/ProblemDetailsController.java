@@ -62,18 +62,18 @@ public class ProblemDetailsController {
     }
 
     private void loadComments() {
-        //commentListContainer.getChildren().clear(); // Clear existing comments to reload
+        commentListContainer.getChildren().clear(); // Ensure this line is uncommented and functioning
         List<Comment> comments = commentDAO.getCommentsByProblemId(currentProblem.getId());
-        UserDAO user = new UserDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
         for (Comment comment : comments) {
             try {
-                //load the FXML file for a single comment item
+                // Load the FXML file for a single comment item
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("commentItem.fxml"));
                 VBox commentItem = loader.load();
 
-                //get the controller and set the comment data
+                // Get the controller and set the comment data
                 CommentItemController controller = loader.getController();
-                controller.setCommentData(comment,user.getUserById(comment.getUserId()).getUsername(),currentUser);
+                controller.setCommentData(comment, userDAO.getUserById(comment.getUserId()).getUsername(), currentUser);
 
                 // Add the comment item to the container
                 commentListContainer.getChildren().add(commentItem);
@@ -86,17 +86,15 @@ public class ProblemDetailsController {
     @FXML
     public void postComment(ActionEvent actionEvent) {
         String content = commentField.getText().trim();
-
         if (!content.isEmpty()) {
             Comment newComment = new Comment();
             newComment.setProblemId(currentProblem.getId());
             newComment.setUserId(currentUserId);
-            System.out.println("in posting "+currentUserId);
             newComment.setContent(content);
 
-            commentDAO.addComment(newComment); //add comment to the database via DAO method
+            commentDAO.addComment(newComment); // Add comment to the database via DAO method
             commentField.clear();
-            loadComments(); // refresh comments
+            loadComments(); // Refresh comments to include the new one
         }
     }
 }

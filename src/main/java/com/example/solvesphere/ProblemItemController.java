@@ -1,8 +1,5 @@
 package com.example.solvesphere;
-import com.example.solvesphere.DataBaseUnit.ProblemDAO;
-import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
-import com.example.solvesphere.DataBaseUnit.UserDAO;
-import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
@@ -19,8 +16,15 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ProblemItemController {
+    private ScheduledExecutorService scheduler;
+
+    @FXML
+    private Label commentCountTxt;
     @FXML
     private Text postedBy;
     @FXML
@@ -29,13 +33,19 @@ public class ProblemItemController {
     private Problem passedProblem;
     private User currentUser; //the current connected use e.g signed in
 
-    public void setProblemData(Problem problem,String publisher,User passedUser) {
+    public void setProblemData(Problem problem,String publisher,User passedUser,int commentsCnt) {
         this.problemTitle.setText(problem.getTitle());
         this.postedBy.setText(publisher);
         this.postDate.setText(formatDateTime(problem.getCreatedAt()));
         this.passedProblem = problem;
         this.currentUser = passedUser;
+        this.commentCountTxt.setText(String.valueOf(commentsCnt));
+    }
 
+    private void initProblemCommentsCount(){
+        CommentDAO commentDAO = new CommentDAOImpl();
+            int count = commentDAO.getCommentCountByProblemId(passedProblem.getId());
+            commentCountTxt.setText(String.valueOf(count));
     }
 
     @FXML
@@ -77,8 +87,33 @@ public class ProblemItemController {
         return !clickedProblem.isAgeRestricted() || currentUserAge >= 18;
     }
 
-    @FXML
-    private void onReportClick() {
+    public void initialize() {
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduleCommentCountRefresh();
+    }
 
+    private void scheduleCommentCountRefresh() {
+        scheduler.scheduleAtFixedRate(() -> {
+            if (passedProblem != null) {
+                javafx.application.Platform.runLater(this::initProblemCommentsCount);
+            }
+        }, 0, 6, TimeUnit.SECONDS);
+    }
+
+    public void shutdownScheduler() {
+        if (scheduler != null) {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+            }
+        }
+    }
+    @FXML
+    private void onClose() {
+        shutdownScheduler();
     }
 }

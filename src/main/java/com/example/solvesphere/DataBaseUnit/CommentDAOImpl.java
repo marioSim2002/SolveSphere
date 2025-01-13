@@ -101,16 +101,16 @@ public class CommentDAOImpl implements CommentDAO {
 
     @Override
     public int getCommentCountByProblemId(long problemId) {
-            try (PreparedStatement stmt = connection.prepareStatement(CommentsQueries.COUNT_COMMENT)) {
-                stmt.setLong(1, problemId);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    return rs.getInt("count");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try (PreparedStatement stmt = connection.prepareStatement(CommentsQueries.COUNT_COMMENT)) {
+            stmt.setLong(1, problemId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
-            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; //return 0 if there's an error or no data found
     }
     public void closeConnection() {
         if (connection != null) {
