@@ -9,6 +9,7 @@ import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.ValidationsUnit.ProfanityFilter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -62,20 +63,20 @@ public class ProblemDetailsController {
     }
 
     private void loadComments() {
-        commentListContainer.getChildren().clear(); // Ensure this line is uncommented and functioning
+        commentListContainer.getChildren().clear();
         List<Comment> comments = commentDAO.getCommentsByProblemId(currentProblem.getId());
         UserDAO userDAO = new UserDAOImpl();
         for (Comment comment : comments) {
             try {
-                // Load the FXML file for a single comment item
+                //load the FXML file for a single comment item
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("commentItem.fxml"));
                 VBox commentItem = loader.load();
 
-                // Get the controller and set the comment data
+                //get the controller and set the comment data
                 CommentItemController controller = loader.getController();
                 controller.setCommentData(comment, userDAO.getUserById(comment.getUserId()).getUsername(), currentUser);
 
-                // Add the comment item to the container
+                //add the comment item to the container
                 commentListContainer.getChildren().add(commentItem);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -86,15 +87,19 @@ public class ProblemDetailsController {
     @FXML
     public void postComment(ActionEvent actionEvent) {
         String content = commentField.getText().trim();
+
         if (!content.isEmpty()) {
+            //apply the profanity filter
+            ProfanityFilter profanityFilter = new ProfanityFilter();
+            String filteredComment = profanityFilter.filterText(content);
+            System.out.println("after calling filtering : " + filteredComment);
             Comment newComment = new Comment();
             newComment.setProblemId(currentProblem.getId());
             newComment.setUserId(currentUserId);
-            newComment.setContent(content);
-
-            commentDAO.addComment(newComment); // Add comment to the database via DAO method
+            newComment.setContent(filteredComment);
+            commentDAO.addComment(newComment);
             commentField.clear();
-            loadComments(); // Refresh comments to include the new one
+            loadComments();
         }
     }
 }
