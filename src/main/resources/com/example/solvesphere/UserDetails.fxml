@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.solvesphere.UserDetailsController"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox spacing="15" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20">
+
+        <!-- Title -->
+        <Label text="User Details" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+        <!-- Profile Picture and Button -->
+        <ImageView fx:id="profilePictureView" fitWidth="100" fitHeight="100"/>
+        <Button fx:id="changePictureButton" text="Change Picture" onAction="#onChangePicture"/>
+
+        <!-- GridPane for user info -->
+        <GridPane hgap="10" vgap="10" alignment="CENTER">
+            <columnConstraints>
+                <!-- Label column -->
+                <ColumnConstraints halignment="RIGHT"/>
+                <!-- TextField column -->
+                <ColumnConstraints halignment="LEFT"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints valignment="CENTER"/>
+            </rowConstraints>
+            <children>
+                <!-- Username -->
+                <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                           prefWidth="150"/>
+
+                <!-- Email -->
+                <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                           prefWidth="150"/>
+
+                <!-- Date of Birth -->
+                <Label text="Date of Birth:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="dateOfBirthPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                            prefWidth="150"/>
+
+                <!-- Country -->
+                <Label text="Country:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="countryField" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                           prefWidth="150"/>
+            </children>
+        </GridPane>
+
+        <!-- Save button -->
+        <Button text="Save Changes" onAction="#onSaveChanges"/>
+    </VBox>
+</AnchorPane>

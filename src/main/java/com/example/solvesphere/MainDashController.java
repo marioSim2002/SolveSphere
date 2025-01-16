@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -196,6 +197,22 @@ public class MainDashController {
 
     @FXML
     public void onProfileClick() {
+        try {
+            //load the FXML file for the new page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("UserDetails.fxml"));
+            Parent root = loader.load();
+            UserDetailsController controller = loader.getController();
+
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = new Stage();
+            stage.setTitle("Profile Page");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading ProfilePage.fxml");
+        }
 
     }
 

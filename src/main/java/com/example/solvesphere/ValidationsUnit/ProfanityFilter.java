@@ -7,8 +7,6 @@ import java.io.IOException;
 public class ProfanityFilter {
 
     private String bannedWordsStr;
-
-    // Constructor
     public ProfanityFilter() {
         bannedWordsStr = "";
         String filePath = "G:\\My Drive\\solveSphere\\BannedWords.txt"; //file path to banned words
@@ -30,14 +28,14 @@ public class ProfanityFilter {
         }
     }
 
-    // FILTER
+    // FILTER //
     public String filterText(String input) {
         if (input == null || input.isEmpty()) {
             return input; // default
         }
 
         String filteredText = input;
-        String[] bannedWordsArray = bannedWordsStr.split(","); // Split the banned words string into individual words
+        String[] bannedWordsArray = bannedWordsStr.split(","); //split the banned words string into individual words
 
         for (String word : bannedWordsArray) {
             if (filteredText.toLowerCase().contains(word)) {
