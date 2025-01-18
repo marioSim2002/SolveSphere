@@ -28,7 +28,7 @@ public class ProfanityFilter {
         }
     }
 
-    // FILTER //
+    // FILTERING //
     public String filterText(String input) {
         if (input == null || input.isEmpty()) {
             return input; // default

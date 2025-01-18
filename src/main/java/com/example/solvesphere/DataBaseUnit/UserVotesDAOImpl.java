@@ -92,9 +92,8 @@ public class UserVotesDAOImpl implements UserVotesDAO {
 
     @Override
     public void decrementDownvote(long commentId) {
-        String sql = "UPDATE comments SET downvotes = downvotes - 1 WHERE id = ? AND downvotes > 0";
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(VoteQueries.DECREMENT_DOWNVOTE_SCRIPT)) {
             stmt.setLong(1, commentId);
             stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {

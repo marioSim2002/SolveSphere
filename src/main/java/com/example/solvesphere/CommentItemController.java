@@ -61,7 +61,7 @@ public class CommentItemController {
         upvoteButton.setOnMouseClicked(mouseEvent -> handleUpvote(comment));
         downvoteButton.setOnMouseClicked(mouseEvent -> handleDownvote(comment));
 
-        // hover effects
+        // hover effects //
         addHoverEffect(upvoteButton);
         addHoverEffect(downvoteButton);
         // tool tips AKA alt text //

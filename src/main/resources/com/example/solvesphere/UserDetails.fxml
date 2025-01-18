@@ -45,9 +45,14 @@
                 <DatePicker fx:id="dateOfBirthPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"
                             prefWidth="150"/>
 
+                <!-- Field of interest/s -->
+                <Label text="Field of interest:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="interestsField" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                           prefWidth="150"/>
+
                 <!-- Country -->
-                <Label text="Country:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <TextField fx:id="countryField" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                <Label text="Country:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="countryField" GridPane.rowIndex="4" GridPane.columnIndex="1"
                            prefWidth="150"/>
             </children>
         </GridPane>

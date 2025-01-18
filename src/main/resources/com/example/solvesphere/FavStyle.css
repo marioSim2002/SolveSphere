@@ -1,0 +1,14 @@
+.save-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 5;
+}
+
+.save-button:hover {
+    -fx-text-fill: #0078D7;
+    -fx-underline: true;
+    -fx-background-color: transparent;
+      -fx-padding: 7;
+
+}

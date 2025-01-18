@@ -36,4 +36,5 @@ public interface UserVotesDAO {
     void decrementUpvote(long commentId);
 
     void decrementDownvote(long commentId);
+
 }

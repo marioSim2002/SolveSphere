@@ -15,14 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDetailsController {
-
-    private long id;
-    private String username;
-    private String email;
-    private LocalDate dateOfBirth;
-    private String country;
-    private Map<String, Integer> fieldsOfInterest;  // Interest levels for various fields
-    private LocalDate registrationDate;
+//    private long id;
+//    private String username;
+//    private String email;
+//    private LocalDate dateOfBirth;
+//    private String country;
+//    private Map<String, Integer> fieldsOfInterest;  // Interest levels for various fields
+//    private LocalDate registrationDate;
     private String profilePicture;
     private List<Problem> problems;  // List of problems associated with the user
 
@@ -34,6 +33,8 @@ public class UserDetailsController {
     private DatePicker dateOfBirthPicker;
     @FXML
     private TextField countryField;
+    @FXML
+    private TextField interestsField;
     @FXML
     private ImageView profilePictureView;
     @FXML
@@ -56,6 +57,13 @@ public class UserDetailsController {
             dateOfBirthPicker.setValue(currentUser.getDateOfBirth());
             countryField.setText(currentUser.getCountry());
             buildImage(currentUser);
+            String formattedInterests = currentUser.getFieldsOfInterest()
+                    .entrySet()
+                    .stream()
+                    .map(Map.Entry::getKey)  // value is priority level
+                    .reduce((s1, s2) -> s1 + ", " + s2) //entries with a comma and space
+                    .orElse("No interests specified"); //default message if the map is empty
+            interestsField.setText(formattedInterests);
         }
     }
 
@@ -71,7 +79,7 @@ public class UserDetailsController {
 
     @FXML
     public void onChangePicture() {
-        // Allow the user to select a new profile picture
+        //allow the user to select a new profile picture
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Profile Picture");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));

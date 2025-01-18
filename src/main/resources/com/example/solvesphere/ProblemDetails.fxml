@@ -5,13 +5,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import java.net.URL?>
 <AnchorPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.solvesphere.ProblemDetailsController"
             prefHeight="400.0" prefWidth="600.0">
+    <stylesheets>
+        <URL value="@FavStyle.css"/>
+    </stylesheets>
 
     <children>
-
         <VBox alignment="CENTER" spacing="10"
               AnchorPane.bottomAnchor="10"
               AnchorPane.leftAnchor="10"
@@ -32,6 +35,18 @@
             <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
                 <TextField fx:id="commentField" promptText="Add a comment..." HBox.hgrow="ALWAYS" style="-fx-padding: 5;"/>
                 <Button text="Post Comment" onAction="#postComment" style="-fx-padding: 5 10;"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+                <!-- Save Icon Button with Href Effect -->
+                <Button fx:id="saveButton" onAction="#onSave" >
+                    <graphic>
+                        <ImageView fx:id="saveIcon" fitHeight="32" fitWidth="32" styleClass="save-button">
+                            <image>
+                                <Image url="@Images/icoFav.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
             </HBox>
         </VBox>
     </children>

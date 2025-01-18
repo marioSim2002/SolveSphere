@@ -1,30 +1,32 @@
 package com.example.solvesphere;
 
-import com.example.solvesphere.DataBaseUnit.CommentDAO;
-import com.example.solvesphere.DataBaseUnit.CommentDAOImpl;
-import com.example.solvesphere.DataBaseUnit.UserDAO;
-import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
+import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
+import com.example.solvesphere.UserData.FavoritesService;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ProfanityFilter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class ProblemDetailsController {
 
+    @FXML
+    private ImageView saveIcon;
+    @FXML
+    private Button saveButton;
     @FXML
     private Label problemTitle;
 
@@ -35,21 +37,25 @@ public class ProblemDetailsController {
     private TextField commentField; // Input field for new comments
 
     @FXML
-    private VBox commentListContainer; ///// here ////
-
+    private VBox commentListContainer;
     private CommentDAO commentDAO;
     private ServerCommunicator serverCommunicator;
     private Problem currentProblem; // Current post
     private User currentUser; // Current user
-    private Long currentUserId ;
+    private Long currentUserId;
+    private FavoritesService favoritesService = new FavoritesService();
+    private boolean isSaved = false;
+
     public void initData(Problem passedProblem, User passedUser) {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         this.currentProblem = passedProblem;
         this.currentUser = passedUser;
         this.commentDAO = new CommentDAOImpl();
+        this.favoritesService = new FavoritesService();
         currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(passedUser.getUsername(), passedUser.getEmail());
         System.out.println(currentUserId);
         showData();
+        updateFavoriteUI();
         loadComments();
     }
 
@@ -92,7 +98,6 @@ public class ProblemDetailsController {
             //apply the profanity filter
             ProfanityFilter profanityFilter = new ProfanityFilter();
             String filteredComment = profanityFilter.filterText(content);
-            System.out.println("after calling filtering : " + filteredComment);
             Comment newComment = new Comment();
             newComment.setProblemId(currentProblem.getId());
             newComment.setUserId(currentUserId);
@@ -100,6 +105,39 @@ public class ProblemDetailsController {
             commentDAO.addComment(newComment);
             commentField.clear();
             loadComments();
+        }
+    }
+
+    @FXML
+    private void onSave() {
+        FavoritesDAOImpl favoritesDAO = new FavoritesDAOImpl();
+        boolean isFavorite = favoritesDAO.isFavorite(currentUserId, currentProblem.getId());
+
+        if (isFavorite) {
+            //remove from favorites
+            favoritesService.removeFavorite(currentUserId, currentProblem.getId());
+            System.out.println("Problem removed from favorites.");
+        } else {
+            //add to favorites
+            favoritesService.addFavorite(currentUserId, currentProblem.getId());
+            System.out.println("Problem added to favorites.");
+        }
+        updateFavoriteUI();
+    }
+
+
+    private void updateFavoriteUI() {
+        FavoritesDAOImpl favoritesDAO = new FavoritesDAOImpl();
+        boolean isFavorite = favoritesDAO.isFavorite(currentUserId, currentProblem.getId());
+
+        if (isFavorite) {
+            //problem is a favorite
+            saveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            saveIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/icoFavClicked.png")).toExternalForm()));
+        } else {
+            //problem is not a favorite
+            saveButton.setStyle("-fx-background-color: transparent;");
+            saveIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/icoFav.png")).toExternalForm()));
         }
     }
 }
