@@ -8,6 +8,7 @@ import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
 import com.example.solvesphere.UserData.User;
 import javafx.animation.ScaleTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -32,11 +33,13 @@ public class CommentItemController {
     private ImageView downvoteButton;
 
     private User currentUser;
+    private Comment currentComment;
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final UserVotesDAO voteDAO = new UserVotesDAOImpl();
     ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void setCommentData(Comment comment, String username, User passedUser) {
+        this.currentComment = comment;
         commentText.setText(comment.getContent());
         commentAuthor.setText("By " + username);
         commentDate.setText(comment.getCreatedAt().toString());
@@ -142,5 +145,23 @@ public class CommentItemController {
         transition.setToX(scale);
         transition.setToY(scale);
         return transition;
+    }
+    public void deleteComment(ActionEvent actionEvent) {
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        long commentId = currentComment.getId();
+
+        Comment comment = commentDAO.getCommentById(commentId);
+
+        if (comment == null) {
+            AlertsUnit.commentNotFoundAlert();
+            return;
+        }
+
+        if (comment.getUserId() == currentUserId) {
+            commentDAO.deleteComment(commentId);
+            AlertsUnit.commentDeletedSuccessfullyAlert();
+        } else {
+            AlertsUnit.commentDeletionPermissionDeniedAlert();
+        }
     }
 }

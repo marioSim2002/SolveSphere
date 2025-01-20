@@ -60,4 +60,16 @@ public abstract class AlertsUnit {
     public static void userUnderAgeAlert() {
             showAlert(Alert.AlertType.WARNING, "Access Denied: Age-Restricted Content", "This content has age restrictions and is not available for viewing.");
     }
+    public static void commentDeletedSuccessfullyAlert() {
+        showAlert(Alert.AlertType.INFORMATION, "Comment Deleted", "The comment has been deleted successfully!");
+    }
+
+    public static void commentDeletionPermissionDeniedAlert() {
+        showAlert(Alert.AlertType.WARNING, "Permission Denied", "You do not have permission to delete this comment.");
+    }
+
+    public static void commentNotFoundAlert() {
+        showAlert(Alert.AlertType.ERROR, "Error", "The comment you are trying to delete does not exist.");
+    }
+
 }
