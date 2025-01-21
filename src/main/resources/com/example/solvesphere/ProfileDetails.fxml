@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.solvesphere.ProfileTabbedController"
+           stylesheets="@profile.css"
+           alignment="CENTER"
+           styleClass="profile-container">
+
+    <!-- Main container -->
+    <VBox spacing="20" alignment="CENTER" fillWidth="true">
+        <!-- User Profile Section -->
+        <VBox spacing="10" alignment="CENTER">
+            <Label fx:id="usernameLabel" text="Username" styleClass="username-label"/>
+        </VBox>
+
+        <!-- Tabbed Section -->
+        <TabPane fx:id="tabPane"
+                 tabClosingPolicy="UNAVAILABLE"
+                 styleClass="tab-pane"
+                 VBox.vgrow="ALWAYS">
+
+            <!-- Tab 1: Favorite Posts -->
+            <Tab text="Favorite Posts">
+                <AnchorPane>
+                    <VBox spacing="15" alignment="CENTER"
+                          styleClass="tab-content"
+                          AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+
+                        <Label text="Favorite Posts" styleClass="section-title"/>
+
+                        <!-- Wrap the VBox in a ScrollPane -->
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="favoriteProblemListContainer"
+                                  spacing="10"
+                                  alignment="CENTER"/>
+                        </ScrollPane>
+
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+
+            <!-- Tab 2: All Posts -->
+            <Tab text="All Posts">
+                <AnchorPane>
+                    <VBox spacing="15" alignment="CENTER"
+                          styleClass="tab-content"
+                          AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+
+                        <Label text="All User Posts" styleClass="section-title"/>
+
+                        <!-- ScrollPane so the user can scroll through multiple items -->
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="problemListContainer"
+                                  spacing="10"
+                                  alignment="CENTER"
+                                  style="-fx-padding: 10;"/>
+                        </ScrollPane>
+
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+
+            <!-- Tab 3: Account Stats -->
+            <Tab text="Account Stats">
+                <AnchorPane>
+                    <VBox spacing="20" alignment="CENTER"
+                          styleClass="tab-content"
+                          AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                        <Label text="Posts Count:" styleClass="stats-label"/>
+                        <Label fx:id="postCountLabel" text="0" styleClass="stats-number"/>
+                        <Label text="Total Favorites:" styleClass="stats-label"/>
+                        <Label fx:id="favoriteCountLabel" text="0" styleClass="stats-number"/>
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+        </TabPane>
+    </VBox>
+</StackPane>

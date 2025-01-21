@@ -15,7 +15,7 @@ public interface UserDAO {
 
     boolean userExists(String username, String email); // check if the user already exists
 
-    // New Method: Get user by username only
+    // user by username only
     User getUserByUsername(String username);
 
     void addUserInterests(long userId, Map<String, Integer> interests) throws SQLException, ClassNotFoundException;

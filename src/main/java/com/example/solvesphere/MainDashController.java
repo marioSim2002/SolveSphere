@@ -187,7 +187,7 @@ public class MainDashController {
         Stage stage = (Stage) problemListContainer.getScene().getWindow();
         stage.setOnCloseRequest(event -> {
             System.out.println("Closing prevented!");
-            event.consume(); // Always consume the event to prevent closing
+            event.consume();
         });
     }
 
@@ -197,6 +197,29 @@ public class MainDashController {
 
     @FXML
     public void onProfileClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfileDetails.fxml"));
+            Parent root = loader.load();
+
+            // Optionally pass data to the controller if needed
+            ProfileTabbedController controller = loader.getController();
+            controller.initialize(currentUser);
+
+            // Create a new stage to display the profile
+            Stage profileStage = new Stage();
+            profileStage.setTitle("User Profile");
+            profileStage.setScene(new Scene(root, 800, 600));
+            profileStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onLogoutClick(ActionEvent actionEvent) {
+    }
+
+    public void onSettingsClick() {
         try {
             //load the FXML file for the new page
             FXMLLoader loader = new FXMLLoader(getClass().getResource("UserDetails.fxml"));
@@ -213,13 +236,6 @@ public class MainDashController {
             e.printStackTrace();
             System.err.println("Error loading ProfilePage.fxml");
         }
-
-    }
-
-    public void onLogoutClick(ActionEvent actionEvent) {
-    }
-
-    public void onSettingsClick(ActionEvent actionEvent) {
     }
 
     @FXML

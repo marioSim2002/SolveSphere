@@ -4,6 +4,7 @@ import com.example.solvesphere.DBQueries.ProblemQueries;
 import com.example.solvesphere.UserData.Problem;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class ProblemDAOImpl implements ProblemDAO {
@@ -13,10 +14,9 @@ public class ProblemDAOImpl implements ProblemDAO {
     public List<Problem> getProblemsByUserInterest(Map<String, Integer> userInterests) {
         List<Problem> problems = new ArrayList<>();
         if (userInterests.isEmpty()) {
-            return problems;  // Return empty if no interests
+            return problems;
         }
 
-        // extract the keys from the map to use as categories
         List<String> categories = new ArrayList<>(userInterests.keySet());
         String inSql = String.join(",", Collections.nCopies(categories.size(), "?"));
         String sql = "SELECT * FROM problems WHERE category IN (" + inSql + ")";
@@ -164,4 +164,34 @@ public boolean addProblem(Problem problem) {
         return false;
     }
 }
+
+    @Override
+    public Problem getProblemById(long problemId) {
+        Problem problem = null;
+        String query = "SELECT * FROM problems WHERE id = ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setLong(1, problemId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Construct a Problem object
+                // Adjust column names/types as needed
+                long id = rs.getLong("id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                long userId = rs.getLong("user_id");
+                LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+                String category = rs.getString("category");
+                boolean isAgeRestricted = rs.getBoolean("is_age_restricted");
+                List<String> tags = null; // or parse from DB if stored
+
+                problem = new Problem(id, title, description, userId, createdAt, category, isAgeRestricted, tags);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return problem;
+    }
 }

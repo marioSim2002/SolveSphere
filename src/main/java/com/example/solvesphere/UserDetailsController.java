@@ -1,5 +1,7 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.UserDataModifier;
+import com.example.solvesphere.DataBaseUnit.UserDataModifierImpl;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
@@ -11,11 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UserDetailsController {
-//    private long id;
+    //    private long id;
 //    private String username;
 //    private String email;
 //    private LocalDate dateOfBirth;
@@ -46,6 +51,7 @@ public class UserDetailsController {
         this.currentUser = user;
         loadUserDataIntoFields();
     }
+
     public UserDetailsController() {
     }
 
@@ -68,18 +74,7 @@ public class UserDetailsController {
     }
 
     @FXML
-    public void onSaveChanges() {
-        currentUser.setUsername(usernameField.getText());
-        currentUser.setEmail(emailField.getText());
-        currentUser.setDateOfBirth(dateOfBirthPicker.getValue());
-        currentUser.setCountry(countryField.getText());
-        // todo - update DB Logic (to alter data in DB)
-        System.out.println("User details updated successfully!");
-    }
-
-    @FXML
     public void onChangePicture() {
-        //allow the user to select a new profile picture
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Profile Picture");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -87,13 +82,38 @@ public class UserDetailsController {
 
         if (selectedFile != null) {
             profilePicture = selectedFile.getAbsolutePath();
-            // Update profile picture in the view (placeholder logic)
-            // profilePictureView.setImage(new Image(new FileInputStream(profilePicture)));
-            System.out.println("Profile picture updated: " + profilePicture);
+            profilePictureView.setImage(new Image(selectedFile.toURI().toString()));
+
+            //save the new profile picture to the database
+            currentUser.setProfilePicture(profilePicture);
+            UserDataModifier userModDAO = new UserDataModifierImpl();
+            if (userModDAO.updateUserDetails(currentUser)) {System.out.println("Profile picture updated in the database.");}
+            else {System.out.println("Failed to update profile picture in the database.");}
         }
     }
 
-    private void buildImage(@NotNull User user){
+    @FXML
+    public void onSaveChanges() {
+        UserDataModifier userModDAO = new UserDataModifierImpl();
+
+        currentUser.setUsername(usernameField.getText());
+        currentUser.setEmail(emailField.getText());
+        currentUser.setDateOfBirth(dateOfBirthPicker.getValue());
+        currentUser.setCountry(countryField.getText());
+
+        Map<String, Integer> interestsMap = new HashMap<>();
+        for (String interest : interestsField.getText().split(",")) {
+            interestsMap.put(interest.trim(), 2);  //default priority value = 2
+        }
+        currentUser.setFieldsOfInterest(interestsMap);
+
+        boolean updated = userModDAO.updateUserDetails(currentUser);
+        if (updated) {
+            AlertsUnit.successUserDetailUpdate();
+        } else {AlertsUnit.showErrorAlert("Error processing request");}
+    }
+
+    private void buildImage(@NotNull User user) {
         String profilePicturePath = user.getProfilePicture();
 
         if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
@@ -111,3 +131,5 @@ public class UserDetailsController {
         }
     }
 }
+
+

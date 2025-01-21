@@ -7,57 +7,74 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.solvesphere.UserDetailsController"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox spacing="15" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+            prefHeight="500.0" prefWidth="650.0"
+            style="-fx-background-color: #F5F5F5; -fx-border-color: #D3D3D3; -fx-border-radius: 10; -fx-padding: 20;">
+
+    <VBox spacing="20" alignment="CENTER"
+          AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
           AnchorPane.rightAnchor="20">
 
         <!-- Title -->
-        <Label text="User Details" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Label text="User Details" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
 
         <!-- Profile Picture and Button -->
-        <ImageView fx:id="profilePictureView" fitWidth="100" fitHeight="100"/>
-        <Button fx:id="changePictureButton" text="Change Picture" onAction="#onChangePicture"/>
+        <VBox spacing="10" alignment="CENTER">
+            <ImageView fx:id="profilePictureView" fitWidth="200" fitHeight="150"
+                       style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5); -fx-border-radius: 10;"/>
+            <Button fx:id="changePictureButton" text="Change Picture"
+                    style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px;" onAction="#onChangePicture"/>
+        </VBox>
 
         <!-- GridPane for user info -->
-        <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <GridPane hgap="20" vgap="15" alignment="CENTER"
+                  style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #BDC3C7; -fx-border-radius: 5; -fx-border-width: 1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
             <columnConstraints>
-                <!-- Label column -->
                 <ColumnConstraints halignment="RIGHT"/>
-                <!-- TextField column -->
-                <ColumnConstraints halignment="LEFT"/>
+                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" prefWidth="250"/>
             </columnConstraints>
+
             <rowConstraints>
                 <RowConstraints valignment="CENTER"/>
             </rowConstraints>
             <children>
                 <!-- Username -->
-                <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
                 <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="1"
-                           prefWidth="150"/>
+                           promptText="Enter your username"
+                           style="-fx-padding: 5; -fx-border-radius: 5;"/>
 
                 <!-- Email -->
-                <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
                 <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                           prefWidth="150"/>
+                           promptText="Enter your email"
+                           style="-fx-padding: 5; -fx-border-radius: 5;"/>
 
                 <!-- Date of Birth -->
-                <Label text="Date of Birth:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label text="Date of Birth:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
                 <DatePicker fx:id="dateOfBirthPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"
-                            prefWidth="150"/>
+                            style="-fx-padding: 5; -fx-border-radius: 5;"/>
 
-                <!-- Field of interest/s -->
-                <Label text="Field of interest:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <!-- Field of interest -->
+                <Label text="Field of Interest:" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
                 <TextField fx:id="interestsField" GridPane.rowIndex="3" GridPane.columnIndex="1"
-                           prefWidth="150"/>
+                           promptText="E.g., tech, science"
+                           style="-fx-padding: 5; -fx-border-radius: 5;"/>
 
                 <!-- Country -->
-                <Label text="Country:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label text="Country:" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
                 <TextField fx:id="countryField" GridPane.rowIndex="4" GridPane.columnIndex="1"
-                           prefWidth="150"/>
+                           promptText="Enter your country"
+                           style="-fx-padding: 5; -fx-border-radius: 5;"/>
             </children>
         </GridPane>
 
         <!-- Save button -->
-        <Button text="Save Changes" onAction="#onSaveChanges"/>
+        <Button text="Save Changes" onAction="#onSaveChanges"
+                style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5;"/>
     </VBox>
 </AnchorPane>

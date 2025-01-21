@@ -16,4 +16,6 @@ public interface ProblemDAO {
 
     List<Problem> getProblemsByCountry(String country);
     boolean addProblem(Problem problem);
+
+    Problem getProblemById(long problemId);
 }
