@@ -98,7 +98,6 @@ public class CommentDAOImpl implements CommentDAO {
             e.printStackTrace();
         }
     }
-
     @Override
     public int getCommentCountByProblemId(long problemId) {
         try (PreparedStatement stmt = connection.prepareStatement(CommentsQueries.COUNT_COMMENT)) {
