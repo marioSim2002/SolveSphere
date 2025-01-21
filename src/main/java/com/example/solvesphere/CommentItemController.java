@@ -10,13 +10,18 @@ import com.example.solvesphere.UserData.User;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class CommentItemController {
 
+    private ProblemDetailsController problemDetailsController; // parent controller //
+    @FXML
+    private ImageView deleteButton;
     @FXML
     private Text downvoteCount;
     @FXML
@@ -38,6 +43,11 @@ public class CommentItemController {
     private final UserVotesDAO voteDAO = new UserVotesDAOImpl();
     ServerCommunicator serverCommunicator = new ServerCommunicator();
 
+
+    public void setProblemDetailsController(ProblemDetailsController parentController) {
+        this.problemDetailsController = parentController;
+    }
+
     public void setCommentData(Comment comment, String username, User passedUser) {
         this.currentComment = comment;
         commentText.setText(comment.getContent());
@@ -47,7 +57,14 @@ public class CommentItemController {
         //initialize the buttons and update vote counts
         initButtons(comment);
         updateVoteCounts(comment);
-    }
+
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        if (comment.getUserId() == currentUserId) {
+            deleteButton.setVisible(true);
+            deleteButton.setOnMouseClicked(e -> deleteComment());
+            Tooltip.install(deleteButton, new Tooltip("Delete your comment"));
+        } else {deleteButton.setVisible(false);}
+}
 
     @FXML
     public void initButtons(Comment comment) {
@@ -63,10 +80,10 @@ public class CommentItemController {
         }
         upvoteButton.setOnMouseClicked(mouseEvent -> handleUpvote(comment));
         downvoteButton.setOnMouseClicked(mouseEvent -> handleDownvote(comment));
-
         // hover effects //
         addHoverEffect(upvoteButton);
         addHoverEffect(downvoteButton);
+        addHoverEffect(deleteButton);
         // tool tips AKA alt text //
         Tooltip.install(upvoteButton, new Tooltip("Up-vote this comment"));
         Tooltip.install(downvoteButton, new Tooltip("Down-vote this comment"));
@@ -146,7 +163,9 @@ public class CommentItemController {
         transition.setToY(scale);
         return transition;
     }
-    public void deleteComment(ActionEvent actionEvent) {
+
+
+    public void deleteComment() {
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         long commentId = currentComment.getId();
 
@@ -160,6 +179,7 @@ public class CommentItemController {
         if (comment.getUserId() == currentUserId) {
             commentDAO.deleteComment(commentId);
             AlertsUnit.commentDeletedSuccessfullyAlert();
+            problemDetailsController.loadComments();
         } else {
             AlertsUnit.commentDeletionPermissionDeniedAlert();
         }

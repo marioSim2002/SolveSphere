@@ -30,12 +30,20 @@
                     <Image url="@Images/downvote_icon.png" />
                 </image>
             </ImageView>
+            <!-- Delete Button -->
             <Text fx:id="downvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/> <!-- Downvote counter -->
+        </VBox>
+        <VBox alignment="CENTER_RIGHT" spacing="20" styleClass="image-container">
+            <ImageView fx:id="deleteButton"
+                       pickOnBounds="true"
+                       preserveRatio="true"
+                       fitWidth="20"
+                       fitHeight="20">
+                <Image url="@Images/icoDelete.png"/>
+            </ImageView>
         </VBox>
     </HBox>
 
-    <!-- Delete Button -->
-    <Button fx:id="deleteButton" text="Delete" onAction="#deleteComment" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 5 10;"/>
 
     <!-- Separator to divide comments -->
     <Separator orientation="HORIZONTAL" style="-fx-background-color: darkgray;"/>

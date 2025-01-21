@@ -68,7 +68,7 @@ public class ProblemDetailsController {
         }
     }
 
-    private void loadComments() {
+    public void loadComments() {
         commentListContainer.getChildren().clear();
         List<Comment> comments = commentDAO.getCommentsByProblemId(currentProblem.getId());
         UserDAO userDAO = new UserDAOImpl();
@@ -80,6 +80,7 @@ public class ProblemDetailsController {
 
                 //get the controller and set the comment data
                 CommentItemController controller = loader.getController();
+                controller.setProblemDetailsController(this);
                 controller.setCommentData(comment, userDAO.getUserById(comment.getUserId()).getUsername(), currentUser);
 
                 //add the comment item to the container
