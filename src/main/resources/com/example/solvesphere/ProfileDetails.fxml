@@ -51,7 +51,7 @@
                           AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
                           AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
 
-                        <Label text="All User Posts" styleClass="section-title"/>
+                        <Label text="All your Posts" styleClass="section-title"/>
 
                         <!-- ScrollPane so the user can scroll through multiple items -->
                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
