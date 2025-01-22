@@ -8,6 +8,10 @@ import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -16,10 +20,23 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProfileTabbedController {
-
+    @FXML
+    private Label postCountLabel;
+    @FXML
+    private Label favoriteCountLabel;
+    @FXML
+    private PieChart favoritesPieChart;
+    @FXML
+    private BarChart<String, Number> postBarChart;
+    @FXML
+    private CategoryAxis categoryAxis;
+    @FXML
+    private NumberAxis numberAxis;
 
     @FXML
     private Label usernameLabel;
@@ -27,10 +44,6 @@ public class ProfileTabbedController {
     private Button changePictureButton;
     @FXML
     private VBox favoriteProblemListContainer;
-    @FXML
-    private Label postCountLabel;
-    @FXML
-    private Label favoriteCountLabel;
 
     // VBox container where we will display the custom items (ProblemItem.fxml)
     @FXML private VBox problemListContainer;
@@ -40,9 +53,9 @@ public class ProfileTabbedController {
     public void initialize(User user) {
         this.currentUser = user;
         usernameLabel.setText("Welcome "+currentUser.getUsername());
-        //profilePictureView.setImage(new Image(currentUser.getProfilePicture()));
         loadAllPosts();
         getFavPosts();
+        initializeCharts();
     }
 
     private void loadAllPosts() {
@@ -111,8 +124,42 @@ public class ProfileTabbedController {
         }
     }
 
+    private void initializeCharts() {
+        List<Problem> userPosts = getUserPosts();
 
-    public void onAccountStats(ActionEvent actionEvent) {
-        // ...
+        Map<String, Integer> postCategoryCounts = new HashMap<>();
+        for (Problem problem : userPosts) {
+            postCategoryCounts.put(problem.getCategory(),
+                    postCategoryCounts.getOrDefault(problem.getCategory(), 0) + 1);
+        }
+        postBarChart.getData().clear();
+        BarChart.Series<String, Number> postSeries = new BarChart.Series<>();
+        postSeries.setName("User Contributions");
+        for (Map.Entry<String, Integer> entry : postCategoryCounts.entrySet()) {
+            postSeries.getData().add(new BarChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+        postBarChart.getData().add(postSeries);
+
+        //fetch favorite problem data
+        FavoritesDAO favoritesDAO = new FavoritesDAOImpl();
+        long currentUserId = new ServerCommunicator().fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+
+        List<Long> favoriteProblemIDs = favoritesDAO.getFavoriteProblemsByUser(currentUserId);
+        ProblemDAO problemDAO = new ProblemDAOImpl();
+
+        Map<String, Integer> favoriteCategoryCounts = new HashMap<>();
+        for (Long problemId : favoriteProblemIDs) {
+            Problem p = problemDAO.getProblemById(problemId);
+            if (p != null) {
+                favoriteCategoryCounts.put(p.getCategory(),
+                        favoriteCategoryCounts.getOrDefault(p.getCategory(), 0) + 1);
+            }
+        }
+
+        favoritesPieChart.getData().clear();
+        for (Map.Entry<String, Integer> entry : favoriteCategoryCounts.entrySet()) {
+            favoritesPieChart.getData().add(new PieChart.Data(entry.getKey(), entry.getValue()));
+        }
     }
+
 }

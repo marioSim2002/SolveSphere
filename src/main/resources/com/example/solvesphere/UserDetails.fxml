@@ -19,7 +19,7 @@
 
         <!-- Profile Picture and Button -->
         <VBox spacing="10" alignment="CENTER">
-            <ImageView fx:id="profilePictureView" fitWidth="200" fitHeight="150"
+            <ImageView fx:id="profilePictureView" fitWidth="240" fitHeight="150"
                        style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5); -fx-border-radius: 10;"/>
             <Button fx:id="changePictureButton" text="Change Picture"
                     style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px;" onAction="#onChangePicture"/>
