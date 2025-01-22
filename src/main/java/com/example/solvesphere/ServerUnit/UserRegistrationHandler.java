@@ -48,6 +48,12 @@ public class UserRegistrationHandler implements Runnable {
                 case "FETCH_USER_ID":
                     handleFetchUserId(in, out);
                     break;
+                case "SEND_CHAT":
+                    handleChatMessage(in, out);
+                    break;
+                case "FETCH_CHAT":
+                    handleFetchChat(out);
+                    break;
                 default:
                     out.writeObject("Invalid command. av.cmds: REGISTER, LOGIN , FETCH_PROBLEMS.");
                     break;
@@ -144,7 +150,6 @@ public class UserRegistrationHandler implements Runnable {
             User user = userDAO.getUserByUsernameAndPassword(username, password); // validate username and password
             System.out.println("handle login method" + password);
             if (user != null) {
-                //ProblemDAO problemDAO = new ProblemDAOImpl();
                 Map<String, Integer> userInterests = user.getFieldsOfInterest();
                 System.out.println(userInterests);
                 user.setFieldsOfInterest(userInterests);
@@ -156,7 +161,27 @@ public class UserRegistrationHandler implements Runnable {
         } else {
             // not an array
             out.writeObject("Error: Invalid data format for login.");
-            System.out.println("Received invalid data for login: " + data); // Debugging
         }
     }
+
+    ///*** chat ***///
+    private static final List<String> chatMessages = new ArrayList<>();
+    private void handleChatMessage(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
+        String[] messageData = (String[]) in.readObject();
+        String username = messageData[0];
+        String message = messageData[1];
+
+        synchronized (chatMessages) {
+            chatMessages.add(username + ": " + message);
+        }
+
+        out.writeObject("Message sent successfully.");
+    }
+
+    private void handleFetchChat(ObjectOutputStream out) throws IOException {
+        synchronized (chatMessages) {
+            out.writeObject(new ArrayList<>(chatMessages));
+        }
+    }
+
 }

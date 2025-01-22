@@ -134,6 +134,40 @@ public class ServerCommunicator {
         }
     }
 
+    public String sendChatMessage(String username, String message) {
+        try (Socket socket = new Socket(serverHost, serverPort);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            out.writeObject("SEND_CHAT");
+            out.writeObject(new String[]{username, message});
+            out.flush();
+
+            return (String) in.readObject(); // response from server
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return "Error: Unable to send message.";
+        }
+    }
+
+    public List<String> fetchChatMessages() {
+        try (Socket socket = new Socket(serverHost, serverPort);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            out.writeObject("FETCH_CHAT");
+            out.flush();
+
+            Object response = in.readObject();
+            if (response instanceof List<?>) {
+                return (List<String>) response;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
     // method to send a request to reset the user's password
     public String sendPasswordResetRequest(String username) {
         return sendRequest("RESET_PASSWORD", username);

@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -39,13 +36,16 @@ public class MainDashController {
     private TextField searchField;
     private User currentUser;  //connected user e.g current user
     @FXML
-
+    private TextField chatInputField;
+    @FXML
+    private ListView<String> chatListView;
     private final String fetch_problems_cmd = "FETCH_PROBLEMS";
 
     public void initUserData(User user) {
         this.currentUser = user;
         buildImage(currentUser);
         fetchAndDisplayProblems();
+        initializeChat();
     }
 
     private void envokeAllProblemsDisplay() {
@@ -183,13 +183,32 @@ public class MainDashController {
         }
     }
 
-    public void setupClosePrevention() {
-        Stage stage = (Stage) problemListContainer.getScene().getWindow();
-        stage.setOnCloseRequest(event -> {
-            System.out.println("Closing prevented!");
-            event.consume();
+    private void initializeChat() {
+        ScheduledExecutorService chatUpdater = Executors.newSingleThreadScheduledExecutor();
+        chatUpdater.scheduleAtFixedRate(this::updateChat, 0, 3, TimeUnit.SECONDS);
+    }
+
+    @FXML
+    private void sendMessage() {
+        String message = chatInputField.getText().trim();
+        if (!message.isEmpty()) {
+            ServerCommunicator communicator = ServerCommunicator.getInstance();
+            String response = communicator.sendChatMessage(currentUser.getUsername(), message);
+            System.out.println(response);
+            chatInputField.clear();
+        }
+    }
+
+    private void updateChat() {
+        ServerCommunicator communicator = ServerCommunicator.getInstance();
+        List<String> chatMessages = communicator.fetchChatMessages();
+
+        Platform.runLater(() -> {
+            chatListView.getItems().clear();
+            chatListView.getItems().addAll(chatMessages);
         });
     }
+
 
     @FXML
     public void onHomeClick() {

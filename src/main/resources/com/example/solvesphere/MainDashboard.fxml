@@ -17,6 +17,7 @@
 
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ListView?>
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.MainDashController"
             stylesheets="@dataStyling.css">
     <!-- Navbar -->
@@ -65,12 +66,17 @@
                         </StackPane.margin>
                     </ImageView>
                 </VBox>
-                <VBox spacing="20" style="-fx-padding: 20;">
-                    <Label text="upcoming feature" style="-fx-font-size: 18; -fx-text-fill: #2C3E50;"/>
-                    <TextField fx:id="aiQueryField" promptText="Enter your question here" />
-                    <Button text="Submit"/>
-                    <TextArea fx:id="aiResponseArea" editable="false" prefHeight="200"/>
+                <VBox spacing="15" style="-fx-padding: 15;">
+                    <Label text="Live Chat" style="-fx-font-size: 18px; -fx-text-fill: #2C3E50;"/>
+                    <ScrollPane fitToWidth="true">
+                        <ListView fx:id="chatListView" prefHeight="200" />
+                    </ScrollPane>
+                    <HBox spacing="10">
+                        <TextField fx:id="chatInputField" promptText="Type your message..." HBox.hgrow="ALWAYS"/>
+                        <Button text="Send" onAction="#sendMessage"/>
+                    </HBox>
                 </VBox>
+
             </items>
         </SplitPane>
     </center>

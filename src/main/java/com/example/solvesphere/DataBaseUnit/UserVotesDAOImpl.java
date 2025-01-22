@@ -36,7 +36,6 @@ public class UserVotesDAOImpl implements UserVotesDAO {
                 stmt.setLong(1, userId);
                 stmt.setLong(2, commentId);
                 stmt.setString(3, voteType);
-                stmt.setString(4, voteType); // For ON DUPLICATE KEY UPDATE
                 stmt.executeUpdate();
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
