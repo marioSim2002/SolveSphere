@@ -8,8 +8,9 @@ public class Comment {
     private long userId;
     private String content;
     private Timestamp createdAt;
-    private int upvotes; // New field for upvotes
-    private int downvotes; // New field for downvotes
+    private int upvotes;
+    private int downvotes;
+    private boolean isSolution; // New field to mark the comment as a solution
 
     // Getters and Setters
     public long getId() {
@@ -52,20 +53,28 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
-    public int getUpvotes() { // Getter for upvotes
+    public int getUpvotes() {
         return upvotes;
     }
 
-    public void setUpvotes(int upvotes) { // Setter for upvotes
+    public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
     }
 
-    public int getDownvotes() { // Getter for downvotes
+    public int getDownvotes() {
         return downvotes;
     }
 
-    public void setDownvotes(int downvotes) { // Setter for downvotes
+    public void setDownvotes(int downvotes) {
         this.downvotes = downvotes;
+    }
+
+    public boolean isSolution() {
+        return isSolution;
+    }
+
+    public void setSolution(boolean solution) {
+        isSolution = solution;
     }
 
     @Override
@@ -78,6 +87,7 @@ public class Comment {
                 ", createdAt=" + createdAt +
                 ", upvotes=" + upvotes +
                 ", downvotes=" + downvotes +
+                ", isSolution=" + isSolution +
                 '}';
     }
 }

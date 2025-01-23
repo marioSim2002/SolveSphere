@@ -1,7 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
 import com.example.solvesphere.DBQueries.CommentsQueries;
-import com.example.solvesphere.DBQueries.VoteQueries;
 import com.example.solvesphere.UserData.Comment;
 
 import java.sql.*;
@@ -76,8 +75,9 @@ public class CommentDAOImpl implements CommentDAO {
                     comment.setUserId(rs.getLong("user_id"));
                     comment.setContent(rs.getString("content"));
                     comment.setCreatedAt(Timestamp.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
-                    comment.setUpvotes(rs.getInt("upvotes")); // Fetch upvotes
-                    comment.setDownvotes(rs.getInt("downvotes")); // Fetch downvotes
+                    comment.setUpvotes(rs.getInt("upvotes")); // fetch upvotes
+                    comment.setDownvotes(rs.getInt("downvotes")); // fetch downvotes
+                    comment.setSolution(rs.getBoolean("is_solution")); // fetch is_solution status
                     comments.add(comment);
                 }
             }
@@ -120,5 +120,45 @@ public class CommentDAOImpl implements CommentDAO {
             }
         }
     }
+
+    @Override
+    public void markAsSolution(long commentId,boolean req) {
+        String cmd ;
+        if(req){cmd = "UPDATE comments SET is_solution = TRUE WHERE id = ?";}
+        else {cmd = "UPDATE comments SET is_solution = FALSE WHERE id = ?";}
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(cmd)) {
+            stmt.setLong(1, commentId);
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Comment getSolutionForProblem(long problemId) {
+        String sql = "SELECT * FROM comments WHERE problem_id = ? AND is_solution = TRUE LIMIT 1";
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, problemId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Comment comment = new Comment();
+                comment.setId(rs.getLong("id"));
+                comment.setContent(rs.getString("content"));
+                comment.setCreatedAt(rs.getTimestamp("created_at"));
+                comment.setUserId(rs.getLong("user_id"));
+                comment.setProblemId(rs.getLong("problem_id"));
+                comment.setUpvotes(rs.getInt("upvotes"));
+                comment.setDownvotes(rs.getInt("downvotes"));
+                comment.setSolution(rs.getBoolean("is_solution"));
+                return comment;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

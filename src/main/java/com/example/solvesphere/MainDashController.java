@@ -185,7 +185,7 @@ public class MainDashController {
 
     private void initializeChat() {
         ScheduledExecutorService chatUpdater = Executors.newSingleThreadScheduledExecutor();
-        chatUpdater.scheduleAtFixedRate(this::updateChat, 0, 3, TimeUnit.SECONDS);
+        chatUpdater.scheduleAtFixedRate(this::updateChat, 0, 1, TimeUnit.SECONDS);
     }
 
     @FXML

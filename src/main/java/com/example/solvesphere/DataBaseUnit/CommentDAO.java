@@ -12,4 +12,8 @@ public interface CommentDAO {
     int getCommentCountByProblemId(long problemId);  //get comment count for a problem
 
     Comment getCommentById(long id);
+
+    void markAsSolution(long commentId,boolean req);
+
+    Comment getSolutionForProblem(long problemId);
 }

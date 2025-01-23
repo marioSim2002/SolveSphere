@@ -8,13 +8,13 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.solvesphere.CommentItemController"
-      spacing="10" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="500.0"
-      style="-fx-padding: 0 0 0 20;"> <!-- Add padding to the left -->
+      spacing="10" alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="500.0"
+      style="-fx-padding: 10 20 10 20;"> <!-- Add padding for better spacing -->
+
     <Text fx:id="commentText" wrappingWidth="530" style="-fx-font-size: 14px;"/>
     <Text fx:id="commentAuthor" style="-fx-font-size: 10px; -fx-fill: gray;"/>
     <Text fx:id="commentDate" style="-fx-font-size: 10px; -fx-fill: gray;"/>
 
-    <!-- HBox to hold the images and counters -->
     <HBox alignment="CENTER_RIGHT" spacing="20" styleClass="image-container">
         <VBox alignment="CENTER">
             <ImageView fx:id="upvoteButton" fitWidth="32" fitHeight="32" preserveRatio="true" styleClass="image-button">
@@ -22,7 +22,7 @@
                     <Image url="@Images/upvote_icon.png" />
                 </image>
             </ImageView>
-            <Text fx:id="upvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/> <!-- Upvote counter -->
+            <Text fx:id="upvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/>
         </VBox>
         <VBox alignment="CENTER">
             <ImageView fx:id="downvoteButton" fitWidth="32" fitHeight="32" preserveRatio="true" styleClass="image-button">
@@ -30,10 +30,9 @@
                     <Image url="@Images/downvote_icon.png" />
                 </image>
             </ImageView>
-            <!-- Delete Button -->
-            <Text fx:id="downvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/> <!-- Downvote counter -->
+            <Text fx:id="downvoteCount" style="-fx-font-size: 12px; -fx-fill: gray;" text="0"/>
         </VBox>
-        <VBox alignment="CENTER_RIGHT" spacing="20" styleClass="image-container">
+        <VBox alignment="CENTER">
             <ImageView fx:id="deleteButton"
                        pickOnBounds="true"
                        preserveRatio="true"
@@ -44,7 +43,19 @@
         </VBox>
     </HBox>
 
-
+    <!-- Mark as Solution button placed below -->
+    <HBox alignment="CENTER_RIGHT">
+        <Button fx:id="markSolutionButton" text="Mark as Solution"
+                onAction="#markAsSolution"
+                visible="false"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 12px;"/>
+    </HBox>
+    <HBox alignment="CENTER_RIGHT">
+    <Text fx:id="solutionIndicator"
+          text="This comment is marked as a solution"
+          style="-fx-font-size: 14px; -fx-fill: green; -fx-font-weight: bold;"
+          visible="false"/>
+    </HBox>
     <!-- Separator to divide comments -->
     <Separator orientation="HORIZONTAL" style="-fx-background-color: darkgray;"/>
 </VBox>

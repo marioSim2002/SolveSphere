@@ -12,13 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class CommentItemController {
-
+    @FXML
+    private Button markSolutionButton;
     private ProblemDetailsController problemDetailsController; // parent controller //
     @FXML
     private ImageView deleteButton;
@@ -36,13 +36,14 @@ public class CommentItemController {
     private ImageView upvoteButton;
     @FXML
     private ImageView downvoteButton;
-
+    @FXML
+    private Text solutionIndicator;
     private User currentUser;
     private Comment currentComment;
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final UserVotesDAO voteDAO = new UserVotesDAOImpl();
     ServerCommunicator serverCommunicator = new ServerCommunicator();
-
+    boolean isPostOwner;
 
     public void setProblemDetailsController(ProblemDetailsController parentController) {
         this.problemDetailsController = parentController;
@@ -54,24 +55,44 @@ public class CommentItemController {
         commentAuthor.setText("By " + username);
         commentDate.setText(comment.getCreatedAt().toString());
         this.currentUser = passedUser;
-        //initialize the buttons and update vote counts
         initButtons(comment);
         updateVoteCounts(comment);
 
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+
         if (comment.getUserId() == currentUserId) {
+            isPostOwner = true;
             deleteButton.setVisible(true);
             deleteButton.setOnMouseClicked(e -> deleteComment());
             Tooltip.install(deleteButton, new Tooltip("Delete your comment"));
-        } else {deleteButton.setVisible(false);}
-}
+        } else {
+            deleteButton.setVisible(false);
+        }
+
+        if (isPostOwner) {
+            markSolutionButton.setVisible(true);
+            markSolutionButton.setOnMouseClicked(mouseEvent -> markAsSolution());
+        } else {
+            markSolutionButton.setVisible(false);
+        }
+        System.err.println("current comment state: "+ comment.isSolution());
+
+        // solution indicator if the comment is marked as a solution
+        if (comment.isSolution()) {
+            solutionIndicator.setVisible(true);
+            markSolutionButton.setText("Solution ✓");
+            markSolutionButton.setDisable(true);
+        } else {
+            solutionIndicator.setVisible(false);
+        }
+    }
 
     @FXML
     public void initButtons(Comment comment) {
-        //check if the user has already voted//
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+
         if (voteDAO.hasUserVoted(currentUserId, comment.getId())) {
-            String voteType = voteDAO.getUserVoteType(currentUser.getId(), comment.getId());
+            String voteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
             if ("upvote".equals(voteType)) {
                 upvoteButton.setDisable(true);
             } else if ("downvote".equals(voteType)) {
@@ -80,43 +101,35 @@ public class CommentItemController {
         }
         upvoteButton.setOnMouseClicked(mouseEvent -> handleUpvote(comment));
         downvoteButton.setOnMouseClicked(mouseEvent -> handleDownvote(comment));
-        // hover effects //
         addHoverEffect(upvoteButton);
         addHoverEffect(downvoteButton);
         addHoverEffect(deleteButton);
-        // tool tips AKA alt text //
+
         Tooltip.install(upvoteButton, new Tooltip("Up-vote this comment"));
         Tooltip.install(downvoteButton, new Tooltip("Down-vote this comment"));
     }
 
-    /**
-     * handles up-voting for a comment
-     * **/
     @FXML
     public void handleUpvote(Comment comment) {
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
 
         if ("upvote".equals(currentVoteType)) {
-            System.out.println("User has already upvoted this comment.");//dg
+            System.out.println("User has already upvoted this comment.");
             return;
         }
 
         voteDAO.recordVote(currentUserId, comment.getId(), "upvote");
         voteDAO.incrementUpvote(comment.getId());
         if ("downvote".equals(currentVoteType)) {
-            voteDAO.decrementDownvote(comment.getId()); // remove the previous downvote
+            voteDAO.decrementDownvote(comment.getId());
         }
         updateVoteCounts(comment);
     }
 
-
-    /**
-     * handles down-voting for a comment
-     * **/
     @FXML
     public void handleDownvote(Comment comment) {
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
 
         if ("downvote".equals(currentVoteType)) {
@@ -127,25 +140,17 @@ public class CommentItemController {
         voteDAO.recordVote(currentUserId, comment.getId(), "downvote");
         voteDAO.incrementDownvote(comment.getId());
         if ("upvote".equals(currentVoteType)) {
-            voteDAO.decrementUpvote(comment.getId()); // remove the previous upvote
+            voteDAO.decrementUpvote(comment.getId());
         }
         updateVoteCounts(comment);
     }
 
-
-    /**
-     * counts the current number of upvotes/downvotes of the comment
-     * **/
     private void updateVoteCounts(Comment comment) {
         Comment updatedComment = commentDAO.getCommentById(comment.getId());
-        //update the UI with the new counts
         upvoteCount.setText(String.valueOf(updatedComment.getUpvotes()));
         downvoteCount.setText(String.valueOf(updatedComment.getDownvotes()));
     }
 
-    /**
-     * Adds a scaling hover effect to an ImageView.
-     */
     private void addHoverEffect(ImageView button) {
         ScaleTransition hoverIn = createScaleTransition(button, 1.3);
         ScaleTransition hoverOut = createScaleTransition(button, 1.0);
@@ -154,16 +159,12 @@ public class CommentItemController {
         button.setOnMouseExited(e -> hoverOut.playFromStart());
     }
 
-    /**
-     * Creates a scale transition for a given ImageView.
-     */
     private ScaleTransition createScaleTransition(ImageView button, double scale) {
         ScaleTransition transition = new ScaleTransition(Duration.millis(200), button);
         transition.setToX(scale);
         transition.setToY(scale);
         return transition;
     }
-
 
     public void deleteComment() {
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
@@ -182,6 +183,22 @@ public class CommentItemController {
             problemDetailsController.loadComments();
         } else {
             AlertsUnit.commentDeletionPermissionDeniedAlert();
+        }
+    }
+
+    @FXML
+    public void markAsSolution() {
+        if (currentComment != null) {
+            commentDAO.markAsSolution(currentComment.getId(), true);
+            // update local state
+            currentComment.setSolution(true);
+            // update the button for the owner
+            markSolutionButton.setText("Solution ✓");
+            markSolutionButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            markSolutionButton.setDisable(true);
+            //the solution indicator for all users
+            solutionIndicator.setVisible(true);
+            problemDetailsController.loadComments();
         }
     }
 }
