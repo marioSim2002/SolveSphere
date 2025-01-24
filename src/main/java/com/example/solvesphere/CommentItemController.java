@@ -1,11 +1,9 @@
 package com.example.solvesphere;
 
-import com.example.solvesphere.DataBaseUnit.CommentDAO;
-import com.example.solvesphere.DataBaseUnit.CommentDAOImpl;
-import com.example.solvesphere.DataBaseUnit.UserVotesDAO;
-import com.example.solvesphere.DataBaseUnit.UserVotesDAOImpl;
+import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
+import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
@@ -49,7 +47,7 @@ public class CommentItemController {
         this.problemDetailsController = parentController;
     }
 
-    public void setCommentData(Comment comment, String username, User passedUser) {
+    public void setCommentData(Comment comment, String username, User passedUser, Problem problem) {
         this.currentComment = comment;
         commentText.setText(comment.getContent());
         commentAuthor.setText("By " + username);
@@ -59,8 +57,8 @@ public class CommentItemController {
         updateVoteCounts(comment);
 
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
-
-        if (comment.getUserId() == currentUserId) {
+        System.out.println(problem.getUserId());
+        if (problem.getUserId() == currentUserId) {
             isPostOwner = true;
             deleteButton.setVisible(true);
             deleteButton.setOnMouseClicked(e -> deleteComment());
