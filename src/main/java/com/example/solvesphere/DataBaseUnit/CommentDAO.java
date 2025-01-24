@@ -16,4 +16,6 @@ public interface CommentDAO {
     void markAsSolution(long commentId,boolean req);
 
     Comment getSolutionForProblem(long problemId);
+
+    List<Comment> getAllComments();
 }

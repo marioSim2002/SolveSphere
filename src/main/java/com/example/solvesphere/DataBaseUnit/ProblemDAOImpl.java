@@ -194,4 +194,27 @@ public boolean addProblem(Problem problem) {
         }
         return problem;
     }
+
+    @Override
+    public Map<String, Integer> getProblemCategoryCounts() {
+        Map<String, Integer> categoryCounts = new HashMap<>();
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.GET_CATEGORY_COUNTS_QUERY);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String category = rs.getString("category");
+                int count = rs.getInt("count");
+                categoryCounts.put(category, count);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error fetching problem category counts", e);
+        }
+
+        return categoryCounts;
+    }
 }
+

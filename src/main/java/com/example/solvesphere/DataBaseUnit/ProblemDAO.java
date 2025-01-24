@@ -18,4 +18,6 @@ public interface ProblemDAO {
     boolean addProblem(Problem problem);
 
     Problem getProblemById(long problemId);
+    Map<String, Integer> getProblemCategoryCounts();
+
 }

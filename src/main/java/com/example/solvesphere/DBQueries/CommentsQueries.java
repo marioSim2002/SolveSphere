@@ -5,4 +5,6 @@ public class CommentsQueries {
     public static final String GET_COMMENTS_BY_PROBLEM_ID = "SELECT * FROM comments WHERE problem_id = ?";
    public static final String DELETE_COMMENT = "DELETE FROM comments WHERE id = ?";
    public static final String COUNT_COMMENT = "SELECT COUNT(*) AS count FROM comments WHERE problem_id = ?";
+   public static final String GET_ALL_COMMENTS_QUERY = "SELECT id, problem_id, user_id, content, created_at, upvotes, downvotes, is_solution FROM comments";
+
 }

@@ -20,8 +20,9 @@
 <?import javafx.scene.control.ListView?>
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.solvesphere.MainDashController"
             stylesheets="@dataStyling.css">
-    <!-- Navbar -->
     <top>
+    <!-- Navbar -->
+    <VBox spacing="5">
         <HBox alignment="center" spacing="10" style="-fx-background-color: #2C3E50; -fx-padding: 10;">
             <Label style="-fx-font-size: 20px; -fx-text-fill: white;" text="SolveSphere" />
             <TextField fx:id="searchField" onKeyReleased="#searchForInput" promptText="Search for problems..." style="-fx-pref-width: 300px;" />
@@ -36,7 +37,10 @@
                 </items>
             </ComboBox>
         </HBox>
-    </top>
+        <Label fx:id="mostPostedCategoryLabel" text="Most Posted Category: N/A"
+               style="-fx-font-size: 14px; -fx-text-fill: #2C3E50; -fx-padding: 0 0 0 15;"/>
+    </VBox>
+</top>
 
     <!-- Sidebar for navigation -->
     <left>

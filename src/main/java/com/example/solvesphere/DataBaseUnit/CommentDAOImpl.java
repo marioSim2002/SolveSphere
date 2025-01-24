@@ -160,5 +160,35 @@ public class CommentDAOImpl implements CommentDAO {
         return null;
     }
 
+    @Override
+    public List<Comment> getAllComments() {
+        List<Comment> comments = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(CommentsQueries.GET_ALL_COMMENTS_QUERY);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Comment comment = new Comment();
+                comment.setId(rs.getLong("id"));
+                comment.setProblemId(rs.getLong("problem_id"));
+                comment.setUserId(rs.getLong("user_id"));
+                comment.setContent(rs.getString("content"));
+                comment.setCreatedAt(Timestamp.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
+                comment.setUpvotes(rs.getInt("upvotes"));
+                comment.setDownvotes(rs.getInt("downvotes"));
+                comment.setSolution(rs.getBoolean("is_solution"));
+
+                comments.add(comment);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error fetching all comments", e);
+        }
+
+        return comments;
+    }
+
 
 }

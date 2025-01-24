@@ -3,6 +3,7 @@ import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.ValidationsUnit.Inspector;
 import javafx.application.Platform;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,6 +28,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class MainDashController {
     @FXML
+    private Label mostPostedCategoryLabel;
+    @FXML
     private ImageView profileImg;
     @FXML
     private VBox problemListContainer;
@@ -46,6 +49,8 @@ public class MainDashController {
         buildImage(currentUser);
         fetchAndDisplayProblems();
         initializeChat();
+        Inspector inspector = new Inspector(this);
+        inspector.startInspection();
     }
 
     private void envokeAllProblemsDisplay() {
@@ -269,4 +274,10 @@ public class MainDashController {
         button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;-fx-font-size:14;");
     }
 
+
+    public void updateMostPostedCategoryLabel(String mostPostedCategory, int maxCount) {
+        Platform.runLater(() -> {
+            mostPostedCategoryLabel.setText("Trending topics \uD83D\uDD25 : " + mostPostedCategory + " (" + maxCount + " posts)");
+        });
+    }
 }
