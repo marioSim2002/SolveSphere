@@ -57,9 +57,9 @@ public class CommentItemController {
         updateVoteCounts(comment);
 
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
-        System.out.println(problem.getUserId());
-        if (problem.getUserId() == currentUserId) {
-            isPostOwner = true;
+        isPostOwner = (problem.getUserId() == currentUserId);
+
+        if (comment.getUserId() == currentUserId) {
             deleteButton.setVisible(true);
             deleteButton.setOnMouseClicked(e -> deleteComment());
             Tooltip.install(deleteButton, new Tooltip("Delete your comment"));
@@ -67,20 +67,28 @@ public class CommentItemController {
             deleteButton.setVisible(false);
         }
 
-        if (isPostOwner) {
-            markSolutionButton.setVisible(true);
-            markSolutionButton.setOnMouseClicked(mouseEvent -> markAsSolution());
-        } else {
-            markSolutionButton.setVisible(false);
-        }
-        System.err.println("current comment state: "+ comment.isSolution());
+        // Ensure the "Mark as Solution" button is visible for all users
+        markSolutionButton.setVisible(true);
 
-        // solution indicator if the comment is marked as a solution
+        // Only enable the button for the post owner
+        if (isPostOwner) {
+            markSolutionButton.setOnMouseClicked(mouseEvent -> markAsSolution());
+            markSolutionButton.setDisable(false);
+        } else {
+            markSolutionButton.setDisable(true);
+        }
+
+        System.err.println("Current comment state: " + comment.isSolution());
+
+        //solution indicator if the comment is marked as a solution
         if (comment.isSolution()) {
             solutionIndicator.setVisible(true);
             markSolutionButton.setText("Solution ✓");
             markSolutionButton.setDisable(true);
+            markSolutionButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         } else {
+            markSolutionButton.setText("Mark as Solution");
+            markSolutionButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
             solutionIndicator.setVisible(false);
         }
     }
