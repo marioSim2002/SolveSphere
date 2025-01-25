@@ -4,6 +4,7 @@ import com.example.solvesphere.DataBaseUnit.UserDataModifier;
 import com.example.solvesphere.DataBaseUnit.UserDataModifierImpl;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -94,6 +95,12 @@ public class UserDetailsController {
 
     @FXML
     public void onSaveChanges() {
+        //validate basic input credentials
+        String[] inputData = {usernameField.getText(),countryField.getText(),interestsField.getText()};
+        if(!ValidateInputData.validTxtData(inputData) || !ValidateInputData.validEmail(emailField.getText())){
+            AlertsUnit.showInvalidDataAlert();
+            return;
+        }
         UserDataModifier userModDAO = new UserDataModifierImpl();
 
         currentUser.setUsername(usernameField.getText());

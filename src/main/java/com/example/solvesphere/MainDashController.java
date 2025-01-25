@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class MainDashController {
+    private Stage profileStage;
+    private Stage settingsStage;
+
     @FXML
     private Label mostPostedCategoryLabel;
     @FXML
@@ -119,6 +122,7 @@ public class MainDashController {
             case "In Your Country":
                 if (currentUser != null) {
                     List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
+                    System.out.println(currentUser.getCountry());
                     displayProblems(problemsByCountry);
                 }
             case "Posted By You":
@@ -222,18 +226,25 @@ public class MainDashController {
     @FXML
     public void onProfileClick() {
         try {
+            if (profileStage != null && profileStage.isShowing()) {
+                profileStage.toFront();  // if already open ,bring the existing window to the front
+                return;
+            }
+            // else open
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfileDetails.fxml"));
             Parent root = loader.load();
 
-            // Optionally pass data to the controller if needed
             ProfileTabbedController controller = loader.getController();
             controller.initialize(currentUser);
 
-            // Create a new stage to display the profile
-            Stage profileStage = new Stage();
+            //create a new stage and store reference
+            profileStage = new Stage();
             profileStage.setTitle("User Profile");
             profileStage.setScene(new Scene(root, 800, 600));
             profileStage.show();
+
+            //add listener to detect when the stage is closed
+            profileStage.setOnCloseRequest(event -> profileStage = null);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -245,17 +256,23 @@ public class MainDashController {
 
     public void onSettingsClick() {
         try {
-            //load the FXML file for the new page
+            if (settingsStage != null && settingsStage.isShowing()) {
+                settingsStage.toFront();
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("UserDetails.fxml"));
             Parent root = loader.load();
             UserDetailsController controller = loader.getController();
-
             controller.setCurrentUser(currentUser);
 
-            Stage stage = new Stage();
-            stage.setTitle("Profile Page");
-            stage.setScene(new Scene(root));
-            stage.show();
+            settingsStage = new Stage();
+            settingsStage.setTitle("Profile Page");
+            settingsStage.setScene(new Scene(root));
+            settingsStage.show();
+
+            settingsStage.setOnCloseRequest(event -> settingsStage = null);
+
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error loading ProfilePage.fxml");
