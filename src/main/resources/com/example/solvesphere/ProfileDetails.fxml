@@ -84,7 +84,7 @@
 
                             <!-- Favorite Problems Pie Chart -->
                             <Label text="Favorite Problem Types" styleClass="section-title"/>
-                            <PieChart fx:id="favoritesPieChart" prefHeight="300" prefWidth="600" />
+                            <PieChart fx:id="favoritesPieChart" prefHeight="350" prefWidth="600" />
 
                             <!-- Add spacing between charts -->
                             <Region prefHeight="50.0" />

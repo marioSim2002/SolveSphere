@@ -24,6 +24,8 @@ import java.util.Objects;
 public class ProblemDetailsController {
 
     @FXML
+    private Label problemCategory;
+    @FXML
     private ImageView saveIcon;
     @FXML
     private Button saveButton;
@@ -44,7 +46,6 @@ public class ProblemDetailsController {
     private User currentUser; // Current user
     private Long currentUserId;
     private FavoritesService favoritesService = new FavoritesService();
-    private boolean isSaved = false;
 
     public void initData(Problem passedProblem, User passedUser) {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
@@ -62,6 +63,7 @@ public class ProblemDetailsController {
     private void showData() {
         try {
             problemTitle.setText(currentProblem.getTitle());
+            problemCategory.setText(currentProblem.getCategory());
             problemDescription.setText(currentProblem.getDescription());
         } catch (NullPointerException exception) {
             System.out.println("Data trying to access may be null.");
