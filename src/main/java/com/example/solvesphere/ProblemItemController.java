@@ -43,7 +43,7 @@ public class ProblemItemController {
     }
 
     private void initProblemCommentsCount(){
-        CommentDAO commentDAO = new CommentDAOImpl();
+        CommentDAO commentDAO = new CommentDAOImpl(); //////// throws  .SQLNonTransientConnectionException error
             int count = commentDAO.getCommentCountByProblemId(passedProblem.getId());
             commentCountTxt.setText(String.valueOf(count));
     }

@@ -14,12 +14,11 @@ import java.util.TimerTask;
 
 public class Inspector {
     private static final int CHECK_INTERVAL = 60 * 1000; // 1 minute in milliseconds
-    private final CommentDAO commentDAO;
+    private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;
     private final MainDashController mainDashController;
 
     public Inspector(MainDashController mainDashController) {
-        this.commentDAO = new CommentDAOImpl();
         this.problemDAO = new ProblemDAOImpl();
         this.mainDashController = mainDashController;
     }

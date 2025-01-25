@@ -23,18 +23,20 @@ public class CommentDAOImpl implements CommentDAO {
     //add a new comment
     @Override
     public void addComment(Comment comment) {
-        try (PreparedStatement stmt = connection.prepareStatement(CommentsQueries.INSERT_COMMENT)) {
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(CommentsQueries.INSERT_COMMENT)) {
+
             stmt.setLong(1, comment.getProblemId());
-            stmt.setLong(2, comment.getUserId()); ////
+            stmt.setLong(2, comment.getUserId());
             stmt.setString(3, comment.getContent());
-            stmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now())); //created at
-            System.out.println(comment.getProblemId());
-            System.out.println( );
+            stmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now())); // Created at
+
             stmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public Comment getCommentById(long commentId) {
