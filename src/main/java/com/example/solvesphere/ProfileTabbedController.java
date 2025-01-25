@@ -34,11 +34,6 @@ public class ProfileTabbedController {
     @FXML
     private BarChart<String, Number> postBarChart;
     @FXML
-    private CategoryAxis categoryAxis;
-    @FXML
-    private NumberAxis numberAxis;
-
-    @FXML
     private Label usernameLabel;
     @FXML
     private Button changePictureButton;

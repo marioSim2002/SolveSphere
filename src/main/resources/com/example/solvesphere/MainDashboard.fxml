@@ -37,8 +37,13 @@
                 </items>
             </ComboBox>
         </HBox>
-        <Label fx:id="mostPostedCategoryLabel" text="Most Posted Category: N/A"
-               style="-fx-font-size: 14px; -fx-text-fill: #2C3E50; -fx-padding: 0 0 0 15;"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 15;">
+            <Label fx:id="mostPostedCategoryLabel" text="Most Posted Category: N/A"
+                   style="-fx-font-size: 14px; -fx-text-fill: #2C3E50;"/>
+            <Button text="Click To View Global Stats" onAction="#onViewGlobalStatsClick"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12px; -fx-border-radius: 5px; -fx-padding: 5 10;"/>
+        </HBox>
     </VBox>
 </top>
 

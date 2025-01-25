@@ -48,7 +48,7 @@
             </Tab>
 
             <!-- Tab 2: All Posts -->
-            <Tab text="All Posts">
+            <Tab text="Posts Owned By You">
                 <AnchorPane>
                     <VBox spacing="5" alignment="CENTER"
                           styleClass="tab-content"
@@ -104,6 +104,7 @@
                     </ScrollPane>
                 </AnchorPane>
             </Tab>
+
         </TabPane>
     </VBox>
 </StackPane>

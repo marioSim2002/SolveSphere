@@ -29,6 +29,8 @@ import java.util.concurrent.ScheduledExecutorService;
 public class MainDashController {
     private Stage profileStage;
     private Stage settingsStage;
+    private Stage globalStatsStage;
+
 
     @FXML
     private Label mostPostedCategoryLabel;
@@ -296,5 +298,28 @@ public class MainDashController {
         Platform.runLater(() -> {
             mostPostedCategoryLabel.setText("Trending topics \uD83D\uDD25 : " + mostPostedCategory + " (" + maxCount + " posts)");
         });
+    }
+
+    @FXML
+    public void onViewGlobalStatsClick() {
+
+        if (globalStatsStage == null || !globalStatsStage.isShowing()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalStats.fxml"));
+                Parent root = loader.load();
+
+                globalStatsStage = new Stage();
+                globalStatsStage.setTitle("Detailed Statistics");
+                globalStatsStage.setScene(new Scene(root, 800, 600));
+                globalStatsStage.show();
+
+                globalStatsStage.setOnCloseRequest(event -> globalStatsStage = null);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            globalStatsStage.toFront();
+        }
     }
 }
