@@ -88,7 +88,7 @@ public class UserDetailsController {
             //save the new profile picture to the database
             currentUser.setProfilePicture(profilePicture);
             UserDataModifier userModDAO = new UserDataModifierImpl();
-            if (userModDAO.updateUserDetails(currentUser)) {System.out.println("Profile picture updated in the database.");}
+            if (userModDAO.updateUserDetails(currentUser,emailField.getText())) {System.out.println("Profile picture updated in the database.");}
             else {System.out.println("Failed to update profile picture in the database.");}
         }
     }
@@ -104,7 +104,7 @@ public class UserDetailsController {
         UserDataModifier userModDAO = new UserDataModifierImpl();
 
         currentUser.setUsername(usernameField.getText());
-        currentUser.setEmail(emailField.getText());
+        //currentUser.setEmail(emailField.getText()); ////// causing error
         currentUser.setDateOfBirth(dateOfBirthPicker.getValue());
         currentUser.setCountry(countryField.getText());
 
@@ -114,7 +114,7 @@ public class UserDetailsController {
         }
         currentUser.setFieldsOfInterest(interestsMap);
 
-        boolean updated = userModDAO.updateUserDetails(currentUser);
+        boolean updated = userModDAO.updateUserDetails(currentUser,emailField.getText());
         if (updated) {
             AlertsUnit.successUserDetailUpdate();
         } else {AlertsUnit.showErrorAlert("Error processing request");}
@@ -128,7 +128,7 @@ public class UserDetailsController {
                 //convert the string path to an Image
                 Image image = new Image(profilePicturePath);
                 profilePictureView.setImage(image);
-            } catch (IllegalArgumentException e) { // prevent error in loading
+            } catch (IllegalArgumentException e) { //prevent error in loading
                 System.out.println("Invalid image path: " + profilePicturePath);
                 profilePictureView.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
             }

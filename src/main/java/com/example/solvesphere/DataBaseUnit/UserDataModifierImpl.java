@@ -10,9 +10,10 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class UserDataModifierImpl implements UserDataModifier {
-    public boolean updateUserDetails(User user) {
+    public boolean updateUserDetails(User user,String newEmail) {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
-         long userId = serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(),user.getEmail());
+        System.out.println("UPDATE USER DETAILS "+user.getUsername()+" "+ user.getEmail());
+        long userId = serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(),user.getEmail());
         try (Connection conn = DatabaseConnectionManager.getConnection()) {
             conn.setAutoCommit(false);  // Start transaction
 
@@ -20,7 +21,7 @@ public class UserDataModifierImpl implements UserDataModifier {
                 // update basic user details
                 try (PreparedStatement stmt = conn.prepareStatement(UpdateUserQueries.UPDATE_USER_DATA_SCRIPT)) {
                     stmt.setString(1, user.getUsername());
-                    stmt.setString(2, user.getEmail());
+                    stmt.setString(2, newEmail);
                     stmt.setString(3, user.getCountry());
                     stmt.setString(4, user.getProfilePicture());
                     stmt.setLong(5, userId);
