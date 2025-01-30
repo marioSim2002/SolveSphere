@@ -5,6 +5,8 @@ import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.Inspector;
 import javafx.application.Platform;
+
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -186,11 +188,11 @@ public class MainDashController {
                 profileImg.setImage(image);
             } catch (IllegalArgumentException e) { // prevent error in loading
                 System.out.println("Invalid image path: " + profilePicturePath);
-                profileImg.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
+                profileImg.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()));
             }
         } else {
             //default image (null or empty)
-            profileImg.setImage(new Image("G:\\My Drive\\solveSphere\\userico.png"));
+            profileImg.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()));
         }
     }
 
@@ -253,7 +255,7 @@ public class MainDashController {
         }
     }
 
-    public void onLogoutClick(ActionEvent actionEvent) {
+    public void onLogoutClick() {
     }
 
     public void onSettingsClick() {

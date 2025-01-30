@@ -40,6 +40,7 @@ public class ProblemItemController {
         this.passedProblem = problem;
         this.currentUser = passedUser;
         this.commentCountTxt.setText(String.valueOf(commentsCnt));
+
     }
 
     private void initProblemCommentsCount(){

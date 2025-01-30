@@ -83,6 +83,7 @@ public class User implements Serializable {
     public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
 
     // Calculate the user's age based on dateOfBirth
+
     public int calculateAge() {
         LocalDate currentDate = LocalDate.now(); //current date
         return Period.between(this.dateOfBirth, currentDate).getYears(); // calc age in years
