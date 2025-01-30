@@ -1,11 +1,10 @@
 package com.example.solvesphere.ValidationsUnit;
 
-import com.example.solvesphere.DataBaseUnit.CommentDAO;
-import com.example.solvesphere.DataBaseUnit.CommentDAOImpl;
-import com.example.solvesphere.DataBaseUnit.ProblemDAO;
-import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
+import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.MainDashController;
+import com.example.solvesphere.ProfileTabbedController;
 import com.example.solvesphere.UserData.Comment;
+import javafx.application.Platform;
 
 import java.util.List;
 import java.util.Map;
@@ -16,11 +15,15 @@ public class Inspector {
     private static final int CHECK_INTERVAL = 60 * 1000; // 1 minute in milliseconds
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;
+    private final FavoritesDAO favoritesDAO;
     private final MainDashController mainDashController;
+    private final ProfileTabbedController profileTabbedController;
 
-    public Inspector(MainDashController mainDashController) {
+    public Inspector(MainDashController mainDashController, ProfileTabbedController profileTabbedController) {
         this.problemDAO = new ProblemDAOImpl();
+        this.favoritesDAO = new FavoritesDAOImpl();
         this.mainDashController = mainDashController;
+        this.profileTabbedController = profileTabbedController;
     }
 
     public void startInspection() {
@@ -30,13 +33,11 @@ public class Inspector {
             public void run() {
                 checkAndDeleteDownvotedComments();
                 updateMostPostedCategory();
+                updateFavorites(); // קריאה לפונקציה כאן
             }
         }, 0, CHECK_INTERVAL);
     }
 
-    /**
-     * Checks all comments in the database and deletes those with more than 40 downvotes.
-     */
     private void checkAndDeleteDownvotedComments() {
         System.out.println("Checking for comments with excessive downvotes...");
         List<Comment> allComments = commentDAO.getAllComments();
@@ -49,9 +50,6 @@ public class Inspector {
         }
     }
 
-    /**
-     * Checks the most posted category in the database and updates it in the dashboard.
-     */
     private void updateMostPostedCategory() {
         System.out.println("Checking the most posted category...");
         Map<String, Integer> categoryCounts = problemDAO.getProblemCategoryCounts();
@@ -70,5 +68,18 @@ public class Inspector {
             System.out.println("Most posted category: " + mostPostedCategory + " (" + maxCount + " posts)");
             mainDashController.updateMostPostedCategoryLabel(mostPostedCategory, maxCount);
         }
+    }
+
+private void updateFavorites() {
+    System.out.println("Checking the comments you favorite...");
+
+    if (isFavoritesPageVisible()) {
+        Platform.runLater(() -> profileTabbedController.getFavPosts());
+    } else {
+        System.out.println("Not on Favorites page, skipping update.");
+    }
+}
+    public boolean isFavoritesPageVisible() {
+        return profileTabbedController != null && profileTabbedController.isFavoritesPageVisible();
     }
 }

@@ -17,7 +17,7 @@
            alignment="CENTER"
            styleClass="profile-container">
 
-    <VBox spacing="30" alignment="CENTER">
+    <VBox  spacing="30" alignment="CENTER">
 
         <!-- User Profile Section -->
         <VBox spacing="15" alignment="CENTER">

@@ -5,6 +5,7 @@ import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.FavoritesService;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.ValidationsUnit.Inspector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ public class ProfileTabbedController {
     @FXML
     private Label postCountLabel;
     @FXML
-    private Label favoriteCountLabel;
+    private  Label favoriteCountLabel;
     @FXML
     private PieChart favoritesPieChart;
     @FXML
@@ -37,13 +38,14 @@ public class ProfileTabbedController {
     private Label usernameLabel;
     @FXML
     private Button changePictureButton;
+
     @FXML
-    private VBox favoriteProblemListContainer;
+    private  VBox favoriteProblemListContainer;
 
     // VBox container where we will display the custom items (ProblemItem.fxml)
     @FXML private VBox problemListContainer;
 
-    private User currentUser;
+    private  User currentUser;
 
     public void initialize(User user) {
         this.currentUser = user;
@@ -51,6 +53,9 @@ public class ProfileTabbedController {
         loadAllPosts();
         getFavPosts();
         initializeCharts();
+        MainDashController mainDashController = new MainDashController();
+        Inspector inspector = new Inspector(mainDashController,this);
+        inspector.startInspection();
     }
 
     private void loadAllPosts() {
@@ -58,14 +63,21 @@ public class ProfileTabbedController {
         postCountLabel.setText(String.valueOf(userPosts.size()));
         displayProblems(userPosts,problemListContainer);
     }
-    private void getFavPosts() {
+    public void getFavPosts() {
+        if (favoriteProblemListContainer != null) {
+            System.out.println("favoriteProblemListContainer is: " + favoriteProblemListContainer);
+
+        }
+        if (currentUser == null) {
+            System.out.println("null");
+            return;
+        }
         // 1) Fetch current user ID
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(
                 currentUser.getUsername(),
                 currentUser.getEmail()
         );
-
         // 2) Get favorite problem IDs
         FavoritesDAO favoritesDAO = new FavoritesDAOImpl();
         List<Long> favoriteProblemIDs = favoritesDAO.getFavoriteProblemsByUser(currentUserId);
@@ -85,7 +97,9 @@ public class ProfileTabbedController {
 
         displayProblems(favoriteProblems, favoriteProblemListContainer);
     }
-
+    public boolean isFavoritesPageVisible() {
+        return favoriteProblemListContainer != null && favoriteProblemListContainer.isVisible();
+    }
 
     private List<Problem> getUserPosts() {
         ServerCommunicator serverCommunicator = new ServerCommunicator();

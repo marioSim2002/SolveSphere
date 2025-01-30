@@ -7,9 +7,9 @@ public class DatabaseConnectionManager {
 
     ///DB connection///
     //// DONT PUSH NEW URL/USER/PASS ////
-    private static final String URL = "jdbc:mysql://localhost:3306/solvespheredata";
+    private static final String URL = "jdbc:mysql://localhost:3306/SolveSphere";
     private static final String USER = "root";
-    private static final String PASSWORD = "mario123";
+    private static final String PASSWORD = "1111";
 
     //establish and return a connection
     public static Connection getConnection() throws SQLException, ClassNotFoundException {

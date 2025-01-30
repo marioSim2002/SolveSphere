@@ -110,7 +110,6 @@ public class ProblemDetailsController {
             loadComments();
         }
     }
-
     @FXML
     private void onSave() {
         FavoritesDAOImpl favoritesDAO = new FavoritesDAOImpl();
@@ -127,8 +126,6 @@ public class ProblemDetailsController {
         }
         updateFavoriteUI();
     }
-
-
     private void updateFavoriteUI() {
         FavoritesDAOImpl favoritesDAO = new FavoritesDAOImpl();
         boolean isFavorite = favoritesDAO.isFavorite(currentUserId, currentProblem.getId());

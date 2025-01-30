@@ -30,8 +30,6 @@ public class MainDashController {
     private Stage profileStage;
     private Stage settingsStage;
     private Stage globalStatsStage;
-
-
     @FXML
     private Label mostPostedCategoryLabel;
     @FXML
@@ -54,7 +52,14 @@ public class MainDashController {
         buildImage(currentUser);
         fetchAndDisplayProblems();
         initializeChat();
-        Inspector inspector = new Inspector(this);
+
+        // Create ProfileTabbedController instance
+        ProfileTabbedController profileTabbedController = new ProfileTabbedController();
+
+        // Create Inspector instance and pass the controller
+        Inspector inspector = new Inspector(this, profileTabbedController);
+
+        // Start the inspection process
         inspector.startInspection();
     }
 
