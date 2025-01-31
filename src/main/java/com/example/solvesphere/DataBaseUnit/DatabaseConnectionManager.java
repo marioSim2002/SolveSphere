@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class DatabaseConnectionManager {
 
     ///DB connection///
-    //// DONT PUSH NEW URL/USER/PASS ////
+    //// DON'T PUSH NEW URL/USER/PASS ////
     private static final String URL = "jdbc:mysql://localhost:3306/solvespheredata";
     private static final String USER = "root";
     private static final String PASSWORD = "mario123";

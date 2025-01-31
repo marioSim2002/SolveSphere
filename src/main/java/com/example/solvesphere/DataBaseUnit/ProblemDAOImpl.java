@@ -63,7 +63,8 @@ public class ProblemDAOImpl implements ProblemDAO {
 
     //include fetching tags associated with each problem
     private Problem mapResultSetToProblem(ResultSet rs) throws SQLException {
-        List<String> tags = getTagsForProblem(rs.getInt("id"));
+        List<String> tags = getTagsByProblemId(rs.getInt("id"));
+        System.out.println(tags);
       //  boolean isAgeRestricted
 
         return new Problem(
@@ -78,19 +79,25 @@ public class ProblemDAOImpl implements ProblemDAO {
         );
     }
 
-    // Helper method to get tags for a problem
-    private List<String> getTagsForProblem(int problemId) {
+    @Override
+    public List<String> getTagsByProblemId(long problemId) {
         List<String> tags = new ArrayList<>();
+
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEM_TAGS)) {
-            stmt.setInt(1, problemId);
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT tag_id FROM problem_tags WHERE problem_id = ?")) {
+
+            stmt.setLong(1, problemId);
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
-                tags.add(rs.getString("tag_name"));
+                tags.add(rs.getString("tag_id"));  // Assuming tag_id holds tag names
             }
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return tags;
     }
 
@@ -154,8 +161,6 @@ public boolean addProblem(Problem problem) {
         stmt.setTimestamp(4, Timestamp.valueOf(problem.getCreatedAt()));
         stmt.setString(5, problem.getCategory());
         stmt.setBoolean(6, problem.isAgeRestricted()); // Correctly bind the isAgeRestricted field
-//        String tagsString = String.join(",", problem.getTags());
-//        stmt.setString(7, tagsString); // not yet implemented
 
         int affectedRows = stmt.executeUpdate();
         return affectedRows > 0;
@@ -168,10 +173,9 @@ public boolean addProblem(Problem problem) {
     @Override
     public Problem getProblemById(long problemId) {
         Problem problem = null;
-        String query = "SELECT * FROM problems WHERE id = ?";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.GET_PROBLEM_BY_ID)) {
 
             stmt.setLong(1, problemId);
             ResultSet rs = stmt.executeQuery();
@@ -185,7 +189,7 @@ public boolean addProblem(Problem problem) {
                 LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
                 String category = rs.getString("category");
                 boolean isAgeRestricted = rs.getBoolean("is_age_restricted");
-                List<String> tags = null; // or parse from DB if stored
+                List<String> tags = getTagsByProblemId(problemId);
 
                 problem = new Problem(id, title, description, userId, createdAt, category, isAgeRestricted, tags);
             }

@@ -10,6 +10,8 @@ public interface ProblemDAO {
     List<Problem> getProblemsByUserInterest(Map<String, Integer> userInterests);
     List<Problem> searchProblems(String keyword);
 
+    List<String> getTagsByProblemId(long problemId);
+
     List<Problem> fetchAllProblems();
 
     List<Problem> getProblemsPostedByCurrentUser(long userId);  //fetch problems posted by the current user

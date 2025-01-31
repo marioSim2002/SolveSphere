@@ -7,4 +7,6 @@ public class CommentsQueries {
    public static final String COUNT_COMMENT = "SELECT COUNT(*) AS count FROM comments WHERE problem_id = ?";
    public static final String GET_ALL_COMMENTS_QUERY = "SELECT id, problem_id, user_id, content, created_at, upvotes, downvotes, is_solution FROM comments";
 
+   public static final String GET_COMMENT_BY_ID = "SELECT * FROM comments WHERE id = ?";
+
 }

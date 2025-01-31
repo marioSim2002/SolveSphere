@@ -56,7 +56,7 @@ public class MainDashController {
         buildImage(currentUser);
         fetchAndDisplayProblems();
         initializeChat();
-        Inspector inspector = new Inspector(this);
+        Inspector inspector = new Inspector(this,currentUser);
         inspector.startInspection();
     }
 

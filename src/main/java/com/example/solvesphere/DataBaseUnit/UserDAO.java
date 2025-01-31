@@ -1,8 +1,10 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 public interface UserDAO {
@@ -10,7 +12,6 @@ public interface UserDAO {
 
     User getUserByUsernameAndPassword(String username, String password);
 
-    User getUserByUserName(String username);
     void addUser(User user) throws SQLException, ClassNotFoundException;    // add a new user to the database
 
     boolean userExists(String username, String email); // check if the user already exists
@@ -18,7 +19,11 @@ public interface UserDAO {
     // user by username only
     User getUserByUsername(String username);
 
+    Map<String, Integer> fetchFieldsOfInterest(long userId) throws SQLException, ClassNotFoundException;
+
     void addUserInterests(long userId, Map<String, Integer> interests) throws SQLException, ClassNotFoundException;
 
     Long getUserIdByUsernameAndEmail(String username, String email);
+
+    void updateUserInterests(long userId, Map<String, Integer> interests) throws SQLException;
 }

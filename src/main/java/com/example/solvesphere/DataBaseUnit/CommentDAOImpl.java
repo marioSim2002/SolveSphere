@@ -42,7 +42,7 @@ public class CommentDAOImpl implements CommentDAO {
     public Comment getCommentById(long commentId) {
         Comment comment = null;
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM comments WHERE id = ?")) {
+             PreparedStatement stmt = conn.prepareStatement(CommentsQueries.GET_COMMENT_BY_ID)) {
             stmt.setLong(1, commentId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

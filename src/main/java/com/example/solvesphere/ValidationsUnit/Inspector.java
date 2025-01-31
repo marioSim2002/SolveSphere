@@ -1,11 +1,14 @@
 package com.example.solvesphere.ValidationsUnit;
 
+import com.example.solvesphere.Algos.SuggestionsAlgo;
 import com.example.solvesphere.DataBaseUnit.CommentDAO;
 import com.example.solvesphere.DataBaseUnit.CommentDAOImpl;
 import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.MainDashController;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
+import com.example.solvesphere.UserData.User;
 
 import java.util.List;
 import java.util.Map;
@@ -13,23 +16,27 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Inspector {
-    private static final int CHECK_INTERVAL = 60 * 1000; // 1 minute in milliseconds
+    private static final int CHECK_INTERVAL = 50 * 1000; // 50 sec in milliseconds
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;
     private final MainDashController mainDashController;
-
-    public Inspector(MainDashController mainDashController) {
+    private final User user;
+    SuggestionsAlgo suggestionsAlgo;
+    public Inspector(MainDashController mainDashController, User user) {
         this.problemDAO = new ProblemDAOImpl();
         this.mainDashController = mainDashController;
+        this.user = user;
+        suggestionsAlgo =  new SuggestionsAlgo();
     }
 
     public void startInspection() {
-        Timer timer = new Timer(true); // Run as daemon
+        Timer timer = new Timer(true); //run as daemon
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 checkAndDeleteDownvotedComments();
                 updateMostPostedCategory();
+                suggestionsAlgo.updateInterestPriorityBasedOnFavorites(extractUserID());
             }
         }, 0, CHECK_INTERVAL);
     }
@@ -70,5 +77,9 @@ public class Inspector {
             System.out.println("Most posted category: " + mostPostedCategory + " (" + maxCount + " posts)");
             mainDashController.updateMostPostedCategoryLabel(mostPostedCategory, maxCount);
         }
+    }
+    private long extractUserID(){
+        ServerCommunicator serverCommunicator = new ServerCommunicator();
+        return serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
     }
 }

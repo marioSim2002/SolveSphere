@@ -85,13 +85,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-
-    @Override
-    public User getUserByUserName(String username) {
-        return null;
-    }
-
-
     @Override
     public void addUser(User user) throws SQLException, ClassNotFoundException {
         /// todo
@@ -169,7 +162,8 @@ public class UserDAOImpl implements UserDAO {
         }
         return user;
     }
-    private Map<String, Integer> fetchFieldsOfInterest(long userId) throws SQLException, ClassNotFoundException {
+    @Override
+    public Map<String, Integer> fetchFieldsOfInterest(long userId) throws SQLException, ClassNotFoundException {
         Map<String, Integer> fields = new HashMap<>();
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_INTEREST)) {
@@ -181,12 +175,13 @@ public class UserDAOImpl implements UserDAO {
                 fields.put(field, interestLevel);
             }
         }
+
         return fields;
     }
     private List<Problem> fetchProblems(long userId) throws SQLException, ClassNotFoundException {
         List<Problem> problems = new ArrayList<>();
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM problems WHERE user_id = ?")) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.GET_PROBLEMS_BY_USER_ID)) {
             stmt.setLong(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -198,7 +193,7 @@ public class UserDAOImpl implements UserDAO {
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getString("category"),
                         rs.getBoolean("is_age_restricted"),
-                        Arrays.asList(rs.getString("tags").split(",")) // Assuming tags are stored as a comma-separated values
+                        Arrays.asList(rs.getString("tags").split(","))
                 );
                 problems.add(problem);
             }
@@ -223,7 +218,7 @@ public class UserDAOImpl implements UserDAO {
                 stmt.executeUpdate();
             }
 
-            conn.commit(); // Commit the transaction
+            conn.commit(); //commit the transaction
         } catch (SQLException ex) {
             if (conn != null) {
                 try {
@@ -261,6 +256,25 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return userId;
+    }
+
+
+    @Override
+    public void updateUserInterests(long userId, Map<String, Integer> updatedInterests) throws SQLException {
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "UPDATE fields_of_interest SET priority_level = ? WHERE user_id = ? AND interest_name = ?")) {
+
+            for (Map.Entry<String, Integer> entry : updatedInterests.entrySet()) {
+                stmt.setInt(1, entry.getValue());  //new priority
+                stmt.setLong(2, userId);
+                stmt.setString(3, entry.getKey()); //interest category
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

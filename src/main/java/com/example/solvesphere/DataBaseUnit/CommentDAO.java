@@ -5,6 +5,9 @@ import com.example.solvesphere.UserData.Comment;
 import java.util.List;
 
 public interface CommentDAO {
+
+    // interface for all the methods handling comment/s activities
+
     void addComment(Comment comment);  // add a new comment
 
     List<Comment> getCommentsByProblemId(long problemId);  // Retrieve comments for a problem
