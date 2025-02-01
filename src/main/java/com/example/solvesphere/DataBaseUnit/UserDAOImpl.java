@@ -258,23 +258,5 @@ public class UserDAOImpl implements UserDAO {
         return userId;
     }
 
-
-    @Override
-    public void updateUserInterests(long userId, Map<String, Integer> updatedInterests) throws SQLException {
-        try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "UPDATE fields_of_interest SET priority_level = ? WHERE user_id = ? AND interest_name = ?")) {
-
-            for (Map.Entry<String, Integer> entry : updatedInterests.entrySet()) {
-                stmt.setInt(1, entry.getValue());  //new priority
-                stmt.setLong(2, userId);
-                stmt.setString(3, entry.getKey()); //interest category
-                stmt.addBatch();
-            }
-            stmt.executeBatch();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
 

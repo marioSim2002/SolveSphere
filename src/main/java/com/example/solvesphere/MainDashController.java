@@ -20,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
@@ -29,11 +30,12 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class MainDashController {
+
     private Stage profileStage;
     private Stage settingsStage;
     private Stage globalStatsStage;
-
-
+    @FXML
+    private ImageView notificationImg;
     @FXML
     private Label mostPostedCategoryLabel;
     @FXML
@@ -50,9 +52,11 @@ public class MainDashController {
     @FXML
     private ListView<String> chatListView;
     private final String fetch_problems_cmd = "FETCH_PROBLEMS";
+   private long currentUserId ;
 
     public void initUserData(User user) {
         this.currentUser = user;
+        this.currentUserId = ServerCommunicator.getInstance().fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
         buildImage(currentUser);
         fetchAndDisplayProblems();
         initializeChat();
@@ -324,4 +328,27 @@ public class MainDashController {
             globalStatsStage.toFront();
         }
     }
+
+    @FXML
+    private void onNotificationClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("NotificationView.fxml"));
+
+            Parent root = loader.load();
+
+            // Get the controller instance
+            NotificationsController controller = loader.getController();
+            controller.initialize(currentUserId); //pass current user ID
+
+            Stage notificationStage = new Stage();
+            notificationStage.initModality(Modality.APPLICATION_MODAL); //stays on top
+            notificationStage.setTitle("Notifications");
+            notificationStage.setScene(new Scene(root, 320, 420));
+            notificationStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

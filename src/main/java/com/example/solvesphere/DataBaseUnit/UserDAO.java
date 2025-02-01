@@ -25,5 +25,4 @@ public interface UserDAO {
 
     Long getUserIdByUsernameAndEmail(String username, String email);
 
-    void updateUserInterests(long userId, Map<String, Integer> interests) throws SQLException;
 }

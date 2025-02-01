@@ -36,6 +36,12 @@
                     </FXCollections>
                 </items>
             </ComboBox>
+            <ImageView fx:id="notificationImg" fitHeight="30.0" fitWidth="30.0" preserveRatio="true"
+                       onMouseClicked="#onNotificationClick">
+                <image>
+                    <Image url="@Images/ico_notification.png"/>
+                </image>
+            </ImageView>
         </HBox>
 
         <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 15;">

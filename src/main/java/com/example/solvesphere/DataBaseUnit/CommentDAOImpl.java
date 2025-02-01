@@ -1,5 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.NotificationsUnit.NotificationSender;
 import com.example.solvesphere.DBQueries.CommentsQueries;
 import com.example.solvesphere.UserData.Comment;
 
@@ -24,18 +25,28 @@ public class CommentDAOImpl implements CommentDAO {
     @Override
     public void addComment(Comment comment) {
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(CommentsQueries.INSERT_COMMENT)) {
+             PreparedStatement stmt = conn.prepareStatement(CommentsQueries.INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setLong(1, comment.getProblemId());
             stmt.setLong(2, comment.getUserId());
             stmt.setString(3, comment.getContent());
-            stmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now())); // Created at
-
+            stmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             stmt.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
+
+            // Retrieve the generated comment ID
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                long commentId = generatedKeys.getLong(1);
+                NotificationSender.sendNotification(comment.getProblemId(), commentId);
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
 
     @Override

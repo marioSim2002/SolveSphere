@@ -48,8 +48,7 @@ public class SuggestionsAlgo {
             }
 
             // update the new interest priorities in the database
-            userDAO.updateUserInterests(userId, interests);
-            System.out.println("INTERESTS UPDATED!");
+            //userDAO.updateUserInterests(userId, interests);
 
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
