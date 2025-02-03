@@ -49,6 +49,8 @@ public class ProblemDAOImpl implements ProblemDAO {
 
             stmt.setString(1, "%" + keyword + "%"); // title
             stmt.setString(2, "%" + keyword + "%"); // desc
+            stmt.setString(3, "%" + keyword + "%"); // category
+
 
             ResultSet rs = stmt.executeQuery();
 

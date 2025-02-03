@@ -64,6 +64,7 @@ public class MainDashController {
         inspector.startInspection();
     }
 
+    // updates UI when called //
     private void envokeAllProblemsDisplay() {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         List<Problem> allProblems = serverCommunicator.sendFetchProblemsRequest(fetch_problems_cmd);
@@ -173,7 +174,7 @@ public class MainDashController {
         List<Problem> matchingProblems = problemDAO.searchProblems(searchText);
         if (matchingProblems.isEmpty()) {
             System.out.println("No problems were found according to the search: " + searchText);
-            problemListContainer.getChildren().clear(); //clearing the problem list
+            problemListContainer.getChildren().clear(); //clearing the problem list - prevents duplicates
 
         } else {
             // presenting the appropriate problems
@@ -336,7 +337,6 @@ public class MainDashController {
 
             Parent root = loader.load();
 
-            // Get the controller instance
             NotificationsController controller = loader.getController();
             controller.initialize(currentUserId); //pass current user ID
 

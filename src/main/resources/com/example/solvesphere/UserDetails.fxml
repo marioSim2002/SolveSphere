@@ -45,11 +45,11 @@
                            style="-fx-padding: 5; -fx-border-radius: 5;"/>
 
                 <!-- Email -->
-                <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                <Label text="Email:(unique)" GridPane.rowIndex="1" GridPane.columnIndex="0"
                        style="-fx-font-weight: bold;"/>
                 <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"
                            promptText="Enter your email"
-                           style="-fx-padding: 5; -fx-border-radius: 5;"/>
+                           style="-fx-padding: 5; -fx-border-radius: 5;" editable="false"/>
 
                 <!-- Date of Birth -->
                 <Label text="Date of Birth:" GridPane.rowIndex="2" GridPane.columnIndex="0"
@@ -60,6 +60,7 @@
                 <!-- Field of interest -->
                 <Label text="Field of Interest:" GridPane.rowIndex="3" GridPane.columnIndex="0"
                        style="-fx-font-weight: bold;"/>
+
                 <TextField fx:id="interestsField" GridPane.rowIndex="3" GridPane.columnIndex="1"
                            promptText="E.g., tech, science"
                            style="-fx-padding: 5; -fx-border-radius: 5;"/>

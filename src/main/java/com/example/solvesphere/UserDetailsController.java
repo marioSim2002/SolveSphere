@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class UserDetailsController {
+
     //    private long id;
 //    private String username;
 //    private String email;
@@ -28,6 +29,9 @@ public class UserDetailsController {
 //    private String country;
 //    private Map<String, Integer> fieldsOfInterest;  // Interest levels for various fields
 //    private LocalDate registrationDate;
+
+    @FXML
+    private TextField AgeField;
     private String profilePicture;
     private List<Problem> problems;  // List of problems associated with the user
 

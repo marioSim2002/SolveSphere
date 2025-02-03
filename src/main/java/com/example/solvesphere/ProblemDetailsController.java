@@ -54,6 +54,7 @@ public class ProblemDetailsController {
         this.commentDAO = new CommentDAOImpl();
         this.favoritesService = new FavoritesService();
         currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(passedUser.getUsername(), passedUser.getEmail());
+        System.out.println(passedUser.getEmail());
         System.out.println(currentUserId);
         showData();
         updateFavoriteUI();

@@ -1,4 +1,4 @@
-package com.example.solvesphere.SecurityUnit;
+package com.example.solvesphere.ServerUnit;
 
 import com.example.solvesphere.ServerUnit.UserRegistrationHandler;
 

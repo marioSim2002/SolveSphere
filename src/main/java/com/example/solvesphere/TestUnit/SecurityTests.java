@@ -1,5 +1,6 @@
 package com.example.solvesphere.TestUnit;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
+import com.example.solvesphere.UserData.User;
 import org.testng.annotations.Test;
 
 public class SecurityTests {
@@ -13,5 +14,4 @@ public class SecurityTests {
     public void testPassValidation(){
         assert hasher.verifyPassword(PASSWORD_FOR_TEST, hasher.hashPassword(PASSWORD_FOR_TEST));
     }
-
 }
