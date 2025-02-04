@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Inspector {
-    // re-occurring methods called here //
+    // BG re-occurring methods called here //
     private static final int CHECK_INTERVAL = 50 * 1000; // 50 sec in milliseconds
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;

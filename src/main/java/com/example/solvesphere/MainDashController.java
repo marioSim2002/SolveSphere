@@ -271,7 +271,32 @@ public class MainDashController {
     }
 
     public void onLogoutClick() {
+        if (problemUpdater != null && !problemUpdater.isShutdown()) {
+            problemUpdater.shutdown();
+        }
+        Stage[] openStages = {profileStage, settingsStage, globalStatsStage};
+
+        for (int i = 0; i < openStages.length; i++) {
+            if (openStages[i] != null) {
+                openStages[i].close();
+                openStages[i] = null; //clear reference to avoid memory leaks
+            }
+        }
+        Stage stage = (Stage) searchField.getScene().getWindow();  //the current window
+        stage.close();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            loginStage.setTitle("SolveSphere - Login");
+            loginStage.setScene(new Scene(root, 600, 400));
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void onSettingsClick() {
         try {
