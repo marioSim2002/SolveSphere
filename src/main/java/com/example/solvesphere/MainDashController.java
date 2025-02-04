@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class MainDashController {
+    private ScheduledExecutorService problemUpdater;
 
     private Stage profileStage;
     private Stage settingsStage;
@@ -59,9 +60,18 @@ public class MainDashController {
         this.currentUserId = ServerCommunicator.getInstance().fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
         buildImage(currentUser);
         fetchAndDisplayProblems();
+        startAutoRefreshProblems();  // method to start auto-refreshing problems
+
         initializeChat();
         Inspector inspector = new Inspector(this,currentUser);
         inspector.startInspection();
+    }
+
+    private void startAutoRefreshProblems() {
+        problemUpdater = Executors.newSingleThreadScheduledExecutor();
+        problemUpdater.scheduleAtFixedRate(() -> {
+            Platform.runLater(this::fetchAndDisplayProblems);
+        }, 0, 5, TimeUnit.SECONDS); // every 5 seconds
     }
 
     // updates UI when called //
