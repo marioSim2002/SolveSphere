@@ -26,7 +26,9 @@
             <VBox spacing="5" alignment="TOP_CENTER" style="-fx-padding: 10;">
                 <Label text="Title" style="-fx-font-weight: bold; -fx-font-size: 24px;"/>
                 <Label fx:id="problemTitle" style="-fx-font-size: 17px;"/>
-                <Label fx:id="problemCategory" style="-fx-font-size: 11px; -fx-font-color:gray;"/>
+
+                <Label fx:id="problemCategory" style="-fx-font-size: 11px; -fx-text-fill: gray;"/>
+
                 <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="100.0" style="-fx-padding: 5;"/>
             </VBox>
             <Label text="Comments" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>

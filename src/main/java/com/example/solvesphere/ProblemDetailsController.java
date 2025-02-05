@@ -42,16 +42,18 @@ public class ProblemDetailsController {
     private VBox commentListContainer;
     private CommentDAO commentDAO;
     private ServerCommunicator serverCommunicator;
-    private Problem currentProblem; // Current post
-    private User currentUser; // Current user
+    private Problem currentProblem; // current post
+    private User currentUser; // current user
     private Long currentUserId;
+    private String ownerName ;
     private FavoritesService favoritesService = new FavoritesService();
 
-    public void initData(Problem passedProblem, User passedUser) {
+    public void initData(Problem passedProblem, User passedUser,String owner) {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         this.currentProblem = passedProblem;
         this.currentUser = passedUser;
         this.commentDAO = new CommentDAOImpl();
+        this.ownerName  = owner;
         this.favoritesService = new FavoritesService();
         currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(passedUser.getUsername(), passedUser.getEmail());
         System.out.println(passedUser.getEmail());
@@ -66,6 +68,7 @@ public class ProblemDetailsController {
             problemTitle.setText(currentProblem.getTitle());
             problemCategory.setText(currentProblem.getCategory());
             problemDescription.setText(currentProblem.getDescription());
+
         } catch (NullPointerException exception) {
             System.out.println("Data trying to access may be null.");
         }

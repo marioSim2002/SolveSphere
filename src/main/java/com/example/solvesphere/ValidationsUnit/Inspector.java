@@ -11,12 +11,15 @@ import com.example.solvesphere.UserData.User;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
 public class Inspector {
     // BG re-occurring methods called here //
-    private static final int CHECK_INTERVAL = 50 * 1000; // 50 sec in milliseconds
+    private static final int CHECK_INTERVAL = 30 * 1000; // 30 sec
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;
     private final MainDashController mainDashController;
@@ -43,7 +46,7 @@ public class Inspector {
     }
 
     /**
-     * Checks all comments in the database and deletes those with more than 40 downvotes.
+     * checks all comments in the database and deletes those with more than 40 downvotes.
      */
     private void checkAndDeleteDownvotedComments() {
         System.out.println("Checking for comments with excessive downvotes...");
@@ -113,4 +116,5 @@ public class Inspector {
             e.printStackTrace();
         }
     }
+
 }

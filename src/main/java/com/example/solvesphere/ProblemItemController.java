@@ -31,14 +31,17 @@ public class ProblemItemController {
     private Text postDate;
     @FXML private Label problemTitle;
     private Problem passedProblem;
+
+    private String owner ;
     private User currentUser; //the current connected use e.g signed in
 
-    public void setProblemData(Problem problem,String publisher,User passedUser,int commentsCnt) {
+    public void setProblemData(Problem problem,User passedUser,int commentsCnt,String publisherName) {
         this.problemTitle.setText(problem.getTitle());
-        this.postedBy.setText(publisher);
+        this.postedBy.setText(publisherName);
         this.postDate.setText(formatDateTime(problem.getCreatedAt()));
         this.passedProblem = problem;
         this.currentUser = passedUser;
+        this.owner = publisherName;
         this.commentCountTxt.setText(String.valueOf(commentsCnt));
 
     }
@@ -61,18 +64,13 @@ public class ProblemItemController {
             AnchorPane problemDetailsRoot = loader.load();
 
             ProblemDetailsController controller = loader.getController();
-            controller.initData(passedProblem, currentUser);
+            controller.initData(passedProblem, currentUser,owner);
 
             //create a NEW stage for the new screen
             Stage newStage = new Stage();
             newStage.setTitle("Problem Details");
             newStage.setScene(new Scene(problemDetailsRoot));
             newStage.show();
-
-            // Do NOT close or overwrite the main dash:
-            // No calls to 'stage.close()' or 'stage.setScene(...)' on the main dash
-            // So the main dash remains open.
-
 
         }  catch (IOException e) {throw new RuntimeException(e);}
     }
@@ -98,14 +96,14 @@ public class ProblemItemController {
             if (passedProblem != null) {
                 javafx.application.Platform.runLater(this::initProblemCommentsCount);
             }
-        }, 0, 6, TimeUnit.SECONDS);
+        }, 0, 8, TimeUnit.SECONDS);
     }
 
     public void shutdownScheduler() {
         if (scheduler != null) {
             scheduler.shutdown();
             try {
-                if (!scheduler.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                if (!scheduler.awaitTermination(8, TimeUnit.SECONDS)) {
                     scheduler.shutdownNow();
                 }
             } catch (InterruptedException e) {

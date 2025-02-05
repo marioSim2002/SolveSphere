@@ -108,7 +108,7 @@ public class ProfileTabbedController {
                 CommentDAO commentDAO = new CommentDAOImpl();
                 int count = commentDAO.getCommentCountByProblemId(problem.getId());
 
-                controller.setProblemData(problem, problemUser.getUsername(), currentUser, count);
+                controller.setProblemData(problem, currentUser, count,problemUser.getUsername());
 
                 // add the item to the chosen container
                 targetContainer.getChildren().add(problemItem);

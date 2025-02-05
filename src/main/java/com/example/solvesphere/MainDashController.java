@@ -101,7 +101,7 @@ public class MainDashController {
                         String problemPublisherName = isCurrentUserThePublisher ? "You" : problemUser.getUsername();
                         CommentDAO commentDAO = new CommentDAOImpl();
                         int count = commentDAO.getCommentCountByProblemId(problem.getId());
-                        controller.setProblemData(problem,problemPublisherName,currentUser,count);
+                        controller.setProblemData(problem,currentUser,count,problemPublisherName);
                         System.out.println("comments count for problem id "+problem.getId()+" is "+count);
                         problemListContainer.getChildren().add(problemItem);
 
@@ -127,6 +127,7 @@ public class MainDashController {
         applyFilter(selectedFilter);
     }
 
+    // sends request and builds data according to filter
     private void applyFilter(String filter) {
         ProblemDAO problemDAO = new ProblemDAOImpl();
         UserDAO userDAO = new UserDAOImpl();;
@@ -216,6 +217,7 @@ public class MainDashController {
         chatUpdater.scheduleAtFixedRate(this::updateChat, 0, 1, TimeUnit.SECONDS);
     }
 
+    //send message request to the server and update UIO
     @FXML
     private void sendMessage() {
         String message = chatInputField.getText().trim();
@@ -270,6 +272,12 @@ public class MainDashController {
         }
     }
 
+
+
+    /* 1 checks all opened stages
+     * 2 close all open stages
+     * 3 terminate running tasks
+     * 4 send user to login page  */
     public void onLogoutClick() {
         if (problemUpdater != null && !problemUpdater.isShutdown()) {
             problemUpdater.shutdown();
@@ -296,6 +304,7 @@ public class MainDashController {
             e.printStackTrace();
         }
     }
+
 
 
     public void onSettingsClick() {
@@ -334,7 +343,6 @@ public class MainDashController {
         Button button = (Button) event.getSource();
         button.setStyle("-fx-background-color: transparent; -fx-text-fill: white;-fx-font-size:14;");
     }
-
 
     public void updateMostPostedCategoryLabel(String mostPostedCategory, int maxCount) {
         Platform.runLater(() -> {

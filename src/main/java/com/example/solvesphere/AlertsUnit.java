@@ -74,5 +74,4 @@ public abstract class AlertsUnit {
     public static void commentNotFoundAlert() {
         showAlert(Alert.AlertType.ERROR, "Error", "The comment you are trying to delete does not exist.");
     }
-
 }
