@@ -146,7 +146,6 @@ public class UserRegistrationHandler implements Runnable {
 
             // retrieve the user from the database
             UserDAO userDAO = new UserDAOImpl();
-            PasswordHasher hasher = new PasswordHasher();
             User user = userDAO.getUserByUsernameAndPassword(username, password); // validate username and password
             System.out.println("handle login method" + password);
             if (user != null) {

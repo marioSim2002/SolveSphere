@@ -30,8 +30,6 @@ public class UserDetailsController {
 //    private Map<String, Integer> fieldsOfInterest;  // Interest levels for various fields
 //    private LocalDate registrationDate;
 
-    @FXML
-    private TextField AgeField;
     private String profilePicture;
     private List<Problem> problems;  // List of problems associated with the user
 

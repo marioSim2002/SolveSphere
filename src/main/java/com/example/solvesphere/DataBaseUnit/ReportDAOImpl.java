@@ -1,9 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DataBaseUnit.Report;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReportDAOImpl implements ReportDAO {
 
@@ -19,23 +16,6 @@ public class ReportDAOImpl implements ReportDAO {
             return stmt.executeUpdate() > 0;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<Report> getPendingReports() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public boolean updateReportStatus(long reportId, String status) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE reports SET report_status = ? WHERE id = ?";
-
-        try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, status);
-            stmt.setLong(2, reportId);
-            return stmt.executeUpdate() > 0;
         }
     }
 

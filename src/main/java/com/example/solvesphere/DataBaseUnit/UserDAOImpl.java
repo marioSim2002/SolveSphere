@@ -26,7 +26,7 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("password"),
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
-                        new HashMap<>(), // Populate fields of interest if applicable
+                        new HashMap<>(), //populate fields of interest
                         rs.getDate("registration_date").toLocalDate(),
                         rs.getString("profile_picture")
                 );
@@ -53,14 +53,12 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 long userId = rs.getLong("id");
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
-                String storedHashedPassword = rs.getString("password"); // Get the hashed password from the database
-
-                System.out.println("Stored Hashed Password: " + storedHashedPassword);
+                String storedHashedPassword = rs.getString("password"); // get the hashed password from the database
 
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        storedHashedPassword, // Use the stored hashed password
+                        storedHashedPassword, //use the stored hashed password
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         fieldsOfInterest,
@@ -68,7 +66,7 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("profile_picture")
                 );
 
-                // Compare the plain password with the stored hashed password
+                //*** compare the plain password with the stored hashed password ***//87
                 PasswordHasher hasher = new PasswordHasher();
                 if (!hasher.verifyPassword(password, storedHashedPassword)) {
                     System.out.println("Password verification failed");
@@ -81,7 +79,7 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
 
-        return user; // Return the user if credentials are valid, otherwise null
+        return user; //return the user if credentials are valid, otherwise null
     }
 
 
@@ -175,7 +173,6 @@ public class UserDAOImpl implements UserDAO {
                 fields.put(field, interestLevel);
             }
         }
-
         return fields;
     }
     private List<Problem> fetchProblems(long userId) throws SQLException, ClassNotFoundException {

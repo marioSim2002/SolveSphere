@@ -74,7 +74,7 @@ public class ReportProblemController {
         if (hateRadio.isSelected()) return "Hate speech or harassment";
         if (violenceRadio.isSelected()) return "Violence or dangerous content";
         if (otherRadio.isSelected()) return otherReasonField.getText().trim();
-        return null;
+        return "Other";
     }
 
     @FXML

@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 public class DataBaseTests {
 
-    private UserDAO userDAO;
     @Test
     public void testDataBaseConnection() throws SQLException, ClassNotFoundException {
         Connection conn = DatabaseConnectionManager.getConnection();

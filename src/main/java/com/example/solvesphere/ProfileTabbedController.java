@@ -35,8 +35,7 @@ public class ProfileTabbedController {
     private BarChart<String, Number> postBarChart;
     @FXML
     private Label usernameLabel;
-    @FXML
-    private Button changePictureButton;
+
     @FXML
     private VBox favoriteProblemListContainer;
 
