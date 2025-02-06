@@ -12,6 +12,7 @@
     <Text fx:id="postDate" style="-fx-font-size: 14; -fx-fill: #666;"/>
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Button text="View Problem Details" onAction="#onDetailsClick" styleClass="button-view-details"/>
+        <Button text="Report"  onAction="#reportProblem" styleClass="button-view-details"/>
     </HBox>
     <HBox spacing="5" alignment="CENTER_RIGHT">
         <Label fx:id="commentCountTxt" textAlignment="RIGHT" style="-fx-font-size: 10; -fx-font-weight: bold;"/>

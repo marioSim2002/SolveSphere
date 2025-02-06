@@ -1,5 +1,6 @@
 package com.example.solvesphere;
 import com.example.solvesphere.DataBaseUnit.*;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -34,6 +36,8 @@ public class ProblemItemController {
 
     private String owner ;
     private User currentUser; //the current connected use e.g signed in
+    private long currentUserID;
+    private final ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void setProblemData(Problem problem,User passedUser,int commentsCnt,String publisherName) {
         this.problemTitle.setText(problem.getTitle());
@@ -42,6 +46,7 @@ public class ProblemItemController {
         this.passedProblem = problem;
         this.currentUser = passedUser;
         this.owner = publisherName;
+        this.currentUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         this.commentCountTxt.setText(String.valueOf(commentsCnt));
 
     }
@@ -114,5 +119,25 @@ public class ProblemItemController {
     @FXML
     private void onClose() {
         shutdownScheduler();
+    }
+
+    @FXML
+    private void reportProblem() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ReportProblemView.fxml"));
+            Parent root = loader.load();
+
+            ReportProblemController controller = loader.getController();
+            controller.initialize(passedProblem.getId(),currentUserID); //pass the current problem and user ID
+
+            Stage reportStage = new Stage();
+            reportStage.setTitle("Post Reporting");
+            reportStage.setScene(new Scene(root));
+            reportStage.initModality(Modality.APPLICATION_MODAL); //keep it focused
+            reportStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

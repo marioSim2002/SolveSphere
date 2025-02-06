@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.solvesphere.ReportProblemController"
+            prefWidth="400" prefHeight="300">
+
+    <VBox spacing="15" alignment="CENTER" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
+
+        <Label text="Report Post" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <Label text="Select a reason:" style="-fx-font-size: 14px;"/>
+
+        <VBox spacing="10">
+            <RadioButton fx:id="spamRadio" text="Spam or misleading"/>
+            <RadioButton fx:id="hateRadio" text="Hate speech or harassment"/>
+            <RadioButton fx:id="violenceRadio" text="Violence or dangerous content"/>
+            <RadioButton fx:id="otherRadio" text="Other"/>
+        </VBox>
+
+        <TextArea fx:id="otherReasonField" promptText="Describe the issue (optional)" prefHeight="60" disable="true"/>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Cancel" onAction="#onCancel"/>
+            <Button text="Submit Report" fx:id="submitButton" onAction="#onSubmitReport" disable="true"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>
