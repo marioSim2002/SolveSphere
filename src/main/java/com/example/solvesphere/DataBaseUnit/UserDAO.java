@@ -9,6 +9,7 @@ import java.util.Map;
 
 public interface UserDAO {
     User getUserById(long id);   // Fetch a user by ID
+    void setUserActivityStatus(long userId, boolean isActive) throws SQLException;
 
     User getUserByUsernameAndPassword(String username, String password);
 

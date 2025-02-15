@@ -61,16 +61,19 @@ public class AddProblemController {
      * Fetch and display similar problems dynamically based on title and description.
      */
     private void searchSimilarProblems(String titleInput, String descInput) throws SQLException, ClassNotFoundException {
-        if (titleInput.length() < 3 && descInput.length() < 3) {
+        titleInput = titleInput.trim();
+        descInput = descInput.trim();
+
+        // Ensure at least one meaningful input exists
+        if (titleInput.isEmpty() && descInput.isEmpty()) {
             similarProblemsListView.getChildren().clear();
             return;
         }
 
         List<Problem> similarProblems = problemDAO.findSimilarProblemsByTitleAndDescription(titleInput, descInput);
 
-        // Update UI
         Platform.runLater(() -> {
-            similarProblemsListView.getChildren().clear(); // Clear previous results
+            similarProblemsListView.getChildren().clear();
             for (Problem problem : similarProblems) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));

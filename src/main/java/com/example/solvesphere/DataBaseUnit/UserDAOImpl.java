@@ -113,7 +113,24 @@ public class UserDAOImpl implements UserDAO {
         }
         addUserInterests(userId,user.getFieldsOfInterest());
     }
+
+
     @Override
+    public void setUserActivityStatus(long userId, boolean isActive) throws SQLException {
+        String sql = "UPDATE users SET ACTIVE = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, isActive);
+            stmt.setLong(2, userId);
+            stmt.executeUpdate();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+@Override
     public boolean userExists(String username, String email) {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_EMAIL)) {

@@ -14,7 +14,7 @@
         <VBox fx:id="similarProblemsListView" spacing="10"
               style="-fx-padding: 10; -fx-border-color: #ccc; -fx-background-color: #e8ecec; -fx-border-radius: 5;"
               prefWidth="400">
-            <Label text="Similar Problems" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label text="Similar Problems Will Appear Here" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
         </VBox>
     </ScrollPane>
 
