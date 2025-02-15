@@ -6,6 +6,7 @@ import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.Inspector;
 import javafx.application.Platform;
 
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -280,7 +281,7 @@ public class MainDashController {
      * 2 close all open stages
      * 3 terminate running tasks
      * 4 send user to login page  */
-    public void onLogoutClick() {
+    public void onLogoutClick() throws SQLException {
         if (problemUpdater != null && !problemUpdater.isShutdown()) {
             problemUpdater.shutdown();
         }
@@ -294,6 +295,8 @@ public class MainDashController {
         }
         Stage stage = (Stage) searchField.getScene().getWindow();  //the current window
         stage.close();
+        UserDAO userDAO = new UserDAOImpl();
+        userDAO.setUserActivityStatus(currentUserId,false);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));

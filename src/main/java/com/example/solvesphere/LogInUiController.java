@@ -1,5 +1,7 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.UserDAO;
+import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LogInUiController {
     @FXML
@@ -40,7 +43,6 @@ public class LogInUiController {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
-
         String username = userNameFld.getText();
         String password = getPasswordTxt();
         Object response = serverCommunicator.sendLoginRequest(username, password);
@@ -72,18 +74,21 @@ public class LogInUiController {
             dashboardStage.setScene(new Scene(root));
 
             MainDashController controller = loader.getController();
-            controller.initUserData(user); //ensure you have this method in your MainDashboardController
+            controller.initUserData(user);
             System.out.println("logging in .," +user.getId());
             dashboardStage.show();
+            UserDAO userDAO = new UserDAOImpl();
+            userDAO.setUserActivityStatus(extractUserID(user),true);
         } catch (IOException e) {
             e.printStackTrace();
             AlertsUnit.showErrorAlert(e.toString());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void responseStatus(String response) {
         if (response.contains("successful")) {
-            System.out.println("response on login click "+response);
             AlertsUnit.showSuccessLogInAlert();
         } else if (response.contains("Invalid")) {
             AlertsUnit.showErrorAlert("Incorrect username or password.\nPlease try again.");
@@ -131,7 +136,10 @@ public class LogInUiController {
     }
     @FXML
     protected void onForgotCradentialsClick(){
-
         ///todo if the user forgot password
+    }
+
+    protected long extractUserID(User user){
+        return serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
     }
 }
