@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -157,15 +158,16 @@ public class MainDashController {
     public void addProblem() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("addProblem.fxml"));
-            VBox addProblemRoot = loader.load();
+            HBox addProblemRoot = loader.load();  // change VBox to HBox
 
             //new problem scene
             Scene scene = new Scene(addProblemRoot);
             Stage stage = new Stage();
             stage.setTitle("Add New Problem");
             stage.setScene(scene);
+            stage.setResizable(false);
            AddProblemController controller = loader.getController();
-           controller.setCurrentUser(currentUser);
+           controller.initialize(currentUser);
             stage.setOnHidden(event -> fetchAndDisplayProblems());
             stage.show();
         } catch (IOException e) {

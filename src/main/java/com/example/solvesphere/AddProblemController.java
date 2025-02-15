@@ -1,28 +1,26 @@
 package com.example.solvesphere;
 
-import com.example.solvesphere.DataBaseUnit.ProblemDAO;
-import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
-import com.example.solvesphere.DataBaseUnit.UserDAO;
-import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
-import com.example.solvesphere.ServerUnit.ServerCommunicator;
+import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
+import com.example.solvesphere.ServerUnit.ServerCommunicator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 public class AddProblemController {
 
-    @FXML
-    public CheckBox ageRestrictionCheckbox;
+    private User currentUser;
+
     @FXML
     private TextField titleField;
     @FXML
@@ -31,11 +29,71 @@ public class AddProblemController {
     private TextField categoryField;
     @FXML
     private TextField tagsField;
-    private User currentUser;
+    @FXML
+    private CheckBox ageRestrictionCheckbox;
+    @FXML
+    private VBox similarProblemsListView; // will hold ProblemItem components
 
+    private final ProblemDAO problemDAO = new ProblemDAOImpl();
 
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
+    @FXML
+    public void initialize(User currentUser) {
+        this.currentUser = currentUser;
+        //attach listener to titleField to fetch similar problems dynamically
+        titleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                searchSimilarProblems(newValue, descriptionField.getText());
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        descriptionField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                searchSimilarProblems(titleField.getText(), newValue);
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    /**
+     * Fetch and display similar problems dynamically based on title and description.
+     */
+    private void searchSimilarProblems(String titleInput, String descInput) throws SQLException, ClassNotFoundException {
+        if (titleInput.length() < 3 && descInput.length() < 3) {
+            similarProblemsListView.getChildren().clear();
+            return;
+        }
+
+        List<Problem> similarProblems = problemDAO.findSimilarProblemsByTitleAndDescription(titleInput, descInput);
+
+        // Update UI
+        Platform.runLater(() -> {
+            similarProblemsListView.getChildren().clear(); // Clear previous results
+            for (Problem problem : similarProblems) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("ProblemItem.fxml"));
+                    Node problemItem = loader.load();
+                    ProblemItemController controller = loader.getController();
+                    controller.setProblemData(problem, currentUser, getProblemCommentCount(problem), getProblemPublisherName(problem));
+                    similarProblemsListView.getChildren().add(problemItem);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public int getProblemCommentCount(Problem problem) {
+        CommentDAO commentDAO = new CommentDAOImpl();
+        return commentDAO.getCommentCountByProblemId(problem.getId());
+    }
+
+    public String getProblemPublisherName(Problem problem) {
+        UserDAO userDAO = new UserDAOImpl();
+        User user = userDAO.getUserById(problem.getUserId());
+        return user.getUsername();
     }
 
     @FXML
@@ -45,33 +103,33 @@ public class AddProblemController {
         String category = categoryField.getText();
         String tagsText = tagsField.getText();
 
+        // Validate input
         String[] inputData = {title, description, category, tagsText};
         if (!ValidateInputData.validTxtData(inputData)) {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
 
-        List<String> tags = Arrays.asList(tagsText.split("\\s*,\\s*"));
-        boolean isAgeRestricted = ageRestrictionCheckbox.isSelected();  //age restriction status
+        boolean isAgeRestricted = ageRestrictionCheckbox.isSelected();
+        List<String> tags = List.of(tagsText.split("\\s*,\\s*"));
 
+        // Fetch user ID
         ServerCommunicator communicator = ServerCommunicator.getInstance();
         Long userId = communicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
-        if (userId != null) {
-            System.out.println("Fetched User ID: " + userId);
-        } else {
+        if (userId == null) {
             System.out.println("User not found.");
             return;
         }
-        System.out.println(isAgeRestricted);
+
+        // Create and submit the problem
         Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted, tags);
-        ProblemDAO problemDAO = new ProblemDAOImpl();
         boolean isSuccess = problemDAO.addProblem(problem);
-        // TODO , refresh problems list
+
         if (isSuccess) {
             AlertsUnit.successAddAlert();
             clearFields();
         } else {
-            AlertsUnit.showErrorAlert("error occurred.");
+            AlertsUnit.showErrorAlert("An error occurred.");
         }
     }
 
@@ -81,6 +139,6 @@ public class AddProblemController {
         categoryField.clear();
         tagsField.clear();
         ageRestrictionCheckbox.setSelected(false);
+        similarProblemsListView.getChildren().clear();
     }
 }
-

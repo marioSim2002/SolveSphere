@@ -222,5 +222,39 @@ public boolean addProblem(Problem problem) {
 
         return categoryCounts;
     }
+
+
+    @Override
+    public List<Problem> findSimilarProblemsByTitleAndDescription(String titleInput,String desc) throws ClassNotFoundException {
+        List<Problem> similarProblems = new ArrayList<>();
+        String sql = "SELECT id, user_id, title, description, category, created_at, is_age_restricted " +
+                "FROM problems WHERE title LIKE ? AND description LIKE ? LIMIT 5";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + titleInput + "%"); // match partial titles
+            stmt.setString(2, "%" + desc + "%"); // match partial description
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Problem problem = new Problem(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getLong("user_id"),
+                        rs.getTimestamp("created_at").toLocalDateTime(), // Matching `created_at`
+                        rs.getString("category"),
+                        rs.getBoolean("is_age_restricted"), // Matching `is_age_restricted`
+                        List.of() // No `tags` column in DB, so an empty list
+                );
+                similarProblems.add(problem);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return similarProblems;
+    }
 }
 
