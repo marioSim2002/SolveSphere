@@ -23,7 +23,7 @@ import java.util.*;
 
 public class Inspector {
     // BG re-occurring methods called here //
-    private static final int CHECK_INTERVAL = 30 * 1000; // 30 sec
+    private static final int CHECK_INTERVAL = 20 * 1000; // 20 sec
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;
     private final MainDashController mainDashController;
