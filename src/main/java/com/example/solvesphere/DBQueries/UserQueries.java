@@ -10,4 +10,6 @@ public class UserQueries {
     public static final String SELECT_USER_INTEREST = "SELECT interest_name, priority_level FROM fields_of_interest WHERE user_id = ?";
     public static final String SELECT_USER_ID_BY_USERNAME_AND_EMAIL = "SELECT id FROM users WHERE username = ? AND email = ?";
     public static final String GET_PROBLEMS_BY_USER_ID = "SELECT * FROM problems WHERE user_id = ?";
+
+    public static String SEARCH_USER_SCRIPT = "SELECT * FROM users WHERE username LIKE = ?";
 }

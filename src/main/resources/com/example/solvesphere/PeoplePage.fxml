@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.solvesphere.PeoplePageController"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #f4f4f4;">
+
+    <VBox spacing="15" alignment="TOP_CENTER"
+          AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0"
+          AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0">
+
+        <!-- Page Title -->
+        <Label text="Discover People"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+
+        <!-- Search Bar -->
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+            <TextField fx:id="searchField" promptText="Search by username or interests..."
+                       style="-fx-pref-width: 400px; -fx-padding: 10; -fx-background-radius: 10;"/>
+            <Button text="Search" onAction="#onSearchPeople"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15; -fx-background-radius: 8;"/>
+        </HBox>
+
+        <!-- Scrollable People Grid -->
+        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background-color: transparent;">
+            <GridPane fx:id="peopleGrid" hgap="15" vgap="15"
+                      style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-border-radius: 10;">
+            </GridPane>
+        </ScrollPane>
+
+    </VBox>
+
+</AnchorPane>
