@@ -26,4 +26,5 @@ public interface UserDAO {
 
     Long getUserIdByUsernameAndEmail(String username, String email);
 
+    List<User> searchUsers(String keyword);
 }

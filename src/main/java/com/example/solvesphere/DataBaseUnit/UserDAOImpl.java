@@ -19,18 +19,19 @@ public class UserDAOImpl implements UserDAO {
 
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                user = new User(
-                        rs.getString("username"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getDate("date_of_birth").toLocalDate(),
-                        rs.getString("country"),
-                        new HashMap<>(), //populate fields of interest
-                        rs.getDate("registration_date").toLocalDate(),
-                        rs.getString("profile_picture")
-                );
-                user.setId(rs.getLong("id")); // Set the ID
+                user = new User();
+                user.setId(rs.getLong("id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
+                user.setCountry(rs.getString("country"));
+                user.setRegistrationDate(rs.getDate("registration_date").toLocalDate());
+
+                // Read profile picture as byte array
+                user.setProfilePicture(rs.getBytes("profile_picture"));
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -38,6 +39,8 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
+
+    ///// logging in //////
     @Override
     public User getUserByUsernameAndPassword(String username, String password) {
         User user = null;
@@ -53,20 +56,23 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 long userId = rs.getLong("id");
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
-                String storedHashedPassword = rs.getString("password"); // get the hashed password from the database
+                String storedHashedPassword = rs.getString("password"); // Get the hashed password from the database
+
+                // Retrieve profile picture as byte array (BLOB)
+                byte[] profilePicture = rs.getBytes("profile_picture");
 
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        storedHashedPassword, //use the stored hashed password
+                        storedHashedPassword, // Use the stored hashed password
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         fieldsOfInterest,
                         rs.getDate("registration_date").toLocalDate(),
-                        rs.getString("profile_picture")
+                        profilePicture  // Store image as byte[]
                 );
 
-                //*** compare the plain password with the stored hashed password ***//87
+                // Compare the plain password with the stored hashed password
                 PasswordHasher hasher = new PasswordHasher();
                 if (!hasher.verifyPassword(password, storedHashedPassword)) {
                     System.out.println("Password verification failed");
@@ -79,14 +85,13 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
 
-        return user; //return the user if credentials are valid, otherwise null
+        return user; // Return the user if credentials are valid, otherwise null
     }
+
 
 
     @Override
     public void addUser(User user) throws SQLException, ClassNotFoundException {
-        /// todo
-        // implement all methods that related to adding user data.
         long userId = -1;
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UserQueries.INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
@@ -96,22 +101,27 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(3, user.getPassword());
             stmt.setDate(4, java.sql.Date.valueOf(user.getDateOfBirth()));
             stmt.setString(5, user.getCountry());
-            stmt.setTimestamp(6, java.sql.Timestamp.valueOf(user.getRegistrationDate()));
-            stmt.setString(7, user.getProfilePicture());
+            stmt.setTimestamp(6, java.sql.Timestamp.valueOf(user.getRegistrationDate().atStartOfDay()));
+
+            if (user.getProfilePicture() != null) {
+                stmt.setBytes(7, user.getProfilePicture());
+            } else {
+                stmt.setNull(7, java.sql.Types.BLOB);
+            }
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        userId = rs.getLong(1);  //retrieve the generated ID
-                        user.setId(userId); // set to gen ID
+                        userId = rs.getLong(1);
+                        user.setId(userId);
                     }
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        addUserInterests(userId,user.getFieldsOfInterest());
+        addUserInterests(userId, user.getFieldsOfInterest());
     }
 
 
@@ -139,7 +149,7 @@ public class UserDAOImpl implements UserDAO {
             ResultSet rs = stmt.executeQuery(); // execute the q
 
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Return true if a user exists
+                return rs.getInt(1) > 0; // return true if a user exists
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -155,7 +165,8 @@ public class UserDAOImpl implements UserDAO {
 
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            
+            byte[] profilePicture = rs.getBytes("profile_picture");
+
             if (rs.next()) {
                 long id = rs.getLong("id");  // Assuming the ID is stored under the column 'id'
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(id); // Hypothetical method to fetch interests
@@ -168,7 +179,7 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("country"),
                         fieldsOfInterest,
                         rs.getDate("registration_date").toLocalDate(),
-                        rs.getString("profile_picture")
+                        profilePicture
                 );
                 user.setProblems(problems); // Assuming you have a setter for problems
             }
@@ -236,7 +247,7 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException ex) {
             if (conn != null) {
                 try {
-                    conn.rollback(); // Rollback in case of error
+                    conn.rollback(); //rollback in case of error
                 } catch (SQLException e) {
                     System.err.println("Error rolling back transaction");
                     e.printStackTrace();
@@ -272,5 +283,38 @@ public class UserDAOImpl implements UserDAO {
         return userId;
     }
 
+
+    @Override
+    public List<User> searchUsers(String keyword) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ? OR email LIKE ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + keyword + "%");
+            stmt.setString(2, "%" + keyword + "%");
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getLong("id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+
+                // Retrieve profile picture as byte array (BLOB)
+                byte[] profilePicture = rs.getBytes("profile_picture");
+                user.setProfilePicture(profilePicture);
+
+                users.add(user);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
 }
+
 

@@ -6,6 +6,7 @@ import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.Inspector;
 import javafx.application.Platform;
 
+import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -65,6 +66,7 @@ public class MainDashController {
         startAutoRefreshProblems();  // method to start auto-refreshing problems
 
         initializeChat();
+        profileImg.setImage(buildImage(user));
         Inspector inspector = new Inspector(this,currentUser);
         inspector.startInspection();
     }
@@ -197,23 +199,27 @@ public class MainDashController {
     }
 
     // method converts the path(string) to an image
-    private void buildImage(@NotNull User user){
-        String profilePicturePath = user.getProfilePicture();
+    private Image buildImage(@NotNull User user) {
+        byte[] profilePictureData = user.getProfilePicture();
 
-        if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+        if (profilePictureData != null && profilePictureData.length > 0) {
             try {
-                //convert the string path to an Image
-                Image image = new Image(profilePicturePath);
-                profileImg.setImage(image);
-            } catch (IllegalArgumentException e) { // prevent error in loading
-                System.out.println("Invalid image path: " + profilePicturePath);
-                profileImg.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()));
+                ByteArrayInputStream bis = new ByteArrayInputStream(profilePictureData);
+                return new Image(bis);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid image data");
+                return getDefaultProfileImage();
             }
         } else {
-            //default image (null or empty)
-            profileImg.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()));
+            return getDefaultProfileImage();
         }
     }
+
+    private Image getDefaultProfileImage() {
+        return new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm());
+    }
+
+
 
     private void initializeChat() {
         ScheduledExecutorService chatUpdater = Executors.newSingleThreadScheduledExecutor();
@@ -399,4 +405,16 @@ public class MainDashController {
         }
     }
 
+    public void onPeopleClick() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("PeoplePage.fxml"));
+        Parent root = loader.load();
+
+        PeoplePageController controller = loader.getController();
+        controller.initialize(currentUserId); //pass current user ID
+        Stage discoverPeopleSt = new Stage();
+        discoverPeopleSt.setTitle("Discover people");
+        discoverPeopleSt.setScene(new Scene(root, 320, 420));
+        discoverPeopleSt.show();
+    }
 }

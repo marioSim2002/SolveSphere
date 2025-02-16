@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -76,6 +77,8 @@ public class LogInUiController {
             MainDashController controller = loader.getController();
             controller.initUserData(user);
             System.out.println("logging in .," +user.getId());
+            dashboardStage.initStyle(StageStyle.UNDECORATED);
+            dashboardStage.setFullScreen(true);
             dashboardStage.show();
             UserDAO userDAO = new UserDAOImpl();
             userDAO.setUserActivityStatus(extractUserID(user),true);

@@ -64,7 +64,7 @@ public class AddProblemController {
         titleInput = titleInput.trim();
         descInput = descInput.trim();
 
-        // Ensure at least one meaningful input exists
+        //at least one meaningful input exists
         if (titleInput.isEmpty() && descInput.isEmpty()) {
             similarProblemsListView.getChildren().clear();
             return;
