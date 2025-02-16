@@ -10,7 +10,11 @@ import com.example.solvesphere.UserData.Comment;
 import com.example.solvesphere.UserData.User;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,6 +45,7 @@ public class Inspector {
                 checkAndDeleteDownvotedComments();
                 updateMostPostedCategory();
                 checkForNewComments();
+                mainDashController.setProfileImage(buildImage(user)); //builds image and sends it to the dash
             }
         }, 0, CHECK_INTERVAL);
     }
@@ -116,5 +121,25 @@ public class Inspector {
             e.printStackTrace();
         }
     }
+
+    private Image buildImage(@NotNull User user) {
+        byte[] profilePictureData = user.getProfilePicture();
+
+        if (profilePictureData != null && profilePictureData.length > 0) {
+            try {
+                ByteArrayInputStream bis = new ByteArrayInputStream(profilePictureData);
+                return new Image(bis);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid image data");
+                return getDefaultProfileImage();
+            }
+        } else {
+            return getDefaultProfileImage();
+        }
+    }
+    private Image getDefaultProfileImage() {
+        return new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm());
+    }
+
 
 }

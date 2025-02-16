@@ -215,6 +215,10 @@ public class MainDashController {
         }
     }
 
+    public void setProfileImage(Image image){
+            this.profileImg.setImage(image);
+    }
+
     private Image getDefaultProfileImage() {
         return new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm());
     }
