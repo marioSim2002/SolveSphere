@@ -8,24 +8,29 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.solvesphere.ProfileCardController"
       fx:id="profileCard"
-        spacing="10" alignment="CENTER"
-        style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);"
-        onMouseClicked="#onProfileClick"
-        onMouseEntered="#onMouseEnter"
-        onMouseExited="#onMouseExit">
+      spacing="10" alignment="CENTER"
+      style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+      onMouseClicked="#onProfileClick"
+      onMouseEntered="#onMouseEnter"
+      onMouseExited="#onMouseExit">
 
-        <!-- Profile Image -->
-<StackPane>
-<ImageView fx:id="profileImage" fitHeight="80" fitWidth="80" preserveRatio="true"
-           style="-fx-border-radius: 50%; -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);"/>
-</StackPane>
+        <!-- Profile Image with Status Icon -->
+        <StackPane>
+                <ImageView fx:id="profileImage" fitHeight="80" fitWidth="80" preserveRatio="true"
+                           style="-fx-border-radius: 50%; -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);"/>
+
+                <!-- Active Status Icon (Small Green Dot) -->
+                <ImageView fx:id="activeStatusIcon" fitHeight="15" fitWidth="15" visible="false"
+                           StackPane.alignment="TOP_RIGHT"
+                           style="-fx-effect: dropshadow(gaussian, rgba(0,255,0,0.8), 5, 0, 0, 2);"/>
+        </StackPane>
 
         <!-- Username -->
-<Label fx:id="usernameLabel" text="Username" wrapText="true"
-       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
+        <Label fx:id="usernameLabel" text="Username" wrapText="true"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
 
         <!-- User Interests -->
-<Label fx:id="userInterests" text="Interests" wrapText="true"
-       style="-fx-font-size: 12px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
+        <Label fx:id="userInterests" text="Interests" wrapText="true"
+               style="-fx-font-size: 12px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
 
-        </VBox>
+</VBox>

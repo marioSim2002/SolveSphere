@@ -57,10 +57,11 @@ public class MainDashController {
     private ListView<String> chatListView;
     private final String fetch_problems_cmd = "FETCH_PROBLEMS";
    private long currentUserId ;
+   ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void initUserData(User user) {
         this.currentUser = user;
-        this.currentUserId = ServerCommunicator.getInstance().fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
+        this.currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
         buildImage(currentUser);
         fetchAndDisplayProblems();
         startAutoRefreshProblems();  // method to start auto-refreshing problems
@@ -306,8 +307,8 @@ public class MainDashController {
         Stage stage = (Stage) searchField.getScene().getWindow();  //the current window
         stage.close();
         UserDAO userDAO = new UserDAOImpl();
-        userDAO.setUserActivityStatus(currentUserId,false);
-
+        userDAO.setUserActivityStatus(currentUserId,false);//update on DB
+        currentUser.setActive(false);//update on app
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
             Parent root = loader.load();
@@ -418,7 +419,7 @@ public class MainDashController {
         controller.initialize(currentUserId); //pass current user ID
         Stage discoverPeopleSt = new Stage();
         discoverPeopleSt.setTitle("Discover people");
-        discoverPeopleSt.setScene(new Scene(root, 320, 420));
+        discoverPeopleSt.setScene(new Scene(root, 650, 650));
         discoverPeopleSt.show();
     }
 }

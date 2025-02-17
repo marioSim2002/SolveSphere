@@ -67,7 +67,7 @@ public class PeoplePageController {
         peopleGrid.getColumnConstraints().clear(); // Clear previous column constraints
         peopleGrid.getRowConstraints().clear(); // Clear previous row constraints
 
-        int columns = 3; // number of columns per row
+        int columns = 3; // Number of columns per row
         int row = 0, col = 0;
 
         for (User user : users) {
@@ -75,15 +75,18 @@ public class PeoplePageController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfileCard.fxml"));
                 VBox profileCard = loader.load();
                 ProfileCardController controller = loader.getController();
+
+                // ✅ Pass User ID and data to ProfileCardController
                 controller.setUserData(user);
 
-                //ensure card fills available space
+                // Ensure card fills available space
                 profileCard.setMaxWidth(Double.MAX_VALUE);
                 GridPane.setFillWidth(profileCard, true);
-                // grid
+
+                // Add card to grid
                 peopleGrid.add(profileCard, col, row);
 
-                // def column constraints to ensure equal spacing
+                // Define column constraints for equal spacing
                 if (peopleGrid.getColumnConstraints().size() < columns) {
                     ColumnConstraints colConstraints = new ColumnConstraints();
                     colConstraints.setPercentWidth(100.0 / columns);
@@ -91,14 +94,14 @@ public class PeoplePageController {
                     peopleGrid.getColumnConstraints().add(colConstraints);
                 }
 
-                //move to next column, reset if full
+                // Move to next column, reset if full
                 col++;
                 if (col >= columns) {
                     col = 0;
                     row++;
                 }
 
-            } catch (IOException e) {
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
         }

@@ -1,5 +1,7 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.UserDAO;
+import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,23 +16,28 @@ import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class ProfileCardController {
-
     @FXML
-    private VBox profileCard; // 🔹 Make sure this is linked
-
-    private User viewedUser;
+    private VBox profileCard;
     @FXML
     private ImageView profileImage;
+    @FXML
+    private ImageView activeStatusIcon;
     @FXML
     private Label usernameLabel;
     @FXML
     private Label userInterests;
 
-    public void setUserData(User user) {
+    private long viewedUserID;
+    private User viewedUser;
+    private final UserDAO userDAO = new UserDAOImpl();
+
+    public void setUserData(User user) throws SQLException {
         this.viewedUser = user;
+        this.viewedUserID = user.getId();  // ✅ Store the user ID from User object
         usernameLabel.setText(user.getUsername());
 
         // Convert fields of interest to a readable format
@@ -49,17 +56,26 @@ public class ProfileCardController {
                     Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()
             ));
         }
+
+        // Set active status visibility (show green dot if user is active)
+        if (userDAO.getUserActivityStatus(viewedUserID)) {
+            activeStatusIcon.setVisible(true);
+            activeStatusIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/onlineIco.png")).toExternalForm()));}
+        else {
+            activeStatusIcon.setVisible(false);
+        }
     }
 
+
     @FXML
-    public void onMouseEnter(MouseEvent event) {
+    public void onMouseEnter() {
         if (profileCard != null) {
             profileCard.setStyle("-fx-background-color: #eaf6ff; -fx-border-color: #3498db; -fx-border-width: 1.5; -fx-padding: 15; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0, 0, 255, 0.3), 10, 0, 0, 5);");
         }
     }
 
     @FXML
-    public void onMouseExit(MouseEvent event) {
+    public void onMouseExit() {
         if (profileCard != null) {
             profileCard.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);");
         }
@@ -70,9 +86,10 @@ public class ProfileCardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("IndividualUserView.fxml"));
             Parent root = loader.load();
-
             IndividualUserViewController controller = loader.getController();
-            controller.setUserData(viewedUser); //pass user data to the controller
+
+            // ✅ Pass User ID when opening the profile
+            controller.setUserData(viewedUser);
 
             Stage userProfileStage = new Stage();
             userProfileStage.setTitle(viewedUser.getUsername() + " - Profile");
@@ -80,6 +97,9 @@ public class ProfileCardController {
             userProfileStage.setResizable(false);
             userProfileStage.show();
 
-        } catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error opening IndividualUserView.fxml");
+        }
     }
 }

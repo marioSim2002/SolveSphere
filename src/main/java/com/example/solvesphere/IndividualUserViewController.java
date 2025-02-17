@@ -17,8 +17,6 @@ public class IndividualUserViewController {
     @FXML
     private Label usernameLabel;
     @FXML
-    private Label emailLabel;
-    @FXML
     private Label countryLabel;
     @FXML
     private Label userInterests;
@@ -30,9 +28,7 @@ public class IndividualUserViewController {
     public void setUserData(User user) {
         this.currentUser = user;
         usernameLabel.setText(user.getUsername());
-        emailLabel.setText("Email: " + user.getEmail());
         countryLabel.setText("Country: " + user.getCountry());
-
         //convert fields of interest to a readable format
         if (user.getFieldsOfInterest() != null && !user.getFieldsOfInterest().isEmpty()) {
             userInterests.setText(String.join(", ", user.getFieldsOfInterest().keySet()));

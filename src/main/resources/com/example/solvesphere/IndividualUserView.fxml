@@ -25,10 +25,6 @@
         <Label fx:id="usernameLabel" text="Username" wrapText="true"
                style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
 
-        <!-- User Email -->
-        <Label fx:id="emailLabel" text="Email" wrapText="true"
-               style="-fx-font-size: 14px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
-
         <!-- Country -->
         <Label fx:id="countryLabel" text="Country" wrapText="true"
                style="-fx-font-size: 14px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
