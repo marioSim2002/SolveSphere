@@ -73,7 +73,7 @@ public class RegisterController {
 
         User newUser = new User(username, email, password,
                 dateOfBirth, country, getWordsFromFieldOfInterest(),
-                LocalDate.now(), profileImageData); // Store image as byte[]
+                LocalDate.now(), profileImageData,false);
 
         // Run registration in a separate THREAD
         Task<String> registrationTask = new Task<String>() {

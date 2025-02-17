@@ -58,8 +58,10 @@ public class UserDAOImpl implements UserDAO {
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
                 String storedHashedPassword = rs.getString("password"); // Get the hashed password from the database
 
-                // Retrieve profile picture as byte array (BLOB)
                 byte[] profilePicture = rs.getBytes("profile_picture");
+
+                // retrieve active status
+                boolean isActive = rs.getBoolean("ACTIVE");
 
                 user = new User(
                         rs.getString("username"),
@@ -69,7 +71,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("country"),
                         fieldsOfInterest,
                         rs.getDate("registration_date").toLocalDate(),
-                        profilePicture  // Store image as byte[]
+                        profilePicture,  // Store image as byte[]
+                        isActive // store the active status
                 );
 
                 // Compare the plain password with the stored hashed password
@@ -79,13 +82,38 @@ public class UserDAOImpl implements UserDAO {
                     user = null; // Password does not match
                 } else {
                     System.out.println("Password verification succeeded");
+
+                    // Update user status to active upon successful login
+                    setUserActiveStatus(userId, true);
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return user; // Return the user if credentials are valid, otherwise null
+        return user; // return the user if credentials are valid, otherwise null
+    }
+
+    /**
+     * Updates the active status of the user in the database.
+     *
+     * @param userId  The ID of the user
+     * @param isActive The active status to set (true for active, false for inactive)
+     */
+    private void setUserActiveStatus(long userId, boolean isActive) {
+        String updateQuery = "UPDATE users SET active = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+
+            stmt.setBoolean(1, isActive);
+            stmt.setLong(2, userId);
+            stmt.executeUpdate();
+            System.out.println("User " + userId + " active status updated to: " + isActive);
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -139,6 +167,28 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+
+    @Override
+    public boolean getUserActivityStatus(long userId) throws SQLException {
+        String sql = "SELECT ACTIVE FROM users WHERE id = ?";
+        boolean isActive = false;
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                isActive = rs.getBoolean("ACTIVE");
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return isActive;
+    }
+
     @Override
     public boolean userExists(String username, String email) {
         try (Connection conn = DatabaseConnectionManager.getConnection();
@@ -165,6 +215,8 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             byte[] profilePicture = rs.getBytes("profile_picture");
+            boolean isActive = rs.getBoolean("ACTIVE");
+
 
             if (rs.next()) {
                 long id = rs.getLong("id");  // Assuming the ID is stored under the column 'id'
@@ -178,7 +230,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("country"),
                         fieldsOfInterest,
                         rs.getDate("registration_date").toLocalDate(),
-                        profilePicture
+                        profilePicture,
+                        isActive
                 );
                 user.setProblems(problems); // Assuming you have a setter for problems
             }
@@ -288,22 +341,20 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> searchUsers(String keyword) throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ? OR email LIKE ?";
+        String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ?";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, "%" + keyword + "%");
-            stmt.setString(2, "%" + keyword + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     User user = new User();
                     user.setId(rs.getLong("id"));
                     user.setUsername(rs.getString("username"));
-                    user.setEmail(rs.getString("email"));
 
-                    // Retrieve profile picture as byte array (BLOB)
+                    //retrieve profile picture as byte array (BLOB)
                     byte[] profilePicture = rs.getBytes("profile_picture");
                     user.setProfilePicture(profilePicture);
 

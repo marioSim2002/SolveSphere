@@ -82,6 +82,7 @@ public class LogInUiController {
             dashboardStage.show();
             UserDAO userDAO = new UserDAOImpl();
             userDAO.setUserActivityStatus(extractUserID(user),true);
+            user.setActive(true);
         } catch (IOException e) {
             e.printStackTrace();
             AlertsUnit.showErrorAlert(e.toString());

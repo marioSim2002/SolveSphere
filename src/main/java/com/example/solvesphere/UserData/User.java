@@ -1,7 +1,5 @@
 package com.example.solvesphere.UserData;
 
-import com.example.solvesphere.UserData.Problem;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,11 +15,12 @@ public class User implements Serializable {
     private String country;
     private Map<String, Integer> fieldsOfInterest;
     private LocalDate registrationDate;
-    private byte[] profilePicture;  // store the image as byte array
+    private byte[] profilePicture;  //store the image as a byte array
+    private boolean active;  //represents if the user is currently active
     private List<Problem> problems;
 
     public User(String username, String email, String password, LocalDate dateOfBirth, String country,
-                Map<String, Integer> fieldsOfInterest, LocalDate registrationDate, byte[] profilePicture) {
+                Map<String, Integer> fieldsOfInterest, LocalDate registrationDate, byte[] profilePicture, boolean active) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -30,6 +29,7 @@ public class User implements Serializable {
         this.fieldsOfInterest = new HashMap<>(fieldsOfInterest);
         this.registrationDate = registrationDate;
         this.profilePicture = profilePicture;
+        this.active = active;
         this.problems = new ArrayList<>();
     }
 
@@ -41,43 +41,39 @@ public class User implements Serializable {
     public byte[] getProfilePicture() { return profilePicture; }
     public void setProfilePicture(byte[] profilePicture) { this.profilePicture = profilePicture; }
 
-    // Calculate the user's age based on dateOfBirth
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
     public int calculateAge() {
-        LocalDate currentDate = LocalDate.now(); //current date
-        return Period.between(this.dateOfBirth, currentDate).getYears(); // calc age in years
-    }
-    public String getUsername() {
-        return username;
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(this.dateOfBirth, currentDate).getYears();
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+
+    public String getCountry() { return country; }
+    public void setCountry(String country) { this.country = country; }
+
+    public Map<String, Integer> getFieldsOfInterest() { return fieldsOfInterest; }
+    public void setFieldsOfInterest(Map<String, Integer> fieldsOfInterest) {
+        this.fieldsOfInterest = fieldsOfInterest;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public LocalDate getRegistrationDate() { return registrationDate; }
+    public void setRegistrationDate(LocalDate registrationDate) { this.registrationDate = registrationDate; }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public Map<String, Integer> getFieldsOfInterest() {
-        return fieldsOfInterest;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public List<Problem> getProblems() {
-        return problems;
-    }
+    public List<Problem> getProblems() { return problems; }
+    public void setProblems(List<Problem> problems) { this.problems = problems; }
 
     @Override
     public String toString() {
@@ -89,38 +85,7 @@ public class User implements Serializable {
                 ", fieldsOfInterest=" + fieldsOfInterest +
                 ", registrationDate=" + registrationDate +
                 ", profilePicture=" + Arrays.toString(profilePicture) +
+                ", active=" + active +
                 '}';
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setFieldsOfInterest(Map<String, Integer> fieldsOfInterest) {
-        this.fieldsOfInterest = fieldsOfInterest;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public void setProblems(List<Problem> problems) {
-        this.problems = problems;
     }
 }

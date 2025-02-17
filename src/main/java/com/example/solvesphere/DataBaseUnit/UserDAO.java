@@ -15,6 +15,8 @@ public interface UserDAO {
 
     void addUser(User user) throws SQLException, ClassNotFoundException;    // add a new user to the database
 
+    boolean getUserActivityStatus(long userId) throws SQLException;
+
     boolean userExists(String username, String email); // check if the user already exists
 
     // user by username only
