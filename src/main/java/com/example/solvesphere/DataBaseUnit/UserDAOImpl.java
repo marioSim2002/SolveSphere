@@ -89,7 +89,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-
     @Override
     public void addUser(User user) throws SQLException, ClassNotFoundException {
         long userId = -1;
@@ -140,7 +139,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-@Override
+    @Override
     public boolean userExists(String username, String email) {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_EMAIL)) {
@@ -188,6 +187,7 @@ public class UserDAOImpl implements UserDAO {
         }
         return user;
     }
+
     @Override
     public Map<String, Integer> fetchFieldsOfInterest(long userId) throws SQLException, ClassNotFoundException {
         Map<String, Integer> fields = new HashMap<>();
@@ -203,6 +203,7 @@ public class UserDAOImpl implements UserDAO {
         }
         return fields;
     }
+
     private List<Problem> fetchProblems(long userId) throws SQLException, ClassNotFoundException {
         List<Problem> problems = new ArrayList<>();
         try (Connection conn = DatabaseConnectionManager.getConnection();
@@ -285,7 +286,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public List<User> searchUsers(String keyword) {
+    public List<User> searchUsers(String keyword) throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ? OR email LIKE ?";
 
@@ -295,24 +296,68 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(1, "%" + keyword + "%");
             stmt.setString(2, "%" + keyword + "%");
 
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getLong("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setEmail(rs.getString("email"));
+
+                    // Retrieve profile picture as byte array (BLOB)
+                    byte[] profilePicture = rs.getBytes("profile_picture");
+                    user.setProfilePicture(profilePicture);
+
+                    users.add(user);
+                }
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT id, username, country, profile_picture FROM users";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getLong("id"));
                 user.setUsername(rs.getString("username"));
-                user.setEmail(rs.getString("email"));
+                user.setCountry(rs.getString("country"));
 
-                // Retrieve profile picture as byte array (BLOB)
+                // profile picture as byte array (BLOB)
                 byte[] profilePicture = rs.getBytes("profile_picture");
                 user.setProfilePicture(profilePicture);
 
+                // Fetch fields of interest separately
+                user.setFieldsOfInterest(getUserInterests(user.getId()));
+
                 users.add(user);
             }
-
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return users;
+    }
+
+    //helper method to fetch fields of interest
+    private Map<String, Integer> getUserInterests(long userId) throws SQLException, ClassNotFoundException {
+        Map<String, Integer> interests = new HashMap<>();
+        String sql = "SELECT interest_name, priority_level FROM fields_of_interest WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    interests.put(rs.getString("interest_name"), rs.getInt("priority_level"));
+                }
+            }
+        }
+        return interests;
     }
 
 }

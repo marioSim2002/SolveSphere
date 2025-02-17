@@ -26,5 +26,7 @@ public interface UserDAO {
 
     Long getUserIdByUsernameAndEmail(String username, String email);
 
-    List<User> searchUsers(String keyword);
+    List<User> searchUsers(String keyword) throws SQLException, ClassNotFoundException;
+
+    List<User> getAllUsers() throws SQLException, ClassNotFoundException;
 }

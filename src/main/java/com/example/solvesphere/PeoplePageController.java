@@ -5,14 +5,16 @@ import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PeoplePageController {
@@ -28,20 +30,45 @@ public class PeoplePageController {
     @FXML
     public void initialize(long currentUserID) {
         this.currentUserID = currentUserID;
-        loadPeople(""); // Load all users initially
+        try {
+            loadPeople(); // Load all users initially
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void onSearchPeople() {
         String keyword = searchField.getText().trim();
-        loadPeople(keyword);
+        searchUsers(keyword);
     }
 
-    private void loadPeople(String keyword) {
-        List<User> users = userDAO.searchUsers(keyword); // Search for users
+    private void loadPeople() throws SQLException, ClassNotFoundException {
+        List<User> users = userDAO.getAllUsers(); // fetch all users
+        populateUserGrid(users);
+    }
 
+    private void searchUsers(String keyword) {
+        try {
+            List<User> users;
+            if (keyword.isEmpty()) {
+                users = userDAO.getAllUsers(); // if empty, load all users
+            } else {
+                users = userDAO.searchUsers(keyword); //search by keyword
+            }
+            populateUserGrid(users);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateUserGrid(List<User> users) {
         peopleGrid.getChildren().clear(); // Clear existing users
-        int col = 0, row = 0;
+        peopleGrid.getColumnConstraints().clear(); // Clear previous column constraints
+        peopleGrid.getRowConstraints().clear(); // Clear previous row constraints
+
+        int columns = 3; // number of columns per row
+        int row = 0, col = 0;
 
         for (User user : users) {
             try {
@@ -50,31 +77,30 @@ public class PeoplePageController {
                 ProfileCardController controller = loader.getController();
                 controller.setUserData(user);
 
+                //ensure card fills available space
+                profileCard.setMaxWidth(Double.MAX_VALUE);
+                GridPane.setFillWidth(profileCard, true);
+                // grid
                 peopleGrid.add(profileCard, col, row);
+
+                // def column constraints to ensure equal spacing
+                if (peopleGrid.getColumnConstraints().size() < columns) {
+                    ColumnConstraints colConstraints = new ColumnConstraints();
+                    colConstraints.setPercentWidth(100.0 / columns);
+                    colConstraints.setFillWidth(true);
+                    peopleGrid.getColumnConstraints().add(colConstraints);
+                }
+
+                //move to next column, reset if full
                 col++;
-                if (col == 3) { // 3 users per row
+                if (col >= columns) {
                     col = 0;
                     row++;
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    @FXML
-    private void onProfileClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfileDetails.fxml"));
-            Parent root = loader.load();
-
-            Stage profileStage = new Stage();
-            profileStage.setTitle("User Profile");
-            profileStage.setScene(new Scene(root, 600, 400));
-            profileStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

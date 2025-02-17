@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.solvesphere.IndividualUserViewController"
+            prefHeight="500.0" prefWidth="600.0"
+            style="-fx-background-color: #f4f4f4;">
+
+    <VBox spacing="20" alignment="CENTER"
+          AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0"
+          AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
+          style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 20; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+
+        <!-- Profile Image -->
+        <StackPane>
+            <ImageView fx:id="profileImage" fitHeight="100" fitWidth="100" preserveRatio="true"
+                       style="-fx-border-radius: 50%; -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);"/>
+        </StackPane>
+
+        <!-- Username -->
+        <Label fx:id="usernameLabel" text="Username" wrapText="true"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
+
+        <!-- User Email -->
+        <Label fx:id="emailLabel" text="Email" wrapText="true"
+               style="-fx-font-size: 14px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
+
+        <!-- Country -->
+        <Label fx:id="countryLabel" text="Country" wrapText="true"
+               style="-fx-font-size: 14px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
+
+        <!-- Interests -->
+        <VBox spacing="5">
+            <Label text="Fields of Interest" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label fx:id="userInterests" text="Interests" wrapText="true"
+                   style="-fx-font-size: 14px; -fx-text-fill: black; -fx-text-alignment: center;"/>
+        </VBox>
+
+        <!-- Actions -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Add Friend" onAction="#onAddFriendClick"
+                    style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 14px;"/>
+        </HBox>
+
+    </VBox>
+
+</AnchorPane>

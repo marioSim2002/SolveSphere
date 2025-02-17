@@ -7,22 +7,25 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.solvesphere.ProfileCardController"
-      spacing="10" alignment="CENTER"
-      style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);"
-      onMouseClicked="#onProfileClick">
+      fx:id="profileCard"
+        spacing="10" alignment="CENTER"
+        style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 15; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+        onMouseClicked="#onProfileClick"
+        onMouseEntered="#onMouseEnter"
+        onMouseExited="#onMouseExit">
 
-    <!-- Profile Image -->
-    <StackPane>
-        <ImageView fx:id="profileImage" fitHeight="80" fitWidth="80" preserveRatio="true"
-                   style="-fx-clip: circle(40px at center); -fx-border-radius: 50%; -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);"/>
-    </StackPane>
+        <!-- Profile Image -->
+<StackPane>
+<ImageView fx:id="profileImage" fitHeight="80" fitWidth="80" preserveRatio="true"
+           style="-fx-border-radius: 50%; -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);"/>
+</StackPane>
 
-    <!-- Username -->
-    <Label fx:id="usernameLabel" text="Username" wrapText="true"
-           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
+        <!-- Username -->
+<Label fx:id="usernameLabel" text="Username" wrapText="true"
+       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
 
-    <!-- User Interests -->
-    <Label fx:id="userInterests" text="Interests" wrapText="true"
-           style="-fx-font-size: 12px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
+        <!-- User Interests -->
+<Label fx:id="userInterests" text="Interests" wrapText="true"
+       style="-fx-font-size: 12px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
 
-</VBox>
+        </VBox>
