@@ -37,7 +37,7 @@ public class ProfileCardController {
 
     public void setUserData(User user) throws SQLException {
         this.viewedUser = user;
-        this.viewedUserID = user.getId();  // ✅ Store the user ID from User object
+        this.viewedUserID = user.getId();
         usernameLabel.setText(user.getUsername());
 
         // Convert fields of interest to a readable format
@@ -56,8 +56,7 @@ public class ProfileCardController {
                     Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()
             ));
         }
-
-        // Set active status visibility (show green dot if user is active)
+            //// green icon if active ////
         if (userDAO.getUserActivityStatus(viewedUserID)) {
             activeStatusIcon.setVisible(true);
             activeStatusIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/onlineIco.png")).toExternalForm()));}
@@ -88,7 +87,7 @@ public class ProfileCardController {
             Parent root = loader.load();
             IndividualUserViewController controller = loader.getController();
 
-            // ✅ Pass User ID when opening the profile
+            //pass User ID when opening the profile
             controller.setUserData(viewedUser);
 
             Stage userProfileStage = new Stage();

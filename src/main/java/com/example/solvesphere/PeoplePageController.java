@@ -76,10 +76,9 @@ public class PeoplePageController {
                 VBox profileCard = loader.load();
                 ProfileCardController controller = loader.getController();
 
-                // ✅ Pass User ID and data to ProfileCardController
                 controller.setUserData(user);
 
-                // Ensure card fills available space
+                //ensure card fills available space
                 profileCard.setMaxWidth(Double.MAX_VALUE);
                 GridPane.setFillWidth(profileCard, true);
 

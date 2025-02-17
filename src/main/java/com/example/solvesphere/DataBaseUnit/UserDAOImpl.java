@@ -341,13 +341,13 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> searchUsers(String keyword) throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ?";
+        String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ? OR country LIKE ?";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, "%" + keyword + "%");
-
+            stmt.setString(2, "%" + keyword + "%");
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     User user = new User();
