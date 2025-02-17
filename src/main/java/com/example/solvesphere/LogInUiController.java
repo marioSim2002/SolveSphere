@@ -77,7 +77,7 @@ public class LogInUiController {
             MainDashController controller = loader.getController();
             controller.initUserData(user);
             System.out.println("logging in .," +user.getId());
-            dashboardStage.initStyle(StageStyle.UNDECORATED);
+           // dashboardStage.initStyle(StageStyle.UNDECORATED);
             dashboardStage.setFullScreen(true);
             dashboardStage.show();
             UserDAO userDAO = new UserDAOImpl();

@@ -22,7 +22,7 @@
 
         <!-- Search Bar -->
         <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
-            <TextField fx:id="searchField" promptText="Search by username or interests..."
+            <TextField fx:id="searchField" promptText="Search by username or country..."
                        style="-fx-pref-width: 400px; -fx-padding: 10; -fx-background-radius: 10;"/>
             <Button text="Search" onAction="#onSearchPeople"
                     style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 15; -fx-background-radius: 8;"/>

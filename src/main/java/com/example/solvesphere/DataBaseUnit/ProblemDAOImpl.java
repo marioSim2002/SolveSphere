@@ -228,28 +228,28 @@ public class ProblemDAOImpl implements ProblemDAO {
     public List<Problem> findSimilarProblemsByTitleAndDescription(String titleInput, String descInput) throws ClassNotFoundException {
         List<Problem> similarProblems = new ArrayList<>();
 
-        // handle cases where one input is empty
+        // Dynamic query building
         String sql = "SELECT id, user_id, title, description, category, created_at, is_age_restricted " +
-                "FROM problems WHERE 1=1 "; //ensures the WHERE clause is always valid
+                "FROM problems WHERE 1=1 ";
 
         if (!titleInput.isEmpty()) {
-            sql += "AND title LIKE ? ";
+            sql += "AND INSTR(title, ?) > 0 ";
         }
         if (!descInput.isEmpty()) {
-            sql += "AND description LIKE ? ";
+            sql += "AND INSTR(description, ?) > 0 ";
         }
 
-        sql += "ORDER BY created_at DESC LIMIT 5"; // order by recent
+        sql += "ORDER BY created_at DESC LIMIT 5"; // by recent problems
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             int paramIndex = 1;
             if (!titleInput.isEmpty()) {
-                stmt.setString(paramIndex++, "%" + titleInput + "%"); //match title if provided
+                stmt.setString(paramIndex++, titleInput);  //using "contains" logic for title
             }
             if (!descInput.isEmpty()) {
-                stmt.setString(paramIndex++, "%" + descInput + "%"); // match description if provided
+                stmt.setString(paramIndex++, descInput);
             }
 
             ResultSet rs = stmt.executeQuery();
