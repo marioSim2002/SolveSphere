@@ -29,7 +29,6 @@ public class IndividualUserViewController {
     private Label userInterests;
     @FXML
     private Button addFriendButton;
-
     private User currentAppUser;
     private User goalUser;
 
@@ -69,13 +68,11 @@ public class IndividualUserViewController {
     private void onAddFriendClick() {
         /// relevant objs for operations ///
         ServerCommunicator serverCommunicator = new ServerCommunicator();
-        FriendController friendController = new FriendController();
         FriendDAO friendDAO = new FriendDAOImpl();
 
         long goalUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(goalUser.getUsername(), goalUser.getEmail());
         long currentAppUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(currentAppUser.getUsername(), currentAppUser.getEmail());
         friendDAO.sendFriendRequest(currentAppUserID,goalUserID);
         addFriendButton.setText("Request Sent");
-        System.out.println("Adding " + goalUser.getUsername() + " as a friend.");
     }
 }

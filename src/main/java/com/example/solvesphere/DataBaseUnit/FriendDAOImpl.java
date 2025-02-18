@@ -148,7 +148,7 @@ public class FriendDAOImpl implements FriendDAO {
 
     @Override
     public boolean markFriendRequestAsSeen(long userId, long friendId) {
-        String sql = "UPDATE friends SET is_seen = 1 WHERE user_id = ? AND friend_id = ? AND status = 'pending'";
+        String sql = "UPDATE friends SET seen = 1 WHERE user_id = ? AND friend_id = ? AND status = 'pending'";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
