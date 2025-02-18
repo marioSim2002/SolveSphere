@@ -25,14 +25,31 @@
         <Label fx:id="usernameLabel" text="Username" wrapText="true"
                style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center;"/>
 
-        <!-- Country -->
-        <Label fx:id="countryLabel" text="Country" wrapText="true"
-               style="-fx-font-size: 14px; -fx-text-fill: gray; -fx-text-alignment: center;"/>
+        <!-- User Details Section -->
+        <VBox spacing="8" style="-fx-padding: 10;">
+            <HBox spacing="5">
+                <Label text="Country:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <Label fx:id="countryLabel" text="N/A"
+                       style="-fx-font-size: 14px; -fx-text-fill: black;"/>
+            </HBox>
+
+            <HBox spacing="5">
+                <Label text="Age:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <Label fx:id="userAge" text="--"
+                       style="-fx-font-size: 14px; -fx-text-fill: black;"/>
+            </HBox>
+
+            <HBox spacing="5">
+                <Label text="Date Joined:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <Label fx:id="dateJoined" text="--"
+                       style="-fx-font-size: 14px; -fx-text-fill: black;"/>
+            </HBox>
+        </VBox>
 
         <!-- Interests -->
         <VBox spacing="5">
             <Label text="Fields of Interest" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <Label fx:id="userInterests" text="Interests" wrapText="true"
+            <Label fx:id="userInterests" text="N/A" wrapText="true"
                    style="-fx-font-size: 14px; -fx-text-fill: black; -fx-text-alignment: center;"/>
         </VBox>
 

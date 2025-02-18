@@ -6,6 +6,8 @@ import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 public class UserDAOImpl implements UserDAO {
@@ -368,7 +370,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, country, profile_picture FROM users";
+        String sql = "SELECT id, username, country, profile_picture, date_of_birth, registration_date FROM users";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -380,12 +382,20 @@ public class UserDAOImpl implements UserDAO {
                 user.setUsername(rs.getString("username"));
                 user.setCountry(rs.getString("country"));
 
-                // profile picture as byte array (BLOB)
+                //retrieve and store profile picture as byte array (BLOB)
                 byte[] profilePicture = rs.getBytes("profile_picture");
                 user.setProfilePicture(profilePicture);
 
                 // Fetch fields of interest separately
                 user.setFieldsOfInterest(getUserInterests(user.getId()));
+
+                //user age calculations performed in the user's class
+                LocalDate dateOfBirth = rs.getDate("date_of_birth").toLocalDate();
+                user.setDateOfBirth(dateOfBirth);
+                user.setDateOfBirth(dateOfBirth);
+
+                // reg date
+                user.setRegistrationDate(rs.getDate("registration_date").toLocalDate());
 
                 users.add(user);
             }

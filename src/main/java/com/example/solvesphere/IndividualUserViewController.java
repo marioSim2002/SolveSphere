@@ -13,6 +13,10 @@ import java.util.Objects;
 public class IndividualUserViewController {
 
     @FXML
+    private Label dateJoined;
+    @FXML
+    private Label userAge;
+    @FXML
     private ImageView profileImage;
     @FXML
     private Label usernameLabel;
@@ -28,7 +32,9 @@ public class IndividualUserViewController {
     public void setUserData(User user) {
         this.currentUser = user;
         usernameLabel.setText(user.getUsername());
-        countryLabel.setText("Country: " + user.getCountry());
+        countryLabel.setText(user.getCountry());
+        userAge.setText(String.valueOf(user.calculateAge()));
+        dateJoined.setText(user.getRegistrationDate().toString());
         //convert fields of interest to a readable format
         if (user.getFieldsOfInterest() != null && !user.getFieldsOfInterest().isEmpty()) {
             userInterests.setText(String.join(", ", user.getFieldsOfInterest().keySet()));
@@ -36,11 +42,12 @@ public class IndividualUserViewController {
             userInterests.setText("No interests provided");
         }
 
-        //load profile image from byte[]
+        //load profile image if found//
         if (user.getProfilePicture() != null && user.getProfilePicture().length > 0) {
             ByteArrayInputStream bis = new ByteArrayInputStream(user.getProfilePicture());
             profileImage.setImage(new Image(bis));
         } else {
+            // set the default image //
             profileImage.setImage(new Image(
                     Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/userico.png")).toExternalForm()
             ));

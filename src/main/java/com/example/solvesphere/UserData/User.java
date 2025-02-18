@@ -88,4 +88,5 @@ public class User implements Serializable {
                 ", active=" + active +
                 '}';
     }
+
 }
