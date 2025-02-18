@@ -56,7 +56,7 @@
         <!-- Actions -->
         <HBox spacing="10" alignment="CENTER">
             <Button text="Add Friend" onAction="#onAddFriendClick"
-                    style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                    style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 14px;" fx:id="addFriendButton"/>
         </HBox>
 
     </VBox>

@@ -32,6 +32,8 @@ public class IndividualUserViewController {
     private User currentAppUser;
     private User goalUser;
 
+
+
     public void setUserData(User goalUser,User appUser) {
         this.currentAppUser = appUser; // the current user of the application
         this.goalUser = goalUser;
