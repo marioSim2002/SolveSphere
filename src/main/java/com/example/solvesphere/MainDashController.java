@@ -62,13 +62,13 @@ public class MainDashController {
     public void initUserData(User user) {
         this.currentUser = user;
         this.currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
+        NotificationsController notificationsController = new NotificationsController();
         buildImage(currentUser);
         fetchAndDisplayProblems();
         startAutoRefreshProblems();  // method to start auto-refreshing problems
-
         initializeChat();
         profileImg.setImage(buildImage(user));
-        Inspector inspector = new Inspector(this,currentUser);
+        Inspector inspector = new Inspector(this,notificationsController,currentUser);
         inspector.startInspection();
     }
 
@@ -402,7 +402,7 @@ public class MainDashController {
             Stage notificationStage = new Stage();
             notificationStage.initModality(Modality.APPLICATION_MODAL); //stays on top
             notificationStage.setTitle("Notifications");
-            notificationStage.setScene(new Scene(root, 320, 420));
+            notificationStage.setScene(new Scene(root, 340, 420));
             notificationStage.show();
 
         } catch (IOException e) {
@@ -416,7 +416,7 @@ public class MainDashController {
         Parent root = loader.load();
 
         PeoplePageController controller = loader.getController();
-        controller.initialize(currentUserId); //pass current user ID
+        controller.initialize(currentUserId,currentUser); //pass current user ID
         Stage discoverPeopleSt = new Stage();
         discoverPeopleSt.setTitle("Discover people");
         discoverPeopleSt.setScene(new Scene(root, 650, 650));

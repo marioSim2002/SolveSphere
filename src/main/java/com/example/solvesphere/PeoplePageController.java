@@ -20,6 +20,7 @@ import java.util.List;
 public class PeoplePageController {
 
     private Long currentUserID;
+    private User currentAppUser;
     @FXML
     private TextField searchField;
     @FXML
@@ -28,10 +29,11 @@ public class PeoplePageController {
     private final UserDAO userDAO = new UserDAOImpl();
 
     @FXML
-    public void initialize(long currentUserID) {
+    public void initialize(long currentUserID,User currentAppUser) {
         this.currentUserID = currentUserID;
+        this.currentAppUser = currentAppUser;
         try {
-            loadPeople(); // Load all users initially
+            loadPeople(); // load all users initially
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -76,7 +78,7 @@ public class PeoplePageController {
                 VBox profileCard = loader.load();
                 ProfileCardController controller = loader.getController();
 
-                controller.setUserData(user);
+                controller.setUserData(user,currentAppUser);
 
                 //ensure card fills available space
                 profileCard.setMaxWidth(Double.MAX_VALUE);

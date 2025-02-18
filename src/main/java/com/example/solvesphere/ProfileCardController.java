@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.xml.transform.sax.TemplatesHandler;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,11 +32,13 @@ public class ProfileCardController {
     @FXML
     private Label userInterests;
 
+    private User currentAppUser;
     private long viewedUserID;
     private User viewedUser;
     private final UserDAO userDAO = new UserDAOImpl();
 
-    public void setUserData(User user) throws SQLException {
+    public void setUserData(User user,User appUser) throws SQLException {
+        this.currentAppUser = appUser;
         this.viewedUser = user;
         this.viewedUserID = user.getId();
         usernameLabel.setText(user.getUsername());
@@ -88,7 +91,7 @@ public class ProfileCardController {
             IndividualUserViewController controller = loader.getController();
 
             //pass User ID when opening the profile
-            controller.setUserData(viewedUser);
+            controller.setUserData(viewedUser,currentAppUser);
 
             Stage userProfileStage = new Stage();
             userProfileStage.setTitle(viewedUser.getUsername() + " - Profile");

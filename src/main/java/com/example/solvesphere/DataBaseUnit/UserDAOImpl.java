@@ -370,7 +370,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, country, profile_picture, date_of_birth, registration_date FROM users";
+        String sql = "SELECT id, username, email, country, profile_picture, date_of_birth, registration_date FROM users";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -380,6 +380,7 @@ public class UserDAOImpl implements UserDAO {
                 User user = new User();
                 user.setId(rs.getLong("id"));
                 user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
                 user.setCountry(rs.getString("country"));
 
                 //retrieve and store profile picture as byte array (BLOB)
@@ -393,7 +394,6 @@ public class UserDAOImpl implements UserDAO {
                 LocalDate dateOfBirth = rs.getDate("date_of_birth").toLocalDate();
                 user.setDateOfBirth(dateOfBirth);
                 user.setDateOfBirth(dateOfBirth);
-
                 // reg date
                 user.setRegistrationDate(rs.getDate("registration_date").toLocalDate());
 

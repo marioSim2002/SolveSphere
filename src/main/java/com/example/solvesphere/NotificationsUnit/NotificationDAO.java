@@ -10,9 +10,11 @@ public interface NotificationDAO {
     Map<Long, String> getUnseenNotificationsWithProblemTitles(long userId) throws SQLException, ClassNotFoundException;
     void markNotificationsAsSeen(List<Long> notificationIds) throws SQLException, ClassNotFoundException;
 
+    long getUserIdByUsername(String username);
+    void removeNotification(long userId, long requesterId, String notificationPrefix);
     List<String> getAllNotifications(long userId);
 
     void markNotificationsAsRead(long userId);
 
-
+    void removeGeneralNotification(long currentUserId, String notification);
 }

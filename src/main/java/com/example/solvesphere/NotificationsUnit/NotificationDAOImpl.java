@@ -82,6 +82,7 @@ public class NotificationDAOImpl implements NotificationDAO {
     }
 
 
+
     @Override
     public List<String> getAllNotifications(long userId) {
         List<String> notifications = new ArrayList<>();
@@ -124,4 +125,65 @@ public class NotificationDAOImpl implements NotificationDAO {
         }
     }
 
+    @Override
+    public void removeGeneralNotification(long userId, String message) {
+        String sql = "DELETE FROM notifications WHERE user_id = ? AND message = ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+            stmt.setString(2, message);
+            stmt.executeUpdate();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String getUsernameById(long userId) {
+        String sql = "SELECT username FROM users WHERE id = ?";
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("username");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public long getUserIdByUsername(String username) {
+        String sql = "SELECT id FROM users WHERE username = ?";
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("id");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1; // Return invalid ID if not found
+    }
+
+    @Override
+    public void removeNotification(long userId, long requesterId, String notificationPrefix) {
+        String sql = "DELETE FROM notifications WHERE user_id = ? AND message = ?";
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            stmt.setString(2, notificationPrefix + getUsernameById(requesterId));
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
