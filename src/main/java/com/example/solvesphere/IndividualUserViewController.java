@@ -43,7 +43,7 @@ public class IndividualUserViewController {
         countryLabel.setText(goalUser.getCountry());
         userAge.setText(String.valueOf(goalUser.calculateAge()));
         dateJoined.setText(goalUser.getRegistrationDate().toString());
-        if(friendDAO.areUsersFriends(extractUserID(goalUser),extractUserID(currentAppUser))){addFriendButton.setText("Friends");}
+        if(checkFreindsStatus()){addFriendButton.setText("Friends");}
         //convert fields of interest to a readable format
         if (goalUser.getFieldsOfInterest() != null && !goalUser.getFieldsOfInterest().isEmpty()) {
             userInterests.setText(String.join(", ", goalUser.getFieldsOfInterest().keySet()));
@@ -71,6 +71,8 @@ public class IndividualUserViewController {
 
     @FXML
     private void onAddFriendClick() {
+
+        if(checkFreindsStatus()){return;} // if users already friends,return
         /// relevant objs for operations ///
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         FriendDAO friendDAO = new FriendDAOImpl();
@@ -81,7 +83,9 @@ public class IndividualUserViewController {
         addFriendButton.setText("Request Sent");
     }
 
-
+    private boolean checkFreindsStatus(){
+        return friendDAO.areUsersFriends(extractUserID(goalUser),extractUserID(currentAppUser));
+    }
     private long extractUserID(User user){
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         return serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(),user.getEmail());
