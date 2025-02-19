@@ -1,7 +1,9 @@
 package com.example.solvesphere;
 
+import com.almasb.fxgl.net.Server;
 import com.example.solvesphere.DataBaseUnit.FriendDAO;
 import com.example.solvesphere.DataBaseUnit.FriendDAOImpl;
+import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
@@ -32,7 +34,7 @@ public class IndividualUserViewController {
     private User currentAppUser;
     private User goalUser;
 
-
+    FriendDAO friendDAO = new FriendDAOImpl();
 
     public void setUserData(User goalUser,User appUser) {
         this.currentAppUser = appUser; // the current user of the application
@@ -41,6 +43,7 @@ public class IndividualUserViewController {
         countryLabel.setText(goalUser.getCountry());
         userAge.setText(String.valueOf(goalUser.calculateAge()));
         dateJoined.setText(goalUser.getRegistrationDate().toString());
+        if(friendDAO.areUsersFriends(extractUserID(goalUser),extractUserID(currentAppUser))){addFriendButton.setText("Friends");}
         //convert fields of interest to a readable format
         if (goalUser.getFieldsOfInterest() != null && !goalUser.getFieldsOfInterest().isEmpty()) {
             userInterests.setText(String.join(", ", goalUser.getFieldsOfInterest().keySet()));
@@ -72,9 +75,15 @@ public class IndividualUserViewController {
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         FriendDAO friendDAO = new FriendDAOImpl();
 
-        long goalUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(goalUser.getUsername(), goalUser.getEmail());
+        long goalUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(goalUser.getUsername(), goalUser.getEmail());//get the goal user(to add) ID
         long currentAppUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(currentAppUser.getUsername(), currentAppUser.getEmail());
         friendDAO.sendFriendRequest(currentAppUserID,goalUserID);
         addFriendButton.setText("Request Sent");
+    }
+
+
+    private long extractUserID(User user){
+        ServerCommunicator serverCommunicator = new ServerCommunicator();
+        return serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(),user.getEmail());
     }
 }

@@ -1,5 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.UserData.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,6 +141,66 @@ public class FriendDAOImpl implements FriendDAO {
             while (rs.next()) {
                 friends.add(rs.getLong(1));
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return friends;
+    }
+
+    @Override
+    public boolean areUsersFriends(long userId1, long userId2) {
+        String sql = "SELECT COUNT(*) FROM friends " +
+                "WHERE ((user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)) " +
+                "AND status = 'accepted'";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId1);
+            stmt.setLong(2, userId2);
+            stmt.setLong(3, userId2);
+            stmt.setLong(4, userId1);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // If count > 0, users are friends
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    @Override
+    public List<User> getFriendsListAsUsers(long userId) {
+        List<User> friends = new ArrayList<>();
+        String sql = "SELECT u.id, u.username, u.email, u.profile_picture, u.country, u.date_of_birth, u.registration_date " +
+                "FROM friends f " +
+                "JOIN users u ON (f.user_id = u.id OR f.friend_id = u.id) " +
+                "WHERE (f.user_id = ? OR f.friend_id = ?) AND f.status = 'accepted' AND u.id != ?";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+            stmt.setLong(2, userId);
+            stmt.setLong(3, userId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                User friend = new User();
+                friend.setId(rs.getLong("id"));
+                friend.setUsername(rs.getString("username"));
+                friend.setEmail(rs.getString("email"));
+                friend.setCountry(rs.getString("country"));
+                friend.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
+                friend.setRegistrationDate(rs.getDate("registration_date").toLocalDate()); // Added registration date
+                friend.setProfilePicture(rs.getBytes("profile_picture")); // Load the image from DB
+
+                friends.add(friend);
+            }
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

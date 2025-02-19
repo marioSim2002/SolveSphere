@@ -8,23 +8,34 @@ import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ProfileTabbedController {
+    @FXML
+    private VBox friendsListContainer;
+    @FXML
+    private TextField searchFriendField;
     @FXML
     private Label postCountLabel;
     @FXML
@@ -40,23 +51,26 @@ public class ProfileTabbedController {
     private VBox favoriteProblemListContainer;
 
     // VBox container where we will display the custom items (ProblemItem.fxml)
-    @FXML private VBox problemListContainer;
+    @FXML
+    private VBox problemListContainer;
 
     private User currentUser;
 
     public void initialize(User user) {
         this.currentUser = user;
-        usernameLabel.setText("Welcome "+currentUser.getUsername());
+        usernameLabel.setText("Welcome " + currentUser.getUsername());
         loadAllPosts();
         getFavPosts();
         initializeCharts();
+        loadFriendsList();
     }
 
     private void loadAllPosts() {
         List<Problem> userPosts = getUserPosts();
         postCountLabel.setText(String.valueOf(userPosts.size()));
-        displayProblems(userPosts,problemListContainer);
+        displayProblems(userPosts, problemListContainer);
     }
+
     private void getFavPosts() {
         // 1) Fetch current user ID
         ServerCommunicator serverCommunicator = new ServerCommunicator();
@@ -107,7 +121,7 @@ public class ProfileTabbedController {
                 CommentDAO commentDAO = new CommentDAOImpl();
                 int count = commentDAO.getCommentCountByProblemId(problem.getId());
 
-                controller.setProblemData(problem, currentUser, count,problemUser.getUsername());
+                controller.setProblemData(problem, currentUser, count, problemUser.getUsername());
 
                 // add the item to the chosen container
                 targetContainer.getChildren().add(problemItem);
@@ -156,4 +170,27 @@ public class ProfileTabbedController {
         }
     }
 
+    private void loadFriendsList() {
+        friendsListContainer.getChildren().clear();
+
+        FriendDAO friendDAO = new FriendDAOImpl();
+        ServerCommunicator serverCommunicator = new ServerCommunicator();
+        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+
+        List<User> friends = friendDAO.getFriendsListAsUsers(currentUserId);
+
+        for (User friend : friends) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("FriendItem.fxml"));
+
+                HBox friendItem = loader.load();
+
+                FriendItemController controller = loader.getController();
+                controller.setFriendData(friend, currentUser);
+                friendsListContainer.getChildren().add(friendItem);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

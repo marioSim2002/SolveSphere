@@ -1,5 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.UserData.User;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,10 @@ public interface FriendDAO {
     boolean removeFriend(long userId, long friendId);
 
     List<Long> getFriends(long userId);
+
+    boolean areUsersFriends(long userId1, long userId2);
+
+    List<User> getFriendsListAsUsers(long userId);
 
     boolean markFriendRequestAsSeen(long userId, long friendId);
 

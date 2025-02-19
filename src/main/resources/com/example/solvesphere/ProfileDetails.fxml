@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.TextField?>
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.example.solvesphere.ProfileTabbedController"
            stylesheets="@profile.css"
@@ -104,7 +105,29 @@
                     </ScrollPane>
                 </AnchorPane>
             </Tab>
+            <Tab text="Friends List">
+                <AnchorPane>
+                    <VBox spacing="15" alignment="CENTER"
+                          styleClass="tab-content"
+                          style="-fx-padding: 15px;"
+                          AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                        <Label text="Manage Your Friends" styleClass="section-title"/>
 
+                        <!-- Search Bar -->
+                        <TextField fx:id="searchField" promptText="Search friends..."
+                                   style="-fx-font-size: 14px; -fx-padding: 10px; -fx-border-color: gray; -fx-border-radius: 8px;"/>
+
+                        <!-- Friends List Scrollable -->
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="friendsListContainer"
+                                  spacing="15"
+                                  alignment="CENTER"
+                                  style="-fx-padding: 15px;"/>
+                        </ScrollPane>
+                    </VBox>
+                </AnchorPane>
+            </Tab>
         </TabPane>
     </VBox>
 </StackPane>

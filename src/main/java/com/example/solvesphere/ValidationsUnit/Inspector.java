@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Inspector {
-    private static final int CHECK_INTERVAL = 20 * 1000; // 20 sec
+    private static final int CHECK_INTERVAL = 20 * 1000; //each 20 sec, inspect
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final ProblemDAO problemDAO;
     private final MainDashController mainDashController;
@@ -43,7 +43,7 @@ public class Inspector {
                 updateMostPostedCategory();
                 checkForNewComments();
                 checkForNewFriendRequests();
-                mainDashController.setProfileImage(buildImage(user)); // Update profile image
+                mainDashController.setProfileImage(buildImage(user)); // update profile image
             }
         }, 0, CHECK_INTERVAL);
     }
