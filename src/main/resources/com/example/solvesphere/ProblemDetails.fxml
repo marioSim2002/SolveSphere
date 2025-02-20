@@ -15,42 +15,58 @@
     </stylesheets>
 
     <children>
-        <VBox alignment="CENTER" spacing="10"
+        <!-- Main HBox to split the UI into two sections -->
+        <HBox spacing="15"
               AnchorPane.bottomAnchor="10"
               AnchorPane.leftAnchor="10"
               AnchorPane.rightAnchor="10"
               AnchorPane.topAnchor="10"
               style="-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-border-color: lightgray; -fx-border-width: 1;">
-            <Label text="Problem Details" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
-            <Separator/>
-            <VBox spacing="5" alignment="TOP_CENTER" style="-fx-padding: 10;">
-                <Label text="Title" style="-fx-font-weight: bold; -fx-font-size: 24px;"/>
-                <Label fx:id="problemTitle" style="-fx-font-size: 17px;"/>
 
-                <Label fx:id="problemCategory" style="-fx-font-size: 11px; -fx-text-fill: gray;"/>
+            <!-- Left Side: Problem Details -->
+            <VBox spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;" HBox.hgrow="ALWAYS">
+                <Label text="Problem Details" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                <Separator/>
+                <VBox spacing="5" alignment="TOP_LEFT">
+                    <Label text="Title" style="-fx-font-weight: bold; -fx-font-size: 24px;"/>
+                    <Label fx:id="problemTitle" style="-fx-font-size: 17px;"/>
+                    <Label fx:id="problemCategory" style="-fx-font-size: 11px; -fx-text-fill: gray;"/>
+                    <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="150.0" style="-fx-padding: 5;"/>
+                </VBox>
 
-                <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="100.0" style="-fx-padding: 5;"/>
+                <!-- Save Button -->
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10;">
+                    <Button fx:id="saveButton" onAction="#onSave">
+                        <graphic>
+                            <ImageView fx:id="saveIcon" fitHeight="32" fitWidth="32" styleClass="save-button">
+                                <image>
+                                    <Image url="@Images/icoFav.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
             </VBox>
-            <Label text="Comments" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <ScrollPane fitToWidth="true" prefHeight="200.0" style="-fx-padding: 5;">
-                <VBox fx:id="commentListContainer" spacing="10" style="-fx-padding: 10; -fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1;"/>
-            </ScrollPane>
-            <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
-                <TextField fx:id="commentField" promptText="Add a comment..." HBox.hgrow="ALWAYS" style="-fx-padding: 5;"/>
-                <Button text="Post Comment" onAction="#postComment" style="-fx-padding: 5 10;"/>
-            </HBox>
-            <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
-                <!-- Save Icon Button with Href Effect -->
-                <Button fx:id="saveButton" onAction="#onSave" >
-                    <graphic>
-                        <ImageView fx:id="saveIcon" fitHeight="32" fitWidth="32" styleClass="save-button">
-                            <image>
-                                <Image url="@Images/icoFav.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </HBox>
-        </VBox>
+
+            <!-- Right Side: Comments Section -->
+            <VBox spacing="10" alignment="TOP_RIGHT"
+                  style="-fx-padding: 10; -fx-background-color: #ffffff; -fx-border-color: lightgray; -fx-border-width: 1;"
+                  prefWidth="380" prefHeight="400" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                <Label text="Comments" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <!-- Increased ScrollPane Height -->
+                <ScrollPane fitToWidth="true" prefHeight="400.0" style="-fx-padding: 5;">
+                    <VBox fx:id="commentListContainer" spacing="10"
+                          style="-fx-padding: 10; -fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1;"
+                          VBox.vgrow="ALWAYS"/>
+                </ScrollPane>
+
+                <!-- Comment Input Field -->
+                <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+                    <TextField fx:id="commentField" promptText="Add a comment..." HBox.hgrow="ALWAYS" style="-fx-padding: 5;"/>
+                    <Button text="Post" onAction="#postComment" style="-fx-padding: 5 10;"/>
+                </HBox>
+            </VBox>
+        </HBox>
     </children>
 </AnchorPane>
