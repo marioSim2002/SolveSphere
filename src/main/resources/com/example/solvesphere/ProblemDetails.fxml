@@ -55,7 +55,7 @@
                 <Label text="Comments" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
 
                 <!-- Increased ScrollPane Height -->
-                <ScrollPane fitToWidth="true" prefHeight="400.0" style="-fx-padding: 5;">
+                <ScrollPane fitToWidth="true" prefHeight="420.0" style="-fx-padding: 5;">
                     <VBox fx:id="commentListContainer" spacing="10"
                           style="-fx-padding: 10; -fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1;"
                           VBox.vgrow="ALWAYS"/>
