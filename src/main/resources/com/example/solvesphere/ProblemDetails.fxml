@@ -31,7 +31,7 @@
                     <Label text="Title" style="-fx-font-weight: bold; -fx-font-size: 24px;"/>
                     <Label fx:id="problemTitle" style="-fx-font-size: 17px;"/>
                     <Label fx:id="problemCategory" style="-fx-font-size: 11px; -fx-text-fill: gray;"/>
-                    <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="150.0" style="-fx-padding: 5;"/>
+                    <TextArea fx:id="problemDescription" editable="false" wrapText="true" prefHeight="200.0" style="-fx-padding: 5;"/>
                 </VBox>
 
                 <!-- Save Button -->

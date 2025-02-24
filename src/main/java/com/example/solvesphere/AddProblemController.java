@@ -125,7 +125,7 @@ public class AddProblemController {
         }
 
         // Create and submit the problem
-        Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted, tags);
+        Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted);
         boolean isSuccess = problemDAO.addProblem(problem);
 
         if (isSuccess) {

@@ -267,4 +267,33 @@ public class FriendDAOImpl implements FriendDAO {
         return friendRequests;
     }
 
+
+    @Override
+    public List<Long> getFriendIds(long userId) {
+        List<Long> friendIds = new ArrayList<>();
+        String sql = "SELECT user_id, friend_id FROM friends WHERE (user_id = ? OR friend_id = ?) AND status = 'accepted'";
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+            stmt.setLong(2, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                long id1 = rs.getLong("user_id");
+                long id2 = rs.getLong("friend_id");
+                if (id1 != userId) {
+                    friendIds.add(id1);
+                }
+                if (id2 != userId) {
+                    friendIds.add(id2);
+                }
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return friendIds;
+    }
 }

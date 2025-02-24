@@ -72,6 +72,13 @@ public class MainDashController {
         inspector.startInspection();
     }
 
+    private void stopAutoRefresh() {
+        if (problemUpdater != null && !problemUpdater.isShutdown()) {
+            problemUpdater.shutdown();
+            problemUpdater = null;
+        }
+    }
+
     private void startAutoRefreshProblems() {
         problemUpdater = Executors.newSingleThreadScheduledExecutor();
         problemUpdater.scheduleAtFixedRate(() -> {
@@ -135,7 +142,11 @@ public class MainDashController {
     // sends request and builds data according to filter
     private void applyFilter(String filter) {
         ProblemDAO problemDAO = new ProblemDAOImpl();
-        UserDAO userDAO = new UserDAOImpl();;
+        FriendDAO friendDAO = new FriendDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
+        long userId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
+        if(currentUser==null){return;}
+        stopAutoRefresh(); // stop refreshing the problem list
         switch (filter) {
             case "No Filter":
                 envokeAllProblemsDisplay();
@@ -145,15 +156,17 @@ public class MainDashController {
                     displayProblems(problems);
                 break;
             case "In Your Country":
-                if (currentUser != null) {
                     List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
                     System.out.println(currentUser.getCountry());
                     displayProblems(problemsByCountry);
-                }
             case "Posted By You":
                 assert currentUser != null;
-                long userId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
                 problems = problemDAO.getProblemsPostedByCurrentUser(userId);
+                displayProblems(problems);
+            case "Posted By Friends":
+                long currentUserId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+                List<Long> friendIds = friendDAO.getFriendIds(currentUserId); //fetch friend IDs
+                problems = problemDAO.getProblemsPostedByUsers(friendIds); // fetch problems by friends
                 displayProblems(problems);
                 break;
         }

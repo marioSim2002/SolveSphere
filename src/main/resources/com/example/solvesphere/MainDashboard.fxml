@@ -33,6 +33,8 @@
                         <String fx:value="Interests Related" />
                         <String fx:value="In Your Country" />
                         <String fx:value="Posted By You" />
+                        <String fx:value="Posted By Friends" />
+
                     </FXCollections>
                 </items>
             </ComboBox>

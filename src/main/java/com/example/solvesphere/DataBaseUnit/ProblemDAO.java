@@ -14,6 +14,8 @@ public interface ProblemDAO {
     List<String> getTagsByProblemId(long problemId);
 
     List<Problem> fetchAllProblems();
+    List<Problem> getProblemsPostedByUsers(List<Long> userIds);
+
 
     List<Problem> getProblemsPostedByCurrentUser(long userId);  //fetch problems posted by the current user
 

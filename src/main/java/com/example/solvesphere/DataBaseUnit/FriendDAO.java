@@ -23,4 +23,6 @@ public interface FriendDAO {
     void removeGeneralNotification(long userId, String message);
 
     Map<Long, String> getUnseenFriendRequests(long userId);
+
+    List<Long> getFriendIds(long currentUserId);
 }

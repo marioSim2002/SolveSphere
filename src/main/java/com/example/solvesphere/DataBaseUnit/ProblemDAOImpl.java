@@ -76,8 +76,7 @@ public class ProblemDAOImpl implements ProblemDAO {
                 rs.getInt("user_id"),
                 rs.getTimestamp("created_at").toLocalDateTime(),  // Convert SQL Timestamp to LocalDateTime
                 rs.getString("category"),
-                rs.getBoolean("is_age_restricted"),
-                tags
+                rs.getBoolean("is_age_restricted")
         );
     }
 
@@ -133,6 +132,43 @@ public class ProblemDAOImpl implements ProblemDAO {
         }
         return problems;
     }
+
+    @Override
+    public List<Problem> getProblemsPostedByUsers(List<Long> userIds) {
+        List<Problem> problems = new ArrayList<>();
+        if (userIds.isEmpty()) return problems; // Return empty list if no friends
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM problems WHERE user_id IN (");
+        sql.append("?,".repeat(userIds.size()));
+        sql.setLength(sql.length() - 1); // Remove trailing comma
+        sql.append(")");
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < userIds.size(); i++) {
+                stmt.setLong(i + 1, userIds.get(i));
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                problems.add(new Problem(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getLong("user_id"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getString("category"),
+                        rs.getBoolean("is_age_restricted")
+                ));
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return problems;
+    }
+
 
     @Override
     public List<Problem> getProblemsByCountry(String country) {
@@ -193,7 +229,7 @@ public class ProblemDAOImpl implements ProblemDAO {
                 boolean isAgeRestricted = rs.getBoolean("is_age_restricted");
                 List<String> tags = getTagsByProblemId(problemId);
 
-                problem = new Problem(id, title, description, userId, createdAt, category, isAgeRestricted, tags);
+                problem = new Problem(id, title, description, userId, createdAt, category, isAgeRestricted);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -262,9 +298,7 @@ public class ProblemDAOImpl implements ProblemDAO {
                         rs.getInt("user_id"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getString("category"),
-                        rs.getBoolean("is_age_restricted"),
-                        new ArrayList<>()
-                );
+                        rs.getBoolean("is_age_restricted"));
                 similarProblems.add(problem);
             }
         } catch (SQLException e) {

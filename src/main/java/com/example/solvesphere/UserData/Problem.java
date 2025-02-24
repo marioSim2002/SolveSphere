@@ -22,7 +22,7 @@ public class Problem implements Serializable {
     private List<String> tags;
 
 
-    public Problem(long id, String title, String description, long userId, LocalDateTime createdAt,String category, Boolean isAgeRestricted,List<String> tags) {
+    public Problem(long id, String title, String description, long userId, LocalDateTime createdAt,String category, Boolean isAgeRestricted) {
         this.id = id;
         this.title = title;
         this.description = description;

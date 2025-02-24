@@ -65,12 +65,13 @@ public class ProblemDetailsController {
 
     private void showData() {
         try {
+
             problemTitle.setText(currentProblem.getTitle());
-            problemCategory.setText(currentProblem.getCategory());
+            problemCategory.setText(currentProblem.getCategory()+" category");
             problemDescription.setText(currentProblem.getDescription());
 
         } catch (NullPointerException exception) {
-            System.out.println("Data trying to access may be null.");
+            System.out.println("Oops NPE! ,Data trying to access may be null.");
         }
     }
 

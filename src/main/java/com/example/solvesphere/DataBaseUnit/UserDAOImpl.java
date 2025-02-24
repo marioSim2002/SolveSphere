@@ -273,8 +273,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getInt("user_id"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getString("category"),
-                        rs.getBoolean("is_age_restricted"),
-                        Arrays.asList(rs.getString("tags").split(","))
+                        rs.getBoolean("is_age_restricted")
+                        //,Arrays.asList(rs.getString("tags").split(","))
                 );
                 problems.add(problem);
             }
