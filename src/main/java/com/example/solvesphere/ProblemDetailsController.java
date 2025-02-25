@@ -1,5 +1,8 @@
 package com.example.solvesphere;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
@@ -8,6 +11,7 @@ import com.example.solvesphere.UserData.FavoritesService;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ProfanityFilter;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -45,7 +50,8 @@ public class ProblemDetailsController {
     private Problem currentProblem; // current post
     private User currentUser; // current user
     private Long currentUserId;
-    private String ownerName ;
+    private String ownerName;
+    private ScheduledExecutorService commentUpdater;
     private FavoritesService favoritesService = new FavoritesService();
 
     public void initData(Problem passedProblem, User passedUser,String owner) {
@@ -61,6 +67,8 @@ public class ProblemDetailsController {
         showData();
         updateFavoriteUI();
         loadComments();
+        startAutoRefreshComments(); //auto-refresh comments
+
     }
 
     private void showData() {
@@ -73,6 +81,27 @@ public class ProblemDetailsController {
         } catch (NullPointerException exception) {
             System.out.println("Oops NPE! ,Data trying to access may be null.");
         }
+    }
+
+
+    public void stopAutoRefreshComments() {
+        if (commentUpdater != null && !commentUpdater.isShutdown()) {
+            commentUpdater.shutdown();
+            commentUpdater = null;
+        }
+    }
+
+    private void startAutoRefreshComments() {
+        commentUpdater = Executors.newSingleThreadScheduledExecutor();
+        commentUpdater.scheduleAtFixedRate(() -> {
+            Platform.runLater(this::loadComments);
+        }, 0, 5, TimeUnit.SECONDS); //every 5 seconds
+    }
+    @FXML
+    private void onClose() {
+        stopAutoRefreshComments();
+        Stage stage = (Stage) problemTitle.getScene().getWindow();
+        stage.close();
     }
 
     public void loadComments() {
@@ -99,7 +128,7 @@ public class ProblemDetailsController {
     }
 
     @FXML
-    public void postComment(ActionEvent actionEvent) {
+    public void postComment() {
         String content = commentField.getText().trim();
 
         if (!content.isEmpty()) {

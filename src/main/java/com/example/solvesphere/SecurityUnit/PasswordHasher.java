@@ -17,7 +17,7 @@ public class PasswordHasher {
         return hashedPassword;
     }
 
-    // Verify a password against the stored hash
+    // verify a password against the stored hash
     public boolean verifyPassword(String password, String hashedPassword) {
         boolean matches = passwordEncoder.matches(password, hashedPassword);
         System.out.println("Password Verification Result: " + matches);
