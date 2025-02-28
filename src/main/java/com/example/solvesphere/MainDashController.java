@@ -8,6 +8,7 @@ import javafx.application.Platform;
 
 import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -141,36 +142,50 @@ public class MainDashController {
 
     // sends request and builds data according to filter
     private void applyFilter(String filter) {
+        if (currentUser == null) {
+            return;
+        }
+
         ProblemDAO problemDAO = new ProblemDAOImpl();
         FriendDAO friendDAO = new FriendDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
-        long userId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(),currentUser.getEmail());
-        if(currentUser==null){return;}
-        stopAutoRefresh(); // stop refreshing the problem list
+        long userId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+
+        stopAutoRefresh(); // stop auto-refreshing the problem list
+
+        List<Problem> problems = new ArrayList<>(); //an empty list if no case is matched
+
         switch (filter) {
             case "No Filter":
                 envokeAllProblemsDisplay();
-                break;
+                return; // No need to continue execution
+
             case "Interests Related":
-                    List<Problem> problems = problemDAO.getProblemsByUserInterest(currentUser.getFieldsOfInterest());
-                    displayProblems(problems);
+                problems = problemDAO.getProblemsByUserInterest(currentUser.getFieldsOfInterest());
                 break;
+
             case "In Your Country":
-                    List<Problem> problemsByCountry = problemDAO.getProblemsByCountry(currentUser.getCountry());
-                    System.out.println(currentUser.getCountry());
-                    displayProblems(problemsByCountry);
-            case "Posted By You":
-                assert currentUser != null;
-                problems = problemDAO.getProblemsPostedByCurrentUser(userId);
-                displayProblems(problems);
-            case "Posted By Friends":
-                long currentUserId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
-                List<Long> friendIds = friendDAO.getFriendIds(currentUserId); //fetch friend IDs
-                problems = problemDAO.getProblemsPostedByUsers(friendIds); // fetch problems by friends
-                displayProblems(problems);
+                problems = problemDAO.getProblemsByCountry(currentUser.getCountry());
+                System.out.println(currentUser.getCountry());
                 break;
+
+            case "Posted By You":
+                problems = problemDAO.getProblemsPostedByCurrentUser(userId);
+                break;
+
+            case "Posted By Friends":
+                List<Long> friendIds = friendDAO.getFriendIds(userId); // fetch friend IDs
+                problems = problemDAO.getProblemsPostedByUsers(friendIds); // fetch problems posted by friends
+                break;
+
+            default:
+                System.out.println("Unknown filter option: " + filter);
+                return; // exit the method if the filter is invalid
         }
+
+        displayProblems(problems); // display the filtered problems
     }
+
 
     public void addProblem() {
         try {
