@@ -7,7 +7,6 @@ import com.example.solvesphere.UserData.User;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.*;
 
 public class UserDAOImpl implements UserDAO {
@@ -156,15 +155,19 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public void setUserActivityStatus(long userId, boolean isActive) throws SQLException {
+    public void setUserActivityStatus(long userId, String status) throws SQLException {
         String sql = "UPDATE users SET ACTIVE = ? WHERE id = ?";
+
+        if (!status.equalsIgnoreCase("ACTIVE") &&
+                !status.equalsIgnoreCase("INACTIVE") &&
+                !status.equalsIgnoreCase("BANNED")) {
+            throw new IllegalArgumentException("Invalid status. Allowed values: ACTIVE, INACTIVE, BANNED");
+        }
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            String status = isActive ? "ACTIVE" : "INACTIVE"; //boolean to string
-
-            stmt.setString(1, status);
+            stmt.setString(1, status.toUpperCase()); // Ensure it stores consistent case
             stmt.setLong(2, userId);
             stmt.executeUpdate();
         } catch (ClassNotFoundException e) {
@@ -172,27 +175,32 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+
     @Override
-    public boolean getUserActivityStatus(long userId) throws SQLException {
+    public String getUserActivityStatus(long userId) throws SQLException {
         String sql = "SELECT ACTIVE FROM users WHERE id = ?";
-        boolean isActive = false;
+        String status = "INACTIVE";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+            System.out.println("getting "+userId+" act stat");
             stmt.setLong(1, userId);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String status = rs.getString("ACTIVE"); //get the value as a string
-                isActive = "ACTIVE".equalsIgnoreCase(status); //string to boolean
+                status = rs.getString("ACTIVE"); // fetch status from DB
             }
+
+            // DEBUGGING OUTPUT
+            System.out.println("Fetched Status from DB: " + status);
+
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        return isActive;
+        return status.trim();
     }
+
 
 
     @Override
@@ -424,6 +432,36 @@ public class UserDAOImpl implements UserDAO {
         }
         return interests;
     }
+
+    @Override
+    public Long getUserIdByUsernameAndPassword(String username, String password) {
+        String sql = "SELECT id, password FROM users WHERE username = ?";
+        long userId = -1;
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String storedHashedPassword = rs.getString("password");
+                PasswordHasher hasher = new PasswordHasher();
+
+                // Verify entered password against the hashed password
+                if (hasher.verifyPassword(password, storedHashedPassword)) {
+                    userId = rs.getLong("id");
+                } else {
+                    System.out.println("Password verification failed.");
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return userId > 0 ? userId : null;
+    }
+
 
 }
 

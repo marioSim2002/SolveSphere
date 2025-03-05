@@ -168,6 +168,29 @@ public class ServerCommunicator {
         }
         return new ArrayList<>();
     }
+
+    public Long fetchUserIdByUsernameAndPassword(String username, String password) {
+        try (Socket socket = new Socket(serverHost, serverPort);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            out.writeObject("FETCH_USER_ID_BY_CREDENTIALS");
+            out.writeObject(new String[]{username, password});
+            out.flush();
+
+            Object response = in.readObject();
+            if (response instanceof Long) {
+                return (Long) response;
+            } else {
+                System.err.println("Unexpected response type: " + response);
+                return null;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // method to send a request to reset the user's password
     public String sendPasswordResetRequest(String username) {
         return sendRequest("RESET_PASSWORD", username);

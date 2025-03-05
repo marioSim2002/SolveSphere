@@ -9,13 +9,14 @@ import java.util.Map;
 
 public interface UserDAO {
     User getUserById(long id);   // Fetch a user by ID
-    void setUserActivityStatus(long userId, boolean isActive) throws SQLException;
 
     User getUserByUsernameAndPassword(String username, String password);
 
     void addUser(User user) throws SQLException, ClassNotFoundException;    // add a new user to the database
 
-    boolean getUserActivityStatus(long userId) throws SQLException;
+    void setUserActivityStatus(long userId, String status) throws SQLException;
+
+    String getUserActivityStatus(long userId) throws SQLException;
 
     boolean userExists(String username, String email); // check if the user already exists
 
@@ -31,4 +32,6 @@ public interface UserDAO {
     List<User> searchUsers(String keyword) throws SQLException, ClassNotFoundException;
 
     List<User> getAllUsers() throws SQLException, ClassNotFoundException;
+
+    Long getUserIdByUsernameAndPassword(String username, String password);
 }

@@ -60,7 +60,7 @@ public class ProfileCardController {
             ));
         }
             //// green icon if active ////
-        if (userDAO.getUserActivityStatus(viewedUserID)) {
+        if (userDAO.getUserActivityStatus(viewedUserID).equalsIgnoreCase("ACTIVE")) {
             activeStatusIcon.setVisible(true);
             activeStatusIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("/com/example/solvesphere/Images/onlineIco.png")).toExternalForm()));}
         else {

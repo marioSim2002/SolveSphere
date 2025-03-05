@@ -39,30 +39,49 @@ public class LogInUiController {
     }
 
     @FXML
-    protected void onLogInButtonClick() {
+    protected void onLogInButtonClick() throws SQLException {
         if (userNameFld.getText().isEmpty() || getPasswordTxt().isEmpty()) {
             AlertsUnit.showInvalidDataAlert();
             return;
         }
         String username = userNameFld.getText();
         String password = getPasswordTxt();
+        if(isBanned(username,password)){
+            AlertsUnit.showErrorAlert("User Banned , Contact Support");
+            return;
+        }
         Object response = serverCommunicator.sendLoginRequest(username, password);
-
+        UserDAO userDAO = new UserDAOImpl();
         // handle the response based on its type
-        if (response instanceof User) {
-            User user = (User) response;
-            transitionToUserDashboard(user); // navigate to the dashboard with the user object
-        } else if (response instanceof String) {
-            String message = (String) response;
-            responseStatus(message); //handle response messages
+        if (response instanceof User user) {
+            String status = userDAO.getUserActivityStatus(extractUserID(user));
+            System.out.println("STATUS  "+ status);
+
+            if ("BANNED".equalsIgnoreCase(status)) {
+                AlertsUnit.showErrorAlert("Your account has been banned. Please contact support.");
+                return;
+            }
+                transitionToUserDashboard(user);
+
+        } else if (response instanceof String message) {
+            responseStatus(message);
         } else {
             AlertsUnit.showErrorAlert("Unexpected response type received.");
         }
     }
 
+
+    public boolean isBanned(String username, String email) throws SQLException {
+        UserDAO userDAO = new UserDAOImpl();
+
+        long attempterID = extractUserIdByCred(username,email);
+        return userDAO.getUserActivityStatus(attempterID).equalsIgnoreCase("BANNED");
+    }
+
+
     private void transitionToUserDashboard(User user) {
         try {
-            // Close the current window
+            // close the current window
             Stage currentStage = (Stage) logInBt.getScene().getWindow();
             currentStage.close();
 
@@ -81,7 +100,7 @@ public class LogInUiController {
             dashboardStage.setFullScreen(true);
             dashboardStage.show();
             UserDAO userDAO = new UserDAOImpl();
-            userDAO.setUserActivityStatus(extractUserID(user),true);
+            userDAO.setUserActivityStatus(extractUserID(user),"ACTIVE");
             user.setActive(true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,7 +108,7 @@ public class LogInUiController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
+        }
 
     public void responseStatus(String response) {
         if (response.contains("successful")) {
@@ -145,5 +164,10 @@ public class LogInUiController {
 
     protected long extractUserID(User user){
         return serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
+    }
+
+
+    protected long extractUserIdByCred(String username ,String pass){
+        return serverCommunicator.fetchUserIdByUsernameAndPassword(username,pass);
     }
 }

@@ -335,7 +335,7 @@ public class MainDashController {
         Stage stage = (Stage) searchField.getScene().getWindow();  //the current window
         stage.close();
         UserDAO userDAO = new UserDAOImpl();
-        userDAO.setUserActivityStatus(currentUserId,false);//update on DB
+        userDAO.setUserActivityStatus(currentUserId,"INACTIVE");//update on DB
         currentUser.setActive(false);//update on app
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));

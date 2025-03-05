@@ -54,6 +54,11 @@ public class UserRegistrationHandler implements Runnable {
                 case "FETCH_CHAT":
                     handleFetchChat(out);
                     break;
+
+                case "FETCH_USER_ID_BY_CREDENTIALS":
+                    handleFetchUserIdByCredentials(in, out);
+                    break;
+
                 default:
                     out.writeObject("Invalid command. av.cmds: REGISTER, LOGIN , FETCH_PROBLEMS.");
                     break;
@@ -67,6 +72,16 @@ public class UserRegistrationHandler implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+    private void handleFetchUserIdByCredentials(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
+        String[] credentials = (String[]) in.readObject();
+        String username = credentials[0];
+        String password = credentials[1];
+
+        UserDAO userDAO = new UserDAOImpl();
+        long userId = userDAO.getUserIdByUsernameAndPassword(username, password);
+
+        out.writeObject(userId > 0 ? userId : null);
     }
 
     private void handleFetchUserId(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
