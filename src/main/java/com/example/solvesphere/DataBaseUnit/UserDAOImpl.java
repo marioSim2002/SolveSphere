@@ -63,17 +63,18 @@ public class UserDAOImpl implements UserDAO {
                 byte[] profilePicture = rs.getBytes("profile_picture");
 
                 // retrieve active status
-                boolean isActive = rs.getBoolean("ACTIVE");
+                String activeStatus = rs.getString("ACTIVE");
+                boolean isActive = "ACTIVE".equalsIgnoreCase(activeStatus); // 'ACTIVE' to boolean true
 
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        storedHashedPassword, // Use the stored hashed password
+                        storedHashedPassword, //use the stored hashed password
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         fieldsOfInterest,
                         rs.getDate("registration_date").toLocalDate(),
-                        profilePicture,  // Store image as byte[]
+                        profilePicture,  //image as byte[]
                         isActive // store the active status
                 );
 
@@ -108,7 +109,7 @@ public class UserDAOImpl implements UserDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
 
-            stmt.setBoolean(1, isActive);
+            stmt.setString(1, isActive ? "ACTIVE" : "INACTIVE");
             stmt.setLong(2, userId);
             stmt.executeUpdate();
             System.out.println("User " + userId + " active status updated to: " + isActive);
@@ -161,14 +162,15 @@ public class UserDAOImpl implements UserDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setBoolean(1, isActive);
+            String status = isActive ? "ACTIVE" : "INACTIVE"; //boolean to string
+
+            stmt.setString(1, status);
             stmt.setLong(2, userId);
             stmt.executeUpdate();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public boolean getUserActivityStatus(long userId) throws SQLException {
@@ -182,7 +184,8 @@ public class UserDAOImpl implements UserDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                isActive = rs.getBoolean("ACTIVE");
+                String status = rs.getString("ACTIVE"); //get the value as a string
+                isActive = "ACTIVE".equalsIgnoreCase(status); //string to boolean
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -190,6 +193,7 @@ public class UserDAOImpl implements UserDAO {
 
         return isActive;
     }
+
 
     @Override
     public boolean userExists(String username, String email) {
