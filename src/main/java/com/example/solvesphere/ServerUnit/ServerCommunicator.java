@@ -182,14 +182,15 @@ public class ServerCommunicator {
             if (response instanceof Long) {
                 return (Long) response;
             } else {
-                System.err.println("Unexpected response type: " + response);
-                return null;
+                System.err.println("Unexpected response type or no matching user found.");
+                return null; // Ensure null is handled properly
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
     // method to send a request to reset the user's password
     public String sendPasswordResetRequest(String username) {

@@ -71,10 +71,10 @@ public class LogInUiController {
     }
 
 
-    public boolean isBanned(String username, String email) throws SQLException {
+    public boolean isBanned(String username, String pass) throws SQLException {
         UserDAO userDAO = new UserDAOImpl();
 
-        long attempterID = extractUserIdByCred(username,email);
+        long attempterID = extractUserIdByCred(username,pass);
         return userDAO.getUserActivityStatus(attempterID).equalsIgnoreCase("BANNED");
     }
 
@@ -168,6 +168,11 @@ public class LogInUiController {
 
 
     protected long extractUserIdByCred(String username ,String pass){
-        return serverCommunicator.fetchUserIdByUsernameAndPassword(username,pass);
+
+        Long userIdObj = serverCommunicator.fetchUserIdByUsernameAndPassword(username, pass);
+        if (userIdObj == null) {
+            return 0;
+        }
+        return userIdObj;
     }
 }

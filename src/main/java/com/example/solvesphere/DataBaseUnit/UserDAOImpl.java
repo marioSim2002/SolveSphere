@@ -445,12 +445,12 @@ public class UserDAOImpl implements UserDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String storedHashedPassword = rs.getString("password");
+                String storedHashedPassword = rs.getString("password"); // Get the hashed password
                 PasswordHasher hasher = new PasswordHasher();
 
-                // Verify entered password against the hashed password
+                // verify entered password against the hashed password
                 if (hasher.verifyPassword(password, storedHashedPassword)) {
-                    userId = rs.getLong("id");
+                    userId = rs.getLong("id"); // Password matched, return user ID
                 } else {
                     System.out.println("Password verification failed.");
                 }
@@ -461,7 +461,6 @@ public class UserDAOImpl implements UserDAO {
 
         return userId > 0 ? userId : null;
     }
-
 
 }
 
