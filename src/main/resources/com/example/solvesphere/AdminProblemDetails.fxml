@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.solvesphere.AdminProblemDetailsController"
+      spacing="15"
+      style="-fx-padding: 20px; -fx-background-color: #f4f4f4;">
+
+    <Label text="Admin Problem Details" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <Label fx:id="problemTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <Label fx:id="descriptionLabel" style="-fx-font-size: 14px;"/>
+    <Label fx:id="categoryLabel" style="-fx-font-size: 14px;"/>
+    <Label fx:id="createdAtLabel" style="-fx-font-size: 14px; -fx-text-fill: gray;"/>
+    <Label fx:id="adminIdLabel" style="-fx-font-size: 14px;"/>
+    <Label fx:id="isAgeRestrictedLabel" style="-fx-font-size: 14px;"/>
+
+    <Button text="Close" fx:id="closeButton" onAction="#handleClose"/>
+</VBox>

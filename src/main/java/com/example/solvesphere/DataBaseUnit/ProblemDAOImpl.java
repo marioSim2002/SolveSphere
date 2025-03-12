@@ -1,6 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
 import com.example.solvesphere.DBQueries.ProblemQueries;
+import com.example.solvesphere.UserData.AdminProblem;
 import com.example.solvesphere.UserData.Problem;
 
 import java.sql.*;
@@ -304,8 +305,29 @@ public class ProblemDAOImpl implements ProblemDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return similarProblems;
     }
-}
 
+    @Override
+    public List<AdminProblem> getAdminProblems() throws SQLException, ClassNotFoundException {
+        String FETCH_ADMIN_PROBLEMS_SQL = "SELECT id, admin_id, title, description, category, created_at, is_age_restricted FROM admin_problems ORDER BY created_at DESC";
+        List<AdminProblem> problems = new ArrayList<>();
+        try (Connection conn = AdminsDBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(FETCH_ADMIN_PROBLEMS_SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                problems.add(new AdminProblem(
+                        rs.getLong("id"),
+                        rs.getInt("admin_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getTimestamp("created_at"),
+                        rs.getBoolean("is_age_restricted")
+                ));
+            }
+        }
+        return problems;
+    }
+}

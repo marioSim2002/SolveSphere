@@ -20,7 +20,6 @@ import java.util.List;
 public class AddProblemController {
 
     private User currentUser;
-
     @FXML
     private TextField titleField;
     @FXML

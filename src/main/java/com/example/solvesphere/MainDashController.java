@@ -439,7 +439,6 @@ public class MainDashController {
     }
 
     public void onPeopleClick() throws IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("PeoplePage.fxml"));
         Parent root = loader.load();
 
@@ -449,5 +448,25 @@ public class MainDashController {
         discoverPeopleSt.setTitle("Discover people");
         discoverPeopleSt.setScene(new Scene(root, 650, 650));
         discoverPeopleSt.show();
+    }
+
+    public void onAdminProblemsClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminProblem.fxml"));
+
+            Parent root = loader.load();
+
+            AdminProblemsController controller = loader.getController();
+            controller.initialize(); // current user id to pass.
+
+            Stage notificationStage = new Stage();
+            notificationStage.initModality(Modality.APPLICATION_MODAL); //stays on top
+            notificationStage.setTitle("Notifications");
+            notificationStage.setScene(new Scene(root, 340, 420));
+            notificationStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

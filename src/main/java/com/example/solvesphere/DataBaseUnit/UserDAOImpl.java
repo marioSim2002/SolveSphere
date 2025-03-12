@@ -167,7 +167,7 @@ public class UserDAOImpl implements UserDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, status.toUpperCase()); // Ensure it stores consistent case
+            stmt.setString(1, status.toUpperCase());
             stmt.setLong(2, userId);
             stmt.executeUpdate();
         } catch (ClassNotFoundException e) {

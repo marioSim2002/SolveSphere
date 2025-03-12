@@ -1,5 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.UserData.AdminProblem;
 import com.example.solvesphere.UserData.Problem;
 
 import java.security.cert.PolicyNode;
@@ -26,4 +27,6 @@ public interface ProblemDAO {
     Map<String, Integer> getProblemCategoryCounts();
 
     List<Problem> findSimilarProblemsByTitleAndDescription(String titleInput,String descInput) throws ClassNotFoundException;
+
+    List<AdminProblem> getAdminProblems() throws SQLException, ClassNotFoundException;
 }

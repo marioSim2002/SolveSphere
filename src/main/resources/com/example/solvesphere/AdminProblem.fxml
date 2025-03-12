@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.solvesphere.AdminProblemsController"
+            prefHeight="600.0" prefWidth="800.0">
+
+    <VBox spacing="10" alignment="CENTER" style="-fx-padding: 15px;"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Title -->
+        <Label text="Admin Submitted Problems"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <!-- Search & Filtering Options -->
+        <HBox spacing="10" alignment="CENTER">
+            <TextField fx:id="searchField"
+                       promptText="Search by title or category..."
+                       onKeyReleased="#handleSearch"/>
+            <ComboBox fx:id="filterCategoryBox"
+                      promptText="Filter by Category"
+                      onAction="#handleFilter"/>
+        </HBox>
+
+        <!-- Scrollable List of Admin Problems -->
+        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
+            <VBox fx:id="problemsContainer" spacing="10"/>
+        </ScrollPane>
+
+        <!-- Buttons Section -->
+        <HBox spacing="10" alignment="CENTER">
+        </HBox>
+    </VBox>
+</AnchorPane>
