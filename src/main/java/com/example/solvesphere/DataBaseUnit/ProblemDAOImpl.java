@@ -210,6 +210,31 @@ public class ProblemDAOImpl implements ProblemDAO {
     }
 
     @Override
+    public boolean DeleteProblem(long problemId) {
+        boolean isDeleted = false;
+
+        try (Connection conn = DatabaseConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.DELETE_PROBLEM)) {
+
+            stmt.setLong(1, problemId);
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                isDeleted = true;
+                System.out.println("Problem with ID " + problemId + " deleted successfully.");
+            } else {
+                System.out.println("No problem found with ID " + problemId + ".");
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return isDeleted;
+    }
+
+
+    @Override
     public Problem getProblemById(long problemId) {
         Problem problem = null;
 

@@ -9,12 +9,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.intellij.lang.annotations.JdkConstants;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -24,6 +26,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ProblemItemController {
+    @FXML
+    private Button btDelete;
     private ScheduledExecutorService scheduler;
 
     @FXML
@@ -32,9 +36,10 @@ public class ProblemItemController {
     private Text postedBy;
     @FXML
     private Text postDate;
-    @FXML private Label problemTitle;
+    @FXML
+    private Label problemTitle;
+    @FXML
     private Problem passedProblem;
-
     private String owner ;
     private User currentUser; //the current connected use e.g signed in
     private long currentUserID;
@@ -48,11 +53,11 @@ public class ProblemItemController {
         this.owner = publisherName;
         this.currentUserID = SessionManager.getCurrentUser().getId();
         this.commentCountTxt.setText(String.valueOf(commentsCnt));
-
+        if(currentUserIsOwner()){btDelete.setVisible(true);}
     }
 
     private void initProblemCommentsCount(){
-        CommentDAO commentDAO = new CommentDAOImpl(); //////// throws  .SQLNonTransientConnectionException error
+        CommentDAO commentDAO = new CommentDAOImpl();
             int count = commentDAO.getCommentCountByProblemId(passedProblem.getId());
             commentCountTxt.setText(String.valueOf(count));
     }
@@ -121,6 +126,13 @@ public class ProblemItemController {
         shutdownScheduler();
     } //uncalled
 
+    public void deleteProblem() {
+        ProblemDAO problemDAO = new ProblemDAOImpl();
+       if(problemDAO.DeleteProblem(passedProblem.getId())){
+           AlertsUnit.successDeletionAlert();
+       }
+    }
+
     @FXML
     private void reportProblem() {
         try {
@@ -139,5 +151,9 @@ public class ProblemItemController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean currentUserIsOwner(){
+       return currentUserID == passedProblem.getUserId(); //means he is the owner
     }
 }

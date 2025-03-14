@@ -35,6 +35,10 @@ public abstract class AlertsUnit {
     public static void successAddAlert() {
         showAlert(Alert.AlertType.INFORMATION, "Success", "Your problem has been posted\nothers can interact with it and suggest solutions.");
     }
+
+    public static void successDeletionAlert() {
+        showAlert(Alert.AlertType.INFORMATION, "Success", "Your problem has been Deleted\nusers can no longer interact with or suggest solutions.");
+    }
     public static void successUserDetailUpdate() {
         showAlert(Alert.AlertType.INFORMATION, "Success", "Your details have been updated\n.Your account personal details have been updated");
     }

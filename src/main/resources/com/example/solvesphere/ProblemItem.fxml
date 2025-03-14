@@ -13,6 +13,8 @@
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Button text="View Problem Details" onAction="#onDetailsClick" styleClass="button-view-details"/>
         <Button text="Report"  onAction="#reportProblem" styleClass="button-view-details"/>
+        <Button text="Delete"  onAction="#deleteProblem" styleClass="button-view-details" fx:id="btDelete" visible="false"/>
+
     </HBox>
     <HBox spacing="5" alignment="CENTER_RIGHT">
         <Label fx:id="commentCountTxt" textAlignment="RIGHT" style="-fx-font-size: 10; -fx-font-weight: bold;"/>

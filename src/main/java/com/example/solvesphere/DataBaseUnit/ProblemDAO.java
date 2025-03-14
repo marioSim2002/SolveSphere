@@ -23,6 +23,8 @@ public interface ProblemDAO {
     List<Problem> getProblemsByCountry(String country);
     boolean addProblem(Problem problem);
 
+    boolean DeleteProblem(long problemId);
+
     Problem getProblemById(long problemId);
     Map<String, Integer> getProblemCategoryCounts();
 
