@@ -17,7 +17,6 @@ public class AdminProblemDetailsController {
     @FXML private Label adminIdLabel;
     @FXML private Label isAgeRestrictedLabel;
     @FXML private Button closeButton;
-
     private AdminProblem adminProblem;
 
     public void setAdminProblem(AdminProblem adminProblem) {

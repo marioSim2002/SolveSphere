@@ -15,6 +15,5 @@
     </HBox>
     <HBox spacing="5" alignment="CENTER_RIGHT">
         <Label fx:id="commentCountTxt" textAlignment="RIGHT" style="-fx-font-size: 10; -fx-font-weight: bold;"/>
-        <Label text="Comments" textAlignment="RIGHT" style="-fx-font-size: 10;"/>
     </HBox>
 </VBox>
