@@ -6,10 +6,7 @@ import java.util.concurrent.TimeUnit;
 import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
-import com.example.solvesphere.UserData.Comment;
-import com.example.solvesphere.UserData.FavoritesService;
-import com.example.solvesphere.UserData.Problem;
-import com.example.solvesphere.UserData.User;
+import com.example.solvesphere.UserData.*;
 import com.example.solvesphere.ValidationsUnit.ProfanityFilter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -46,7 +43,6 @@ public class ProblemDetailsController {
     @FXML
     private VBox commentListContainer;
     private CommentDAO commentDAO;
-    private ServerCommunicator serverCommunicator;
     private Problem currentProblem; // current post
     private User currentUser; // current user
     private Long currentUserId;
@@ -61,7 +57,7 @@ public class ProblemDetailsController {
         this.commentDAO = new CommentDAOImpl();
         this.ownerName  = owner;
         this.favoritesService = new FavoritesService();
-        currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(passedUser.getUsername(), passedUser.getEmail());
+        currentUserId = SessionManager.getCurrentUser().getId();
         System.out.println(passedUser.getEmail());
         System.out.println(currentUserId);
         showData();

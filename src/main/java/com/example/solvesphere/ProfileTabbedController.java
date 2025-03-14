@@ -4,6 +4,7 @@ import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.FavoritesService;
 import com.example.solvesphere.UserData.Problem;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,7 +54,6 @@ public class ProfileTabbedController {
     // VBox container where we will display the custom items (ProblemItem.fxml)
     @FXML
     private VBox problemListContainer;
-
     private User currentUser;
 
     public void initialize(User user) {
@@ -73,11 +73,7 @@ public class ProfileTabbedController {
 
     private void getFavPosts() {
         // 1) Fetch current user ID
-        ServerCommunicator serverCommunicator = new ServerCommunicator();
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(
-                currentUser.getUsername(),
-                currentUser.getEmail()
-        );
+        long currentUserId = currentUser.getId();
 
         // 2) Get favorite problem IDs
         FavoritesDAO favoritesDAO = new FavoritesDAOImpl();
@@ -101,9 +97,8 @@ public class ProfileTabbedController {
 
 
     private List<Problem> getUserPosts() {
-        ServerCommunicator serverCommunicator = new ServerCommunicator();
         ProblemDAO problemDAO = new ProblemDAOImpl();
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        long currentUserId = currentUser.getId();
         return problemDAO.getProblemsPostedByCurrentUser(currentUserId);
     }
 
@@ -150,7 +145,7 @@ public class ProfileTabbedController {
 
         //fetch favorite problem data
         FavoritesDAO favoritesDAO = new FavoritesDAOImpl();
-        long currentUserId = new ServerCommunicator().fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        long currentUserId = currentUser.getId();
 
         List<Long> favoriteProblemIDs = favoritesDAO.getFavoriteProblemsByUser(currentUserId);
         ProblemDAO problemDAO = new ProblemDAOImpl();
@@ -174,8 +169,7 @@ public class ProfileTabbedController {
         friendsListContainer.getChildren().clear();
 
         FriendDAO friendDAO = new FriendDAOImpl();
-        ServerCommunicator serverCommunicator = new ServerCommunicator();
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        long currentUserId = currentUser.getId();
 
         List<User> friends = friendDAO.getFriendsListAsUsers(currentUserId);
 
