@@ -88,15 +88,14 @@ public class ServerCommunicator {
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-            // Send login command and credentials
+            //send login command and credentials
             out.writeObject("LOGIN");
             out.writeObject(new String[]{username, password});
             out.flush();
 
-            // Read the response from the server
             Object response = in.readObject();
 
-            // Handle the response based on its type
+            //handle the response based on its type
             if (response instanceof User user) {
                 System.out.println("Login successful for: " + user.getUsername());
                 return user;

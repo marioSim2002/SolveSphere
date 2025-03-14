@@ -57,35 +57,35 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 long userId = rs.getLong("id");
                 Map<String, Integer> fieldsOfInterest = fetchFieldsOfInterest(userId);
-                String storedHashedPassword = rs.getString("password"); // Get the hashed password from the database
-
+                String storedHashedPassword = rs.getString("password");
                 byte[] profilePicture = rs.getBytes("profile_picture");
 
-                // retrieve active status
+                //  properly handle the active status
                 String activeStatus = rs.getString("ACTIVE");
-                boolean isActive = "ACTIVE".equalsIgnoreCase(activeStatus); // 'ACTIVE' to boolean true
+                boolean isActive = "ACTIVE".equalsIgnoreCase(activeStatus); //  'ACTIVE' to boolean true
 
                 user = new User(
                         rs.getString("username"),
                         rs.getString("email"),
-                        storedHashedPassword, //use the stored hashed password
+                        storedHashedPassword,
                         rs.getDate("date_of_birth").toLocalDate(),
                         rs.getString("country"),
                         fieldsOfInterest,
                         rs.getDate("registration_date").toLocalDate(),
-                        profilePicture,  //image as byte[]
-                        isActive // store the active status
+                        profilePicture,
+                        isActive
                 );
 
-                // Compare the plain password with the stored hashed password
+                user.setId(userId); // set the user's id
+
                 PasswordHasher hasher = new PasswordHasher();
                 if (!hasher.verifyPassword(password, storedHashedPassword)) {
                     System.out.println("Password verification failed");
-                    user = null; // Password does not match
+                    return null; // Return null if the password does not match
                 } else {
                     System.out.println("Password verification succeeded");
 
-                    // Update user status to active upon successful login
+                    //updates user status to ACTIVE upon successful login
                     setUserActiveStatus(userId, true);
                 }
             }
@@ -93,7 +93,7 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
 
-        return user; // return the user if credentials are valid, otherwise null
+        return user;
     }
 
     /**

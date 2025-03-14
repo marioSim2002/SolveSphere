@@ -3,6 +3,7 @@ package com.example.solvesphere;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.DataBaseUnit.UserDAOImpl;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,6 +62,7 @@ public class LogInUiController {
                 AlertsUnit.showErrorAlert("Your account has been banned. Please contact support.");
                 return;
             }
+                SessionManager.setCurrentUser(user);
                 transitionToUserDashboard(user);
 
         } else if (response instanceof String message) {

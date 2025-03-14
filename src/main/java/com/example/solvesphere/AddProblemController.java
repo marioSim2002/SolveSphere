@@ -2,6 +2,7 @@ package com.example.solvesphere;
 
 import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.UserData.Problem;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class AddProblemController {
 
@@ -115,16 +117,8 @@ public class AddProblemController {
         boolean isAgeRestricted = ageRestrictionCheckbox.isSelected();
         List<String> tags = List.of(tagsText.split("\\s*,\\s*"));
 
-        // Fetch user ID
-        ServerCommunicator communicator = ServerCommunicator.getInstance();
-        Long userId = communicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
-        if (userId == null) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        // Create and submit the problem
-        Problem problem = new Problem(0, title, description, userId, LocalDateTime.now(), category, isAgeRestricted);
+        long currentUserId = SessionManager.getCurrentUser().getId();
+        Problem problem = new Problem(0, title, description, currentUserId, LocalDateTime.now(), category, isAgeRestricted);
         boolean isSuccess = problemDAO.addProblem(problem);
 
         if (isSuccess) {

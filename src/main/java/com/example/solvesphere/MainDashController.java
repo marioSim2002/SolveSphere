@@ -2,6 +2,7 @@ package com.example.solvesphere;
 import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.Inspector;
 import javafx.application.Platform;
@@ -61,8 +62,9 @@ public class MainDashController {
    ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void initUserData(User user) {
+        System.out.println("SM TEST : "+SessionManager.getCurrentUser().getId());
         this.currentUser = user;
-        this.currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(), user.getEmail());
+        this.currentUserId = SessionManager.getCurrentUser().getId();
         NotificationsController notificationsController = new NotificationsController();
         buildImage(currentUser);
         fetchAndDisplayProblems();
@@ -148,9 +150,7 @@ public class MainDashController {
 
         ProblemDAO problemDAO = new ProblemDAOImpl();
         FriendDAO friendDAO = new FriendDAOImpl();
-        UserDAO userDAO = new UserDAOImpl();
-        long userId = userDAO.getUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
-
+        long userId = SessionManager.getCurrentUser().getId();
         stopAutoRefresh(); // stop auto-refreshing the problem list
 
         List<Problem> problems = new ArrayList<>(); //an empty list if no case is matched

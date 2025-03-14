@@ -2,6 +2,7 @@ package com.example.solvesphere;
 import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,7 +38,6 @@ public class ProblemItemController {
     private String owner ;
     private User currentUser; //the current connected use e.g signed in
     private long currentUserID;
-    private final ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void setProblemData(Problem problem,User passedUser,int commentsCnt,String publisherName) {
         this.problemTitle.setText(problem.getTitle());
@@ -46,7 +46,7 @@ public class ProblemItemController {
         this.passedProblem = problem;
         this.currentUser = passedUser;
         this.owner = publisherName;
-        this.currentUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
+        this.currentUserID = SessionManager.getCurrentUser().getId();
         this.commentCountTxt.setText(String.valueOf(commentsCnt));
 
     }
@@ -119,7 +119,7 @@ public class ProblemItemController {
     @FXML
     private void onClose() {
         shutdownScheduler();
-    }
+    } //uncalled
 
     @FXML
     private void reportProblem() {

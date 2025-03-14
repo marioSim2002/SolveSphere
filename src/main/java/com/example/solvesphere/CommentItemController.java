@@ -4,6 +4,7 @@ import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Comment;
 import com.example.solvesphere.UserData.Problem;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
@@ -41,6 +42,8 @@ public class CommentItemController {
     private final CommentDAO commentDAO = new CommentDAOImpl();
     private final UserVotesDAO voteDAO = new UserVotesDAOImpl();
     ServerCommunicator serverCommunicator = new ServerCommunicator();
+
+    private final long currentUserId = SessionManager.getCurrentUser().getId();
     boolean isPostOwner;
 
     public void setProblemDetailsController(ProblemDetailsController parentController) {
@@ -56,7 +59,6 @@ public class CommentItemController {
         initButtons(comment);
         updateVoteCounts(comment);
 
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         isPostOwner = (problem.getUserId() == currentUserId);
 
         if (comment.getUserId() == currentUserId) {
@@ -95,7 +97,6 @@ public class CommentItemController {
 
     @FXML
     public void initButtons(Comment comment) {
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
 
         if (voteDAO.hasUserVoted(currentUserId, comment.getId())) {
             String voteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
@@ -117,7 +118,6 @@ public class CommentItemController {
 
     @FXML
     public void handleUpvote(Comment comment) {
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
 
         if ("upvote".equals(currentVoteType)) {
@@ -135,7 +135,6 @@ public class CommentItemController {
 
     @FXML
     public void handleDownvote(Comment comment) {
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         String currentVoteType = voteDAO.getUserVoteType(currentUserId, comment.getId());
 
         if ("downvote".equals(currentVoteType)) {
@@ -173,9 +172,7 @@ public class CommentItemController {
     }
 
     public void deleteComment() {
-        long currentUserId = serverCommunicator.fetchUserIdByUsernameAndEmail(currentUser.getUsername(), currentUser.getEmail());
         long commentId = currentComment.getId();
-
         Comment comment = commentDAO.getCommentById(commentId);
 
         if (comment == null) {

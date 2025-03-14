@@ -5,6 +5,7 @@ import com.example.solvesphere.DataBaseUnit.FriendDAO;
 import com.example.solvesphere.DataBaseUnit.FriendDAOImpl;
 import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
+import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -78,15 +79,15 @@ public class IndividualUserViewController {
         FriendDAO friendDAO = new FriendDAOImpl();
 
         long goalUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(goalUser.getUsername(), goalUser.getEmail());//get the goal user(to add) ID
-        long currentAppUserID = serverCommunicator.fetchUserIdByUsernameAndEmail(currentAppUser.getUsername(), currentAppUser.getEmail());
+        long currentAppUserID = SessionManager.getCurrentUser().getId();
         friendDAO.sendFriendRequest(currentAppUserID,goalUserID);
         addFriendButton.setText("Request Sent");
     }
 
     private boolean checkFriendsStatus(){
-        return friendDAO.areUsersFriends(extractUserID(goalUser),extractUserID(currentAppUser));
+        return friendDAO.areUsersFriends(extractGeneralUserID(goalUser),extractGeneralUserID(currentAppUser));
     }
-    private long extractUserID(User user){
+    private long extractGeneralUserID(User user){
         ServerCommunicator serverCommunicator = new ServerCommunicator();
         return serverCommunicator.fetchUserIdByUsernameAndEmail(user.getUsername(),user.getEmail());
     }
