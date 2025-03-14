@@ -24,4 +24,8 @@
     <!-- View Profile Button -->
     <Button text="View" fx:id="viewProfileButton" onAction="#onViewProfileClick"
             style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12px; -fx-border-radius: 5;"/>
+
+    <!-- delete friend Button -->
+    <Button text="Unfriend" fx:id="deleteFriend" onAction="#onDeleteFriendClick"
+            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 12px; -fx-border-radius: 5;"/>
 </HBox>

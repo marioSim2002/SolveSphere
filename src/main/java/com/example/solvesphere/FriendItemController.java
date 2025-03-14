@@ -1,6 +1,9 @@
 package com.example.solvesphere;
 
+import com.example.solvesphere.DataBaseUnit.FriendDAO;
+import com.example.solvesphere.DataBaseUnit.FriendDAOImpl;
 import com.example.solvesphere.UserData.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,9 +20,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class FriendItemController {
+    @FXML private Button deleteFriend;
     @FXML private ImageView profileImage;
     @FXML private Label usernameLabel;
     @FXML private Button viewProfileButton;
+    private ProfileTabbedController profileTabbedController;
 
     private User friend;
     private User currentUser;
@@ -54,6 +59,15 @@ public class FriendItemController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void onDeleteFriendClick() {
+        FriendDAO friendDAO = new FriendDAOImpl();
+        if (friendDAO.removeFriend(currentUser.getId(), friend.getId())) {
+            profileTabbedController.loadFriendsList();
+            AlertsUnit.successFriendDeletionAlert(friend.getUsername());
+
         }
     }
 }

@@ -170,7 +170,7 @@ public class ProfileTabbedController {
         }
     }
 
-    private void loadFriendsList() {
+    public void loadFriendsList() {
         friendsListContainer.getChildren().clear();
 
         FriendDAO friendDAO = new FriendDAOImpl();

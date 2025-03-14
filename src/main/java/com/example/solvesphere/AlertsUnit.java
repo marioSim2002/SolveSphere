@@ -36,7 +36,7 @@ public abstract class AlertsUnit {
         showAlert(Alert.AlertType.INFORMATION, "Success", "Your problem has been posted\nothers can interact with it and suggest solutions.");
     }
 
-    public static void successDeletionAlert() {
+    public static void successProblemDeletionAlert() {
         showAlert(Alert.AlertType.INFORMATION, "Success", "Your problem has been Deleted\nusers can no longer interact with or suggest solutions.");
     }
     public static void successUserDetailUpdate() {
@@ -77,5 +77,10 @@ public abstract class AlertsUnit {
 
     public static void commentNotFoundAlert() {
         showAlert(Alert.AlertType.ERROR, "Error", "The comment you are trying to delete does not exist.");
+    }
+
+    public static void successFriendDeletionAlert(String friendUsername) {
+        showAlert(Alert.AlertType.ERROR, "Success", "You and "+friendUsername+" are no longer friends");
+
     }
 }

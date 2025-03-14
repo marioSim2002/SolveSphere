@@ -129,7 +129,7 @@ public class ProblemItemController {
     public void deleteProblem() {
         ProblemDAO problemDAO = new ProblemDAOImpl();
        if(problemDAO.DeleteProblem(passedProblem.getId())){
-           AlertsUnit.successDeletionAlert();
+           AlertsUnit.successProblemDeletionAlert();
        }
     }
 
