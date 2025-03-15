@@ -55,14 +55,14 @@ public class RegisterController {
 
     @FXML
     public void registerUser() {
-        // Collect user data
+        //collect user data
         String username = TxtUsername.getText();
         String email = TxtMail.getText();
         String password = getPassword();
         LocalDate dateOfBirth = DateOfBirthVal.getValue();
-        String country = CountryInput.getValue();
+        String country = CountryInput.getValue().toLowerCase();
 
-        // Validate data before sending to the server
+        //validate data before sending to the server
         String[] userDataArr = {username, email, password, country};
         if (!ValidateInputData.validTxtData(userDataArr) ||
                 !ValidateInputData.validEmail(email) ||

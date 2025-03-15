@@ -177,7 +177,7 @@ public class ProblemDAOImpl implements ProblemDAO {
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(ProblemQueries.SELECT_PROBLEMS_IN_USER_COUNTRY)) {
 
-            stmt.setString(1, country);
+            stmt.setString(1, country.toLowerCase());
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

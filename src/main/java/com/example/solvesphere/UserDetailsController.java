@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 
 public class UserDetailsController {
 
-    private byte[] profilePicture; // Store the image as a byte array
-    private List<Problem> problems; // List of problems associated with the user
+    private byte[] profilePicture;
 
     @FXML
     private TextField usernameField;
@@ -77,7 +76,7 @@ public class UserDetailsController {
             profilePicture = convertImageToByteArray(selectedFile);
             profilePictureView.setImage(new Image(selectedFile.toURI().toString()));
 
-            // Save the new profile picture to the database
+            //save the new profile picture to the database
             currentUser.setProfilePicture(profilePicture);
             UserDataModifier userModDAO = new UserDataModifierImpl();
             if (userModDAO.updateUserProfilePicture(currentUser.getId(), profilePicture)) {
@@ -101,7 +100,7 @@ public class UserDetailsController {
 
         currentUser.setUsername(usernameField.getText());
         currentUser.setDateOfBirth(dateOfBirthPicker.getValue());
-        currentUser.setCountry(countryField.getText());
+        currentUser.setCountry(countryField.getText().toLowerCase());
 
         Map<String, Integer> interestsMap = new HashMap<>();
         for (String interest : interestsField.getText().split(",")) {

@@ -59,7 +59,6 @@ public class MainDashController {
     private ListView<String> chatListView;
     private final String fetch_problems_cmd = "FETCH_PROBLEMS";
    private long currentUserId ;
-   ServerCommunicator serverCommunicator = new ServerCommunicator();
 
     public void initUserData(User user) {
         System.out.println("SM TEST : "+SessionManager.getCurrentUser().getId());
