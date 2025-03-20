@@ -18,4 +18,7 @@ public class UserQueries {
     public static final String GET_USER_ACTIVITY_STATUS = "SELECT ACTIVE FROM users WHERE id = ?";
     public static String SEARCH_USER_SCRIPT =  "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ? OR country LIKE ?";
     public static String GET_ALL_USERS =  "SELECT id, username, email, country, profile_picture, date_of_birth, registration_date FROM users";
+    public static String UPDATE_USER_PROFILE_PIC =  "UPDATE users SET profile_picture = ? WHERE id = ?";
+
+
 }

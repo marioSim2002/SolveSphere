@@ -1,6 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
 import com.example.solvesphere.DBQueries.UpdateUserQueries;
+import com.example.solvesphere.DBQueries.UserQueries;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
@@ -78,10 +79,9 @@ public class UserDataModifierImpl implements UserDataModifier {
 
     @Override
     public boolean updateUserProfilePicture(long userId, byte[] profilePicture) {
-        String sql = "UPDATE users SET profile_picture = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.UPDATE_USER_PROFILE_PIC)) {
 
             if (profilePicture != null && profilePicture.length > 0) {
                 stmt.setBytes(1, profilePicture);
