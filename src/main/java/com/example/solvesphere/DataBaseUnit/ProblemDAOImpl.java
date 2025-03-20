@@ -290,9 +290,8 @@ public class ProblemDAOImpl implements ProblemDAO {
     public List<Problem> findSimilarProblemsByTitleAndDescription(String titleInput, String descInput) throws ClassNotFoundException {
         List<Problem> similarProblems = new ArrayList<>();
 
-        // Dynamic query building
-        String sql = "SELECT id, user_id, title, description, category, created_at, is_age_restricted " +
-                "FROM problems WHERE 1=1 ";
+        // dynamic query building
+        String sql = ProblemQueries.FETCH_SIMILAR_PROBLEMS;
 
         if (!titleInput.isEmpty()) {
             sql += "AND INSTR(title, ?) > 0 ";
@@ -335,10 +334,9 @@ public class ProblemDAOImpl implements ProblemDAO {
 
     @Override
     public List<AdminProblem> getAdminProblems() throws SQLException, ClassNotFoundException {
-        String FETCH_ADMIN_PROBLEMS_SQL = "SELECT id, admin_id, title, description, category, created_at, is_age_restricted FROM admin_problems ORDER BY created_at DESC";
         List<AdminProblem> problems = new ArrayList<>();
         try (Connection conn = AdminsDBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(FETCH_ADMIN_PROBLEMS_SQL);
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.GET_ADMIN_PROBLEMS);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {

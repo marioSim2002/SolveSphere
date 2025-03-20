@@ -103,10 +103,9 @@ public class UserDAOImpl implements UserDAO {
      * @param isActive The active status to set (true for active, false for inactive)
      */
     private void setUserActiveStatus(long userId, boolean isActive) {
-        String updateQuery = "UPDATE users SET active = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SET_ACTIVITY_STATUS)) {
 
             stmt.setString(1, isActive ? "ACTIVE" : "INACTIVE");
             stmt.setLong(2, userId);
@@ -156,7 +155,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void setUserActivityStatus(long userId, String status) throws SQLException {
-        String sql = "UPDATE users SET ACTIVE = ? WHERE id = ?";
 
         if (!status.equalsIgnoreCase("ACTIVE") &&
                 !status.equalsIgnoreCase("INACTIVE") &&
@@ -165,7 +163,7 @@ public class UserDAOImpl implements UserDAO {
         }
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SET_ACTIVITY_STATUS)) {
 
             stmt.setString(1, status.toUpperCase());
             stmt.setLong(2, userId);
@@ -178,11 +176,10 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public String getUserActivityStatus(long userId) throws SQLException {
-        String sql = "SELECT ACTIVE FROM users WHERE id = ?";
         String status = "INACTIVE";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.GET_USER_ACTIVITY_STATUS)) {
             System.out.println("getting "+userId+" act stat");
             stmt.setLong(1, userId);
             ResultSet rs = stmt.executeQuery();
@@ -355,10 +352,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> searchUsers(String keyword) throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, email, profile_picture FROM users WHERE username LIKE ? OR country LIKE ?";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SEARCH_USER_SCRIPT)) {
 
             stmt.setString(1, "%" + keyword + "%");
             stmt.setString(2, "%" + keyword + "%");
@@ -382,10 +378,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, email, country, profile_picture, date_of_birth, registration_date FROM users";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.GET_ALL_USERS);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -439,7 +434,7 @@ public class UserDAOImpl implements UserDAO {
         long userId = -1;
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.SELECT_USER_BY_USERNAME_AND_PASSWORD)) {
 
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();

@@ -19,7 +19,9 @@ public class ProblemQueries {
 
     public static final String SELECT_PROBLEM_TAGS = "SELECT tag_id FROM problem_tags WHERE problem_id = ?";
 
-
     public static final String GET_CATEGORY_COUNTS_QUERY = "SELECT category, COUNT(*) AS count FROM problems GROUP BY category";
+    public static final String FETCH_SIMILAR_PROBLEMS = "SELECT id, user_id, title, description, category, created_at, is_age_restricted " +
+            "FROM problems WHERE 1=1";
     public static final String GET_SOLS_FOR_PROBLEM = "SELECT * FROM comments WHERE problem_id = ? AND is_solution = TRUE LIMIT 1";
+    public static final String GET_ADMIN_PROBLEMS = "SELECT id, admin_id, title, description, category, created_at, is_age_restricted FROM admin_problems ORDER BY created_at DESC";
 }
