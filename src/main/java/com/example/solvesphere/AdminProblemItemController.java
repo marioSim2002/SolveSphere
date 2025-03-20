@@ -1,5 +1,4 @@
 package com.example.solvesphere;
-import com.example.solvesphere.DataBaseUnit.CommentDAO;
 import com.example.solvesphere.UserData.AdminProblem;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

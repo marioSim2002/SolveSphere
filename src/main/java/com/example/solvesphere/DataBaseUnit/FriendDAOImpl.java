@@ -1,5 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.DBQueries.FriendsQueries;
+import com.example.solvesphere.DBQueries.UserQueries;
 import com.example.solvesphere.UserData.User;
 
 import java.sql.*;
@@ -13,10 +15,9 @@ public class FriendDAOImpl implements FriendDAO {
     @Override
     public boolean sendFriendRequest(long userId, long friendId) {
         // first, check if the friendship record already exists
-        String checkQuery = "SELECT status FROM friends WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+             PreparedStatement checkStmt = conn.prepareStatement(FriendsQueries.CHECK_IF_RECORD_EXISTS)) {
 
             checkStmt.setLong(1, userId);
             checkStmt.setLong(2, friendId);
@@ -30,7 +31,7 @@ public class FriendDAOImpl implements FriendDAO {
 
                 if ("pending".equals(existingStatus)) {
                     System.out.println("Friend request already sent.");
-                    return false; // Request already exists
+                    return false; //request already exists
                 } else if ("accepted".equals(existingStatus)) {
                     System.out.println("You are already friends!");
                     return false; // Already friends
@@ -41,11 +42,9 @@ public class FriendDAOImpl implements FriendDAO {
             return false;
         }
 
-        // If no existing record, insert the friend request
-        String sql = "INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 'pending')";
-
+        // if no existing record, insert the friend request
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.INSERT_PENDING_FRIEND)) {
 
             stmt.setLong(1, userId);
             stmt.setLong(2, friendId);
@@ -73,9 +72,8 @@ public class FriendDAOImpl implements FriendDAO {
     }
 
     private String getUsernameById(long userId) {
-        String sql = "SELECT username FROM users WHERE id = ?";
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UserQueries.GET_USERNAME_BY_ID)) {
             stmt.setLong(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -90,10 +88,9 @@ public class FriendDAOImpl implements FriendDAO {
 
     @Override
     public boolean acceptFriendRequest(long userId, long friendId) {
-        String sql = "UPDATE friends SET status = 'accepted' WHERE user_id = ? AND friend_id = ? AND status = 'pending'";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.ACCEPT_FRIEND_REQ)) {
 
             stmt.setLong(1, friendId);  // Friend is now accepting
             stmt.setLong(2, userId);
@@ -107,10 +104,9 @@ public class FriendDAOImpl implements FriendDAO {
     }
     @Override
     public boolean removeFriend(long userId, long friendId) {
-        String sql = "DELETE FROM friends WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.REMOVE_FRIEND)) {
 
             stmt.setLong(1, userId);
             stmt.setLong(2, friendId);
@@ -128,11 +124,9 @@ public class FriendDAOImpl implements FriendDAO {
     @Override
     public List<Long> getFriends(long userId) {
         List<Long> friends = new ArrayList<>();
-        String sql = "SELECT friend_id FROM friends WHERE user_id = ? AND status = 'accepted' " +
-                "UNION SELECT user_id FROM friends WHERE friend_id = ? AND status = 'accepted'";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.GET_FRIENDS_LIST)) {
 
             stmt.setLong(1, userId);
             stmt.setLong(2, userId);
@@ -149,12 +143,9 @@ public class FriendDAOImpl implements FriendDAO {
 
     @Override
     public boolean areUsersFriends(long userId1, long userId2) {
-        String sql = "SELECT COUNT(*) FROM friends " +
-                "WHERE ((user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)) " +
-                "AND status = 'accepted'";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.CHECK_IF_USERS_FRIENDS)) {
 
             stmt.setLong(1, userId1);
             stmt.setLong(2, userId2);
@@ -210,10 +201,9 @@ public class FriendDAOImpl implements FriendDAO {
 
     @Override
     public boolean markFriendRequestAsSeen(long userId, long friendId) {
-        String sql = "UPDATE friends SET seen = 1 WHERE user_id = ? AND friend_id = ? AND status = 'pending'";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.MARK_REQUEST_SEEN)) {
 
             stmt.setLong(1, friendId);
             stmt.setLong(2, userId);
@@ -271,10 +261,9 @@ public class FriendDAOImpl implements FriendDAO {
     @Override
     public List<Long> getFriendIds(long userId) {
         List<Long> friendIds = new ArrayList<>();
-        String sql = "SELECT user_id, friend_id FROM friends WHERE (user_id = ? OR friend_id = ?) AND status = 'accepted'";
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(FriendsQueries.GET_FRIENDS_IDS)) {
 
             stmt.setLong(1, userId);
             stmt.setLong(2, userId);

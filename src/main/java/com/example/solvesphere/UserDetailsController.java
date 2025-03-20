@@ -2,7 +2,6 @@ package com.example.solvesphere;
 
 import com.example.solvesphere.DataBaseUnit.UserDataModifier;
 import com.example.solvesphere.DataBaseUnit.UserDataModifierImpl;
-import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
 import javafx.fxml.FXML;
@@ -13,11 +12,8 @@ import javafx.stage.FileChooser;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class UserDetailsController {
 

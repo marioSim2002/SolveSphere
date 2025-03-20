@@ -1,6 +1,5 @@
 package com.example.solvesphere.ValidationsUnit;
 
-import com.example.solvesphere.Algos.SuggestionsAlgo;
 import com.example.solvesphere.DataBaseUnit.*;
 import com.example.solvesphere.MainDashController;
 import com.example.solvesphere.NotificationsController;

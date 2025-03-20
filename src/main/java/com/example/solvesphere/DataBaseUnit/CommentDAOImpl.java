@@ -1,5 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
+import com.example.solvesphere.DBQueries.ProblemQueries;
 import com.example.solvesphere.NotificationsUnit.NotificationSender;
 import com.example.solvesphere.DBQueries.CommentsQueries;
 import com.example.solvesphere.UserData.Comment;
@@ -150,9 +151,8 @@ public class CommentDAOImpl implements CommentDAO {
 
     @Override
     public Comment getSolutionForProblem(long problemId) {
-        String sql = "SELECT * FROM comments WHERE problem_id = ? AND is_solution = TRUE LIMIT 1";
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(ProblemQueries.GET_SOLS_FOR_PROBLEM)) {
             stmt.setLong(1, problemId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

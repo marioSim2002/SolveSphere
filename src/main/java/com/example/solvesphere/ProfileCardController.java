@@ -10,11 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.xml.transform.sax.TemplatesHandler;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.SQLException;

@@ -1,8 +1,9 @@
 package com.example.solvesphere.UserData;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.sql.Timestamp;
-
-public class Comment {
+public class Comment implements Serializable {
     private long id;
     private long problemId;
     private long userId;

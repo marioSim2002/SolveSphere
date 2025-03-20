@@ -7,7 +7,6 @@ import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import javafx.animation.ScaleTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;

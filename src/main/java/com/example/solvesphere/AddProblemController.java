@@ -5,7 +5,6 @@ import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 import com.example.solvesphere.ValidationsUnit.ValidateInputData;
-import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 public class AddProblemController {
 

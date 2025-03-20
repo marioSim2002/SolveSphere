@@ -21,4 +21,5 @@ public class ProblemQueries {
 
 
     public static final String GET_CATEGORY_COUNTS_QUERY = "SELECT category, COUNT(*) AS count FROM problems GROUP BY category";
+    public static final String GET_SOLS_FOR_PROBLEM = "SELECT * FROM comments WHERE problem_id = ? AND is_solution = TRUE LIMIT 1";
 }

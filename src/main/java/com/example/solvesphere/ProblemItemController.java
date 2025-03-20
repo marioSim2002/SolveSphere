@@ -1,10 +1,8 @@
 package com.example.solvesphere;
 import com.example.solvesphere.DataBaseUnit.*;
-import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,11 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.intellij.lang.annotations.JdkConstants;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
