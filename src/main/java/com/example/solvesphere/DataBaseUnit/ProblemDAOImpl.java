@@ -290,27 +290,28 @@ public class ProblemDAOImpl implements ProblemDAO {
     public List<Problem> findSimilarProblemsByTitleAndDescription(String titleInput, String descInput) throws ClassNotFoundException {
         List<Problem> similarProblems = new ArrayList<>();
 
-        // dynamic query building
-        String sql = ProblemQueries.FETCH_SIMILAR_PROBLEMS;
+        // Start SQL query
+        StringBuilder sql = new StringBuilder("SELECT id, user_id, title, description, category, created_at, is_age_restricted FROM problems WHERE 1=1");
+
+        List<String> params = new ArrayList<>();
 
         if (!titleInput.isEmpty()) {
-            sql += "AND INSTR(title, ?) > 0 ";
+            sql.append(" AND title LIKE ?");
+            params.add("%" + titleInput + "%");  //  LIKE for partial match
         }
         if (!descInput.isEmpty()) {
-            sql += "AND INSTR(description, ?) > 0 ";
+            sql.append(" AND description LIKE ?");
+            params.add("%" + descInput + "%");
         }
 
-        sql += "ORDER BY created_at DESC LIMIT 5"; // by recent problems
+        sql.append(" ORDER BY created_at DESC LIMIT 5");
 
         try (Connection conn = DatabaseConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
 
-            int paramIndex = 1;
-            if (!titleInput.isEmpty()) {
-                stmt.setString(paramIndex++, titleInput);  //using "contains" logic for title
-            }
-            if (!descInput.isEmpty()) {
-                stmt.setString(paramIndex++, descInput);
+            // Set parameters dynamically
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setString(i + 1, params.get(i));
             }
 
             ResultSet rs = stmt.executeQuery();

@@ -30,7 +30,7 @@ public class UserVotesDAOImpl implements UserVotesDAO {
         String currentVoteType = getUserVoteType(userId, commentId);
 
         if (currentVoteType == null) {
-            // User hasn't voted yet, insert a new record
+            // user hasn't voted yet, insert a new record
             try (Connection conn = DatabaseConnectionManager.getConnection();
                  PreparedStatement stmt = conn.prepareStatement(VoteQueries.RECORD_VOTE)) {
                 stmt.setLong(1, userId);
