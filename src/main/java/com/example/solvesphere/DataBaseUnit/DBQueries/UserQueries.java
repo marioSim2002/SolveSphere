@@ -1,4 +1,4 @@
-package com.example.solvesphere.DBQueries;
+package com.example.solvesphere.DataBaseUnit.DBQueries;
 
 import java.io.StringReader;
 

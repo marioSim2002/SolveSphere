@@ -59,7 +59,6 @@
     <left>
         <VBox spacing="14" style="-fx-background-color: #333333; -fx-padding: 10;">
             <ImageView fx:id="profileImg" styleClass="image-view" fitWidth="90" fitHeight="90" preserveRatio="true"/>
-            <Button onAction="#onHomeClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Home" />
             <Button onAction="#onPeopleClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Discover People" />
             <Button onAction="#onAdminProblemsClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Admins Posts" />
             <Button onAction="#onProfileClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Profile Data" />

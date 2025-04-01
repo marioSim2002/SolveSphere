@@ -1,6 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.FavoritesQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.FavoritesQueries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package com.example.solvesphere.DBQueries;
+package com.example.solvesphere.DataBaseUnit.DBQueries;
 
 public class CommentsQueries {
     public static final String INSERT_COMMENT = "INSERT INTO comments (problem_id, user_id, content, created_at) VALUES (?, ?, ?, ?)";

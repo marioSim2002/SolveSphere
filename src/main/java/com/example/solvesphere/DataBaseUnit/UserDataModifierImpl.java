@@ -1,8 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.UpdateUserQueries;
-import com.example.solvesphere.DBQueries.UserQueries;
-import com.example.solvesphere.ServerUnit.ServerCommunicator;
+import com.example.solvesphere.DataBaseUnit.DBQueries.UpdateUserQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.UserQueries;
 import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
 

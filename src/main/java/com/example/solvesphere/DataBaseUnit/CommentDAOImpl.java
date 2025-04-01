@@ -1,8 +1,8 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.ProblemQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.ProblemQueries;
 import com.example.solvesphere.NotificationsUnit.NotificationSender;
-import com.example.solvesphere.DBQueries.CommentsQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.CommentsQueries;
 import com.example.solvesphere.UserData.Comment;
 
 import java.sql.*;

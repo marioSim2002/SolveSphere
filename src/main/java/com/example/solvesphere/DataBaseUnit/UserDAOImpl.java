@@ -1,6 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.UserQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.UserQueries;
 import com.example.solvesphere.SecurityUnit.PasswordHasher;
 import com.example.solvesphere.UserData.Problem;
 import com.example.solvesphere.UserData.User;

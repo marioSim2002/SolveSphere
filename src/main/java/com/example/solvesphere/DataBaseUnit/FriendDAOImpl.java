@@ -1,7 +1,7 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.FriendsQueries;
-import com.example.solvesphere.DBQueries.UserQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.FriendsQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.UserQueries;
 import com.example.solvesphere.UserData.User;
 
 import java.sql.*;

@@ -21,9 +21,6 @@
             <TextField fx:id="searchField"
                        promptText="Search by title or category..."
                        onKeyReleased="#handleSearch"/>
-            <ComboBox fx:id="filterCategoryBox"
-                      promptText="Filter by Category"
-                      onAction="#handleFilter"/>
         </HBox>
 
         <!-- Scrollable List of Admin Problems -->

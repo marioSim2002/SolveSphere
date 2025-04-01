@@ -14,7 +14,6 @@ public class AdminProblemDetailsController {
     @FXML private Label descriptionLabel;
     @FXML private Label categoryLabel;
     @FXML private Label createdAtLabel;
-    @FXML private Label adminIdLabel;
     @FXML private Label isAgeRestrictedLabel;
     @FXML private Button closeButton;
     private AdminProblem adminProblem;
@@ -26,7 +25,6 @@ public class AdminProblemDetailsController {
         descriptionLabel.setText("Description: " + adminProblem.getDescription());
         categoryLabel.setText("Category: " + adminProblem.getCategory());
         createdAtLabel.setText("Created At: " + formatDate(Timestamp.valueOf(adminProblem.getCreatedAt())));
-        adminIdLabel.setText("Admin ID: " + adminProblem.getAdminId());
         isAgeRestrictedLabel.setText("Age Restricted: " + (adminProblem.isAgeRestricted() ? "Yes" : "No"));
     }
 

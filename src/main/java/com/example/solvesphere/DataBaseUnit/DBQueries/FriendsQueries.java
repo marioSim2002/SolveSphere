@@ -1,4 +1,4 @@
-package com.example.solvesphere.DBQueries;
+package com.example.solvesphere.DataBaseUnit.DBQueries;
 
 public class FriendsQueries {
 

@@ -1,6 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.ProblemQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.ProblemQueries;
 import com.example.solvesphere.UserData.AdminProblem;
 import com.example.solvesphere.UserData.Problem;
 

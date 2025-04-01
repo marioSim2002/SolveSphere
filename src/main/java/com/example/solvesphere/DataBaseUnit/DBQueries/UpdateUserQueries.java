@@ -1,4 +1,4 @@
-package com.example.solvesphere.DBQueries;
+package com.example.solvesphere.DataBaseUnit.DBQueries;
 
 public class UpdateUserQueries {
     public static final String UPDATE_USER_DATA_SCRIPT = "UPDATE users SET username = ?, email = ?, country = ?, profile_picture = ? WHERE id = ?";

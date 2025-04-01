@@ -1,6 +1,6 @@
 package com.example.solvesphere.DataBaseUnit;
 
-import com.example.solvesphere.DBQueries.VoteQueries;
+import com.example.solvesphere.DataBaseUnit.DBQueries.VoteQueries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

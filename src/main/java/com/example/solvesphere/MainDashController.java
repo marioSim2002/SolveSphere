@@ -280,10 +280,6 @@ public class MainDashController {
 
 
     @FXML
-    public void onHomeClick() {
-    }
-
-    @FXML
     public void onProfileClick() {
         try {
             if (profileStage != null && profileStage.isShowing()) {
@@ -458,7 +454,7 @@ public class MainDashController {
 
             Stage notificationStage = new Stage();
             notificationStage.initModality(Modality.APPLICATION_MODAL); //stays on top
-            notificationStage.setTitle("Notifications");
+            notificationStage.setTitle("Admin problems");
             notificationStage.setScene(new Scene(root, 340, 420));
             notificationStage.show();
 

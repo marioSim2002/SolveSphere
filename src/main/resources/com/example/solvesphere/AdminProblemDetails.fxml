@@ -7,16 +7,32 @@
 <VBox xmlns="http://javafx.com/javafx/19"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.solvesphere.AdminProblemDetailsController"
+      alignment="CENTER"
       spacing="15"
-      style="-fx-padding: 20px; -fx-background-color: #f4f4f4;">
+      style="
+          -fx-padding: 20px;
+          -fx-background-color: #f4f4f4;
+          -fx-border-color: #ccc;
+          -fx-border-width: 1px;
+          -fx-background-radius: 10;
+          -fx-border-radius: 10;
+      ">
 
     <Label text="Admin Problem Details" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-
     <Label fx:id="problemTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-    <Label fx:id="descriptionLabel" style="-fx-font-size: 14px;"/>
+
+    <!-- Updated: background color added to only this description label -->
+    <Label fx:id="descriptionLabel"
+           style="
+               -fx-font-size: 14px;
+               -fx-background-color: #e8f4fc;
+               -fx-padding: 8px;
+               -fx-background-radius: 5px;
+               -fx-border-radius: 5px;
+           "/>
+
     <Label fx:id="categoryLabel" style="-fx-font-size: 14px;"/>
     <Label fx:id="createdAtLabel" style="-fx-font-size: 14px; -fx-text-fill: gray;"/>
-    <Label fx:id="adminIdLabel" style="-fx-font-size: 14px;"/>
     <Label fx:id="isAgeRestrictedLabel" style="-fx-font-size: 14px;"/>
 
     <Button text="Close" fx:id="closeButton" onAction="#handleClose"/>

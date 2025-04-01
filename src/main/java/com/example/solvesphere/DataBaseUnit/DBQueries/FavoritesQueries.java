@@ -1,4 +1,4 @@
-package com.example.solvesphere.DBQueries;
+package com.example.solvesphere.DataBaseUnit.DBQueries;
 
 public class FavoritesQueries {
     public static final String ADD_FAVORITE_SCRIPT = "INSERT INTO favorites (user_id, problem_id) VALUES (?, ?)";
