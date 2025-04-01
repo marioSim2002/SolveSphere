@@ -45,9 +45,6 @@ public class NotificationsController {
             HBox notificationItem = createFriendRequestItem(requesterUsername, requesterId);
             notificationList.getItems().add(notificationItem);
         }
-
-        // ✅ Mark all friend requests as seen
-        friendRequests.forEach((id, username) -> friendDAO.markFriendRequestAsSeen(currentUserId, id));
     }
 
     private void loadGeneralNotifications() {

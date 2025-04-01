@@ -54,12 +54,12 @@ public class FriendDAOImpl implements FriendDAO {
                 System.out.println("Friend request sent successfully!");
 
                 // ** Now Add Notification **
-                String notificationSQL = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
-                try (PreparedStatement notifStmt = conn.prepareStatement(notificationSQL)) {
-                    notifStmt.setLong(1, friendId);
-                    notifStmt.setString(2, "Friend Request from: " + getUsernameById(userId));
-                    notifStmt.executeUpdate();
-                }
+//                String notificationSQL = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
+//                try (PreparedStatement notifStmt = conn.prepareStatement(notificationSQL)) {
+//                    notifStmt.setLong(1, friendId);
+//                    notifStmt.setString(2, "Friend Request from: " + getUsernameById(userId));
+//                    notifStmt.executeUpdate();
+//                }
 
                 return true;
             }
