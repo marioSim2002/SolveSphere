@@ -49,7 +49,7 @@ public abstract class AlertsUnit {
     }
 
     public static void showSuccessRegistrationAlert() {
-        showAlert(Alert.AlertType.INFORMATION, "Success", "Registered Successfully!");
+        showAlert(Alert.AlertType.CONFIRMATION, "Success", "Registered Successfully!");
     }
 
     public static void showSuccessLogInAlert() {

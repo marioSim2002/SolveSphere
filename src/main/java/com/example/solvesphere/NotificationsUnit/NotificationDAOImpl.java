@@ -176,11 +176,10 @@ public class NotificationDAOImpl implements NotificationDAO {
 
     @Override
     public void removeNotification(long userId, long requesterId, String notificationPrefix) {
-        String sql = "DELETE FROM notifications WHERE user_id = ? AND message = ?";
+        String sql = "DELETE FROM notifications WHERE user_id = ?";
         try (Connection conn = DatabaseConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, userId);
-            stmt.setString(2, notificationPrefix + getUsernameById(requesterId));
             stmt.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

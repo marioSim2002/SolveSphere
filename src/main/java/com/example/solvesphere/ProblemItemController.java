@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ProblemItemController {
     @FXML
+    private Button btReport;
+    @FXML
     private Button btDelete;
     private ScheduledExecutorService scheduler;
 
@@ -50,6 +52,7 @@ public class ProblemItemController {
         this.currentUserID = SessionManager.getCurrentUser().getId();
         this.commentCountTxt.setText(String.valueOf(commentsCnt));
         if(currentUserIsOwner()){btDelete.setVisible(true);}
+        if (currentUserIsOwner()) {btReport.setVisible(false);}
     }
 
     private void initProblemCommentsCount(){

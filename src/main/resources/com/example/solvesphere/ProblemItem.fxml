@@ -12,7 +12,7 @@
     <Text fx:id="postDate" style="-fx-font-size: 14; -fx-fill: #666;"/>
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Button text="View Problem Details" onAction="#onDetailsClick" styleClass="button-view-details"/>
-        <Button text="Report"  onAction="#reportProblem" styleClass="button-view-details"/>
+        <Button text="Report"  onAction="#reportProblem" styleClass="button-view-details" fx:id="btReport"/>
         <Button text="Delete"  onAction="#deleteProblem" styleClass="button-view-details" fx:id="btDelete" visible="false"/>
 
     </HBox>
