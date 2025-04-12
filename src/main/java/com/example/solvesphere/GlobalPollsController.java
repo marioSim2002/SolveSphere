@@ -40,7 +40,7 @@ public class GlobalPollsController {
         }
     }
 
-    private void loadAllPolls() {
+    public void loadAllPolls() {
         pollsListContainer.getChildren().clear();
         List<GlobalPoll> polls = pollDAO.getAllPolls();
 

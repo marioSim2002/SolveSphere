@@ -1,6 +1,7 @@
 package com.example.solvesphere.ValidationsUnit;
 
 import com.example.solvesphere.DataBaseUnit.*;
+import com.example.solvesphere.GlobalPollsController;
 import com.example.solvesphere.MainDashController;
 import com.example.solvesphere.NotificationsController;
 import com.example.solvesphere.NotificationsUnit.NotificationDAO;
@@ -26,7 +27,7 @@ public class Inspector {
     private final User user;
     private final NotificationDAO notificationDAO = new NotificationDAOImpl();
 
-    public Inspector(MainDashController mainDashController, NotificationsController notificationsController, User user) {
+    public Inspector(MainDashController mainDashController, NotificationsController notificationsController , User user) {
         this.problemDAO = new ProblemDAOImpl();
         this.mainDashController = mainDashController;
         this.notificationsController = notificationsController;

@@ -8,7 +8,6 @@ public class GlobalPoll {
     private int votesYes;
     private int votesNo;
 
-    // קונסטרקטור לשימוש ביצירת סקר חדש (id יוקצה מה־DB)
     public GlobalPoll(String question, String optionYes, String optionNo) {
         this.question = question;
         this.optionYes = optionYes;
@@ -17,7 +16,6 @@ public class GlobalPoll {
         this.votesNo = 0;
     }
 
-    // קונסטרקטור מלא לטעינה מה־DB
     public GlobalPoll(long id, String question, String optionYes, String optionNo, int votesYes, int votesNo) {
         this.id = id;
         this.question = question;
