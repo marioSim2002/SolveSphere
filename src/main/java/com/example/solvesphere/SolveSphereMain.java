@@ -21,5 +21,4 @@ public class SolveSphereMain extends Application {
         launch(args);
     }
 
-
 }

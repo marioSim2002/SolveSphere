@@ -61,6 +61,7 @@
             <ImageView fx:id="profileImg" styleClass="image-view" fitWidth="90" fitHeight="90" preserveRatio="true"/>
             <Button onAction="#onPeopleClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Discover People" />
             <Button onAction="#onAdminProblemsClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Admins Posts" />
+            <Button onAction="#onPollsClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Polls" />
             <Button onAction="#onProfileClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Profile Data" />
             <Button onAction="#onSettingsClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Profile Settings" />
             <Button onAction="#onLogoutClick" onMouseEntered="#onHoverEnter" onMouseExited="#onHoverExit" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size:14;" text="Logout" />

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="CENTER" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.solvesphere.GlobalPollsController"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+
+    <Label text="Global Polls" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Button text="Create New Poll" onAction="#openPollCreator"/>
+
+    <ScrollPane fitToWidth="true" fitToHeight="true">
+        <VBox fx:id="pollsListContainer" spacing="15" style="-fx-padding: 10;"/>
+    </ScrollPane>
+</VBox>
+

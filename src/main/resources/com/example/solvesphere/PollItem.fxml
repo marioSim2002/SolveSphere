@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.solvesphere.PollItemController"
+            prefHeight="200" prefWidth="400">
+
+    <VBox spacing="10" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <Label fx:id="pollQuestion" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="10">
+            <Button fx:id="option1Button" text="A" onAction="#voteOption1"/>
+            <ProgressBar fx:id="option1Bar" prefWidth="200"/>
+            <Label fx:id="option1Label"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Button fx:id="option2Button" text="B" onAction="#voteOption2"/>
+            <ProgressBar fx:id="option2Bar" prefWidth="200"/>
+            <Label fx:id="option2Label"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

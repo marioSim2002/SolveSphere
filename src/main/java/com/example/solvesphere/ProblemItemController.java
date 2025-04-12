@@ -22,22 +22,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ProblemItemController {
-    @FXML
-    private Button btReport;
-    @FXML
-    private Button btDelete;
+    @FXML private Button btReport;
+    @FXML private Button btDelete;
     private ScheduledExecutorService scheduler;
-
-    @FXML
-    private Label commentCountTxt;
-    @FXML
-    private Text postedBy;
-    @FXML
-    private Text postDate;
-    @FXML
-    private Label problemTitle;
-    @FXML
-    private Problem passedProblem;
+    @FXML private Label commentCountTxt;
+    @FXML private Text postedBy;
+    @FXML private Text postDate;
+    @FXML private Label problemTitle;
+    @FXML private Problem passedProblem;
     private String owner ;
     private User currentUser; //the current connected use e.g signed in
     private long currentUserID;

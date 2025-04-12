@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -457,6 +458,22 @@ public class MainDashController {
             notificationStage.setTitle("Admin problems");
             notificationStage.setScene(new Scene(root, 340, 420));
             notificationStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onPollsClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalPolls.fxml"));
+            Parent root = loader.load();
+
+            Stage pollStage = new Stage();
+            pollStage.initModality(Modality.APPLICATION_MODAL);
+            pollStage.setTitle("Global Anonymous Polls");
+            pollStage.setScene(new Scene(root, 340, 420));
+            pollStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.solvesphere.CreatePollController"
+      style="-fx-padding: 30; -fx-background-color: #ffffff;">
+
+    <Label text="Create New Poll" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="questionField" promptText="Enter your poll question" maxWidth="300"/>
+    <TextField fx:id="optionYesField" promptText="Option A" maxWidth="300"/>
+    <TextField fx:id="optionNoField" promptText="Option B" maxWidth="300"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Submit Poll" onAction="#submitPoll"/>
+        <Button text="Cancel" onAction="#cancelPoll"/>
+    </HBox>
+</VBox>

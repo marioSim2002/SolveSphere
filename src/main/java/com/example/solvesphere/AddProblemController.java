@@ -20,18 +20,12 @@ import java.util.List;
 public class AddProblemController {
 
     private User currentUser;
-    @FXML
-    private TextField titleField;
-    @FXML
-    private TextArea descriptionField;
-    @FXML
-    private TextField categoryField;
-    @FXML
-    private TextField tagsField;
-    @FXML
-    private CheckBox ageRestrictionCheckbox;
-    @FXML
-    private VBox similarProblemsListView; // will hold ProblemItem components
+    @FXML private TextField titleField;
+    @FXML private TextArea descriptionField;
+    @FXML private TextField categoryField;
+    @FXML private TextField tagsField;
+    @FXML private CheckBox ageRestrictionCheckbox;
+    @FXML private VBox similarProblemsListView; // will hold ProblemItem components
 
     private final ProblemDAO problemDAO = new ProblemDAOImpl();
 

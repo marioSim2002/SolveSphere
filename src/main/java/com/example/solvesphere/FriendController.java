@@ -8,8 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 public class FriendController {
-    @FXML
-    private Button addFriendButton, acceptFriendButton, removeFriendButton;
+    @FXML private Button addFriendButton, acceptFriendButton, removeFriendButton;
 
     private User currentUser;
     private User selectedUser;

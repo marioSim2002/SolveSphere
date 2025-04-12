@@ -21,10 +21,8 @@ public class PeoplePageController {
 
     private Long currentUserID;
     private User currentAppUser;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private GridPane peopleGrid;
+    @FXML private TextField searchField;
+    @FXML private GridPane peopleGrid;
 
     private final UserDAO userDAO = new UserDAOImpl();
 
