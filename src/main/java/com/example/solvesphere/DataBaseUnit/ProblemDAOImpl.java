@@ -10,7 +10,6 @@ import java.util.*;
 
 public class ProblemDAOImpl implements ProblemDAO {
 
-
     @Override
     public List<Problem> getProblemsByUserInterest(Map<String, Integer> userInterests) {
         List<Problem> problems = new ArrayList<>();

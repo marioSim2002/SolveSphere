@@ -4,7 +4,6 @@ import com.example.solvesphere.DataBaseUnit.ProblemDAO;
 import com.example.solvesphere.DataBaseUnit.ProblemDAOImpl;
 import com.example.solvesphere.UserData.AdminProblem;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,9 +18,7 @@ public class AdminProblemsController {
 
     @FXML private VBox problemsContainer;
     private final ProblemDAO adminProblemDAO = new ProblemDAOImpl();
-
-    @FXML
-    public void initialize() {
+    @FXML public void initialize() {
         loadAdminProblems();
     }
 
@@ -53,10 +50,9 @@ public class AdminProblemsController {
         }
     }
 
-
     public void handleSearch(KeyEvent keyEvent) {
     }
 
-    public void handleFilter(ActionEvent actionEvent) {
+    public void handleFilter() {
     }
 }

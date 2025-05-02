@@ -15,27 +15,17 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class CommentItemController {
-    @FXML
-    private Button markSolutionButton;
+    @FXML private Button markSolutionButton;
     private ProblemDetailsController problemDetailsController; // parent controller //
-    @FXML
-    private ImageView deleteButton;
-    @FXML
-    private Text downvoteCount;
-    @FXML
-    private Text upvoteCount;
-    @FXML
-    private Text commentText;
-    @FXML
-    private Text commentAuthor;
-    @FXML
-    private Text commentDate;
-    @FXML
-    private ImageView upvoteButton;
-    @FXML
-    private ImageView downvoteButton;
-    @FXML
-    private Text solutionIndicator;
+    @FXML private ImageView deleteButton;
+    @FXML private Text downvoteCount;
+    @FXML private Text upvoteCount;
+    @FXML private Text commentText;
+    @FXML private Text commentAuthor;
+    @FXML private Text commentDate;
+    @FXML private ImageView upvoteButton;
+    @FXML private ImageView downvoteButton;
+    @FXML private Text solutionIndicator;
     private User currentUser;
     private Comment currentComment;
     private final CommentDAO commentDAO = new CommentDAOImpl();

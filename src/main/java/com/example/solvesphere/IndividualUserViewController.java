@@ -1,9 +1,7 @@
 package com.example.solvesphere;
 
-import com.almasb.fxgl.net.Server;
 import com.example.solvesphere.DataBaseUnit.FriendDAO;
 import com.example.solvesphere.DataBaseUnit.FriendDAOImpl;
-import com.example.solvesphere.DataBaseUnit.UserDAO;
 import com.example.solvesphere.ServerUnit.ServerCommunicator;
 import com.example.solvesphere.UserData.SessionManager;
 import com.example.solvesphere.UserData.User;
@@ -12,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 

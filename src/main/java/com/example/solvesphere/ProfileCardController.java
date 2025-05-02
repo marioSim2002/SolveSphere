@@ -19,17 +19,11 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class ProfileCardController {
-    @FXML
-    private VBox profileCard;
-    @FXML
-    private ImageView profileImage;
-    @FXML
-    private ImageView activeStatusIcon;
-    @FXML
-    private Label usernameLabel;
-    @FXML
-    private Label userInterests;
-
+    @FXML private VBox profileCard;
+    @FXML private ImageView profileImage;
+    @FXML private ImageView activeStatusIcon;
+    @FXML private Label usernameLabel;
+    @FXML private Label userInterests;
     private User currentAppUser;
     private long viewedUserID;
     private User viewedUser;
@@ -48,7 +42,7 @@ public class ProfileCardController {
             userInterests.setText("No interests provided");
         }
 
-        // Load profile image from byte[]
+        // loading profile image from byte[]
         if (user.getProfilePicture() != null && user.getProfilePicture().length > 0) {
             ByteArrayInputStream bis = new ByteArrayInputStream(user.getProfilePicture());
             profileImage.setImage(new Image(bis));

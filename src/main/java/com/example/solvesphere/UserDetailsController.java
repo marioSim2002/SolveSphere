@@ -18,22 +18,13 @@ import java.util.Map;
 public class UserDetailsController {
 
     private byte[] profilePicture;
-
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private DatePicker dateOfBirthPicker;
-    @FXML
-    private TextField countryField;
-    @FXML
-    private TextField interestsField;
-    @FXML
-    private ImageView profilePictureView;
-    @FXML
-    private Button changePictureButton;
-
+    @FXML private TextField usernameField;
+    @FXML private TextField emailField;
+    @FXML private DatePicker dateOfBirthPicker;
+    @FXML private TextField countryField;
+    @FXML private TextField interestsField;
+    @FXML private ImageView profilePictureView;
+    @FXML private Button changePictureButton;
     private User currentUser;
 
     public void setCurrentUser(User user) {

@@ -23,7 +23,7 @@ public class AdminProblem {
         this.isAgeRestricted = isAgeRestricted;
     }
 
-    // Getters
+    // getters
     public long getId() {
         return id;
     }

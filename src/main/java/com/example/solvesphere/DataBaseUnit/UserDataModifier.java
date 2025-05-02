@@ -8,6 +8,5 @@ UserDataModifier , is responsible for modifying/altering existing user personal 
 */
 public interface UserDataModifier {
     boolean updateUserDetails(User user,String newEmail);
-
     boolean updateUserProfilePicture(long userId, byte[] profilePicture);
 }

@@ -16,30 +16,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
 public class ProblemDetailsController {
-
-    @FXML
-    private Label problemCategory;
-    @FXML
-    private ImageView saveIcon;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Label problemTitle;
-
-    @FXML
-    private TextArea problemDescription;
-
-    @FXML
-    private TextField commentField; // Input field for new comments
-
-    @FXML
-    private VBox commentListContainer;
+    @FXML private Label problemCategory;
+    @FXML private ImageView saveIcon;
+    @FXML private Button saveButton;
+    @FXML private Label problemTitle;
+    @FXML private TextArea problemDescription;
+    @FXML private TextField commentField; // Input field for new comments
+    @FXML private VBox commentListContainer;
     private CommentDAO commentDAO;
     private Problem currentProblem; // current post
     private User currentUser; // current user

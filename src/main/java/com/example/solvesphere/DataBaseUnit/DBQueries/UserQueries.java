@@ -1,7 +1,5 @@
 package com.example.solvesphere.DataBaseUnit.DBQueries;
 
-import java.io.StringReader;
-
 public class UserQueries {
     public static final String INSERT_USER = "INSERT INTO users (username, email, password, date_of_birth, country, registration_date, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String SELECT_USER_BY_USERNAME = "SELECT * FROM users WHERE username = ?";

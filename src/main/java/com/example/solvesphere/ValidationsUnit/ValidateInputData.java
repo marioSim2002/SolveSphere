@@ -15,7 +15,6 @@ public abstract class ValidateInputData {
     }
 
     public static boolean validEmail(String email){return email.contains("@")&&email.contains(".");}
-
     public static boolean validDate(LocalDate pickedDate){
         LocalDate today = LocalDate.now();
         return pickedDate!=null && pickedDate.isBefore(today);

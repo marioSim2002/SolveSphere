@@ -19,29 +19,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ProfileTabbedController {
-    @FXML
-    private VBox friendsListContainer;
-    @FXML
-    private TextField searchFriendField;
-    @FXML
-    private Label postCountLabel;
-    @FXML
-    private Label favoriteCountLabel;
-    @FXML
-    private PieChart favoritesPieChart;
-    @FXML
-    private BarChart<String, Number> postBarChart;
-    @FXML
-    private Label usernameLabel;
-
-    @FXML
-    private VBox favoriteProblemListContainer;
+    @FXML private VBox friendsListContainer;
+    @FXML private TextField searchFriendField;
+    @FXML private Label postCountLabel;
+    @FXML private Label favoriteCountLabel;
+    @FXML private PieChart favoritesPieChart;
+    @FXML private BarChart<String, Number> postBarChart;
+    @FXML private Label usernameLabel;
+    @FXML private VBox favoriteProblemListContainer;
 
     // VBox container where we will display the custom items (ProblemItem.fxml)
-    @FXML
-    private VBox problemListContainer;
+    @FXML private VBox problemListContainer;
     private User currentUser;
-
     public void initialize(User user) {
         this.currentUser = user;
         usernameLabel.setText("Welcome " + currentUser.getUsername());
